@@ -1,4 +1,4 @@
-package log;
+package course.oop.log;
 
 public interface LogChangeListener
 {
