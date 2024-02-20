@@ -1,4 +1,4 @@
-package gui;
+package course.oop.gui;
 
 import java.awt.Color;
 import java.awt.EventQueue;

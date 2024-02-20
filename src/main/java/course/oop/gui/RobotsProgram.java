@@ -1,4 +1,4 @@
-package gui;
+package course.oop.gui;
 
 import java.awt.Frame;
 
