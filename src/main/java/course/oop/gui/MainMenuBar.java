@@ -11,6 +11,10 @@ import javax.swing.UIManager;
 
 import course.oop.log.Logger;
 
+/**
+ * Главная строка меню программы.
+ * Добавляется к окну {@link MainApplicationFrame}
+ */
 public class MainMenuBar extends JMenuBar {
     private final MainApplicationFrame mainFrame;
 
@@ -19,9 +23,9 @@ public class MainMenuBar extends JMenuBar {
      */
     public MainMenuBar(MainApplicationFrame mainFrame) {
         this.mainFrame = mainFrame;
-        JMenu viewModeMenu = generateViewModeMenu();
-        JMenu testMenu = generateTestsMenu();
-        JMenu quitMenu = generateQuitMenu();
+        JMenu viewModeMenu = createViewModeMenu();
+        JMenu testMenu = createTestsMenu();
+        JMenu quitMenu = createQuitMenu();
 
         add(viewModeMenu);
         add(testMenu);
@@ -31,7 +35,7 @@ public class MainMenuBar extends JMenuBar {
     /**
      * Создает пункт меню с режимами отображения.
      */
-    private JMenu generateViewModeMenu() {
+    private JMenu createViewModeMenu() {
         JMenu ret = new JMenu("Режим отображения");
         ret.setMnemonic(KeyEvent.VK_V);
         ret.getAccessibleContext().setAccessibleDescription(
@@ -44,7 +48,7 @@ public class MainMenuBar extends JMenuBar {
         });
         ret.add(systemSchemeMenuItem);
 
-        JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_S);
+        JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_U);
         crossplatformLookAndFeel.addActionListener((event) -> {
             mainFrame.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             this.invalidate();
@@ -56,12 +60,12 @@ public class MainMenuBar extends JMenuBar {
     /**
      * Создает пункт меню с тестированием программы.
      */
-    private JMenu generateTestsMenu() {
+    private JMenu createTestsMenu() {
         JMenu ret = new JMenu("Тесты");
         ret.setMnemonic(KeyEvent.VK_T);
         ret.getAccessibleContext().setAccessibleDescription(
                 "Тестовые команды");
-        JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_S);
+        JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_M);
         addLogMessageItem.addActionListener((event) -> {
             Logger.debug("Новая строка");
         });
@@ -72,12 +76,12 @@ public class MainMenuBar extends JMenuBar {
     /**
      * Создает пункт меню c функцией выхода из программы.
      */
-    private JMenu generateQuitMenu() {
+    private JMenu createQuitMenu() {
         JMenu ret = new JMenu("Выход");
         ret.setMnemonic(KeyEvent.VK_Q);
         ret.getAccessibleContext().setAccessibleDescription(
                 "Выход из программы");
-        JMenuItem quitItem = new JMenuItem("Выход", KeyEvent.VK_S);
+        JMenuItem quitItem = new JMenuItem("Выход", KeyEvent.VK_Q);
         quitItem.addActionListener((event) -> {
             WindowEvent closeEvent = new WindowEvent(mainFrame, WindowEvent.WINDOW_CLOSING);
             Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeEvent);

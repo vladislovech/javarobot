@@ -29,15 +29,14 @@ public class MainApplicationFrame extends JFrame {
         // of the screen.
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(inset, inset, screenSize.width, screenSize.height);
+        setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
 
         setContentPane(desktopPane);
 
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
-        gameWindow.setBounds(300, 0, 800, 800);
+        GameWindow gameWindow = createGameWindow();
         addWindow(gameWindow);
 
         setJMenuBar(new MainMenuBar(this));
@@ -74,17 +73,24 @@ public class MainApplicationFrame extends JFrame {
             setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    protected void addWindow(JInternalFrame frame) {
+    private void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
         frame.setVisible(true);
     }
 
-    protected LogWindow createLogWindow() {
+    private LogWindow createLogWindow() {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
         logWindow.setLocation(0, 0);
         logWindow.setSize(300, 800);
-        setMinimumSize(logWindow.getSize());
         Logger.debug("Протокол работает");
         return logWindow;
     }
+
+    private GameWindow createGameWindow() {
+        GameWindow gameWindow = new GameWindow();
+        gameWindow.setLocation(300, 0);
+        gameWindow.setSize(800, 800);
+        return gameWindow;
+    }
+
 }
