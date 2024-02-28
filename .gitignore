@@ -1,4 +1,14 @@
+.idea
 /.metadata
 /robots/.settings
 /robots/bin
 eclipse.bat
+
+target/
+out/
+venv/
+
+/robots/*.ear
+/robots/*.zip
+/robots/*tar.gz
+/robots/*.rar
