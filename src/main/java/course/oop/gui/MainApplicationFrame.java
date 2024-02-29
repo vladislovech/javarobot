@@ -16,14 +16,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 import course.oop.log.Logger;
 
 /**
- * Что требуется сделать:
- * 1. Метод создания меню перегружен функционалом и трудно читается.
- * Следует разделить его на серию более простых методов (или вообще выделить
- * отдельный класс).
+ * Класс главного окна программы
  */
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
 
+    /**
+     * Создает главное окно программы
+     */
     public MainApplicationFrame() {
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
@@ -50,7 +50,30 @@ public class MainApplicationFrame extends JFrame {
         });
     }
 
-    public void setLookAndFeel(String className) {
+    /**
+     * Устанавливает системный внещний вид для главного окна.
+     */
+    public void setSystemLookAndFeel() {
+        setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    }
+
+    /**
+     * Устанавливает универсальный внещний вид для главного окна.
+     */
+    public void setCrossPlatformLookAndFeel() {
+        setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+    }
+
+    /**
+     * Устанавливает внешний вид для главного окна на основе предоставленного класса
+     * внешнего вида.
+     * Вызывает UIManager.setLookAndFeel(className) и
+     * SwingUtilities.updateComponentTreeUI(this).
+     *
+     * @param className Класс внешнего вида, который следует установить.
+     * @see UIManager#setLookAndFeel
+     */
+    private void setLookAndFeel(String className) {
         try {
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(this);
@@ -73,11 +96,19 @@ public class MainApplicationFrame extends JFrame {
             setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    /**
+     * Добавляет переданное окно в это (главное)
+     * 
+     * @param frame окно
+     */
     private void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
         frame.setVisible(true);
     }
 
+    /**
+     * Создает окно лога
+     */
     private LogWindow createLogWindow() {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
         logWindow.setLocation(0, 0);
@@ -86,6 +117,9 @@ public class MainApplicationFrame extends JFrame {
         return logWindow;
     }
 
+    /**
+     * Создает игровое окно
+     */
     private GameWindow createGameWindow() {
         GameWindow gameWindow = new GameWindow();
         gameWindow.setLocation(300, 0);

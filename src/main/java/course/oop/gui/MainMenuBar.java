@@ -7,7 +7,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.UIManager;
 
 import course.oop.log.Logger;
 
@@ -43,14 +42,14 @@ public class MainMenuBar extends JMenuBar {
 
         JMenuItem systemSchemeMenuItem = new JMenuItem("Системная схема", KeyEvent.VK_S);
         systemSchemeMenuItem.addActionListener((event) -> {
-            mainFrame.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            mainFrame.setSystemLookAndFeel();
             this.invalidate();
         });
         ret.add(systemSchemeMenuItem);
 
         JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_U);
         crossplatformLookAndFeel.addActionListener((event) -> {
-            mainFrame.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            mainFrame.setCrossPlatformLookAndFeel();
             this.invalidate();
         });
         ret.add(crossplatformLookAndFeel);
