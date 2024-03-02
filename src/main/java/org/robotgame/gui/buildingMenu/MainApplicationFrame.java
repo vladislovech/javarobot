@@ -52,7 +52,7 @@ public class MainApplicationFrame extends JFrame {
 
     protected GameWindow createGameWindow() {
         GameWindow gameWindow = new GameWindow();
-        gameWindow.setSize(400, 400);
+        gameWindow.setSize(500, 500);
         return gameWindow;
     }
 
