@@ -13,8 +13,24 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 
 public class WindowConfigsIOTest {
+
+    /**
+     * Чистит директорию с данными приложения
+     */
+    @BeforeClass
+    public static void clearAppFolder() {
+        String appDirPath = System.getProperty("user.home")
+                + File.separator + "Robots";
+        File appDir = new File(appDirPath);
+        try {
+            FileUtils.deleteDirectory(appDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Проверяет, что объект класса WindowConfigsIO - singleton.

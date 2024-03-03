@@ -8,10 +8,10 @@ public interface Saveable {
     /**
      * метод для сохранения данных об объекте.
      */
-    void Save() throws SaveException;
+    void save() throws SaveException, LoadException;
 
     /**
      * метод для восстановления объекта по сохраненным данным.
      */
-    void Load() throws LoadException;
+    void load() throws LoadException;
 }

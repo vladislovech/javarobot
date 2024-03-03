@@ -35,50 +35,53 @@ public class WindowConfigsIO implements Flushable {
      * {@code windowStates}
      */
     private WindowConfigsIO() throws LoadException {
-        String confFilePath = System.getProperty("user.home")
-                + File.separator + "Robots"
-                + File.separator + "config"
-                + File.separator + "windowStates.conf";
+        String confFilePath = System.getProperty("user.home") +
+                File.separator + "Robots" +
+                File.separator + "config" +
+                File.separator + "windowStates.conf";
+
         confFile = new File(confFilePath);
-        File p = confFile.getParentFile();
-        if (!p.exists()) {
-            if (p.mkdirs()) {
-                try {
-                    confFile.createNewFile();
-                    windowStates = new HashMap<>();
-                } catch (IOException e) {
-                    throw new LoadException("can't create confFile %s}".formatted(confFilePath));
-                }
-            } else {
-                throw new LoadException("can't create app structure at %s}".formatted(confFilePath));
-            }
+
+        try {
+            createAppStructureIfNeeded();
+            loadWindowStates();
+        } catch (IOException e) {
+            throw new LoadException("Error while loading window configurations", e);
+        }
+    }
+
+    /**
+     * Создает структуру директорий для класса, если ее нет.
+     * 
+     * @throws LoadException если не удалось создать структуру
+     */
+    private void createAppStructureIfNeeded() throws LoadException {
+        File parentDirectory = confFile.getParentFile();
+
+        if (!parentDirectory.exists() && !parentDirectory.mkdirs()) {
+            throw new LoadException("Failed to create app structure at " + confFile.getPath());
+        }
+    }
+
+    /**
+     * 
+     * @throws IOException
+     * @throws LoadException
+     */
+    private void loadWindowStates() throws IOException, LoadException {
+        if (!confFile.exists() || confFile.length() == 0) {
+            windowStates = new HashMap<>();
+            flush();
         } else {
-            if (!confFile.exists()) {
-                try {
-                    confFile.createNewFile();
-                    windowStates = new HashMap<>();
-                } catch (IOException e) {
-                    throw new LoadException("can't create confFile %s}".formatted(confFilePath));
-                }
-            } else {
-                try {
-                    InputStream is = new FileInputStream(confFile);
-                    ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
-                    try {
-                        windowStates = (HashMap<String, WindowConfig>) ois.readObject();
-                    } catch (IOException e) {
-                        throw new LoadException("can't read confFile %s}".formatted(confFilePath));
-                    } catch (ClassNotFoundException e) {
-                        throw new LoadException("data is bitten in %s}".formatted(confFilePath));
-                    } finally {
-                        ois.close();
-                        is.close();
-                    }
-                } catch (FileNotFoundException e) {
-                    throw new LoadException("can't read confFile %s because it's not exist}".formatted(confFilePath));
-                } catch (IOException e) {
-                    throw new LoadException("can't create ObjectInputStream.".formatted(confFilePath));
-                }
+            try (InputStream is = new FileInputStream(confFile);
+                    ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is))) {
+
+                windowStates = (HashMap<String, WindowConfig>) ois.readObject();
+
+            } catch (FileNotFoundException e) {
+                throw new LoadException("Configuration file not found at " + confFile.getPath(), e);
+            } catch (ClassNotFoundException e) {
+                throw new LoadException("Data is corrupted in " + confFile.getPath(), e);
             }
         }
     }
@@ -93,7 +96,8 @@ public class WindowConfigsIO implements Flushable {
     }
 
     /**
-     * Создает или обновляет запись в {@code windowStates}
+     * Создает или обновляет запись в {@code windowStates}, сохраняя копию
+     * переданного {@link WindowConfig}
      * 
      * @param id уникальный идентификатор окна
      * @param wc конфигурация окна
@@ -110,6 +114,8 @@ public class WindowConfigsIO implements Flushable {
      * @throws LoadException если записи нет
      */
     public WindowConfig load(String id) throws LoadException {
+        if (!windowStates.containsKey(id))
+            throw new LoadException("no saved entry for %s".formatted(id));
         return new WindowConfig(windowStates.get(id));
     }
 
@@ -119,17 +125,13 @@ public class WindowConfigsIO implements Flushable {
      */
     @Override
     public void flush() throws IOException {
-        try {
-            OutputStream os = new FileOutputStream(confFile);
-            ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
-            try {
-                oos.writeObject(windowStates);
-            } finally {
-                oos.close();
-                os.close();
-            }
-        } catch (FileNotFoundException e1) {
-            throw new IOException("Can't find file structure.");
+        try (OutputStream os = new FileOutputStream(confFile);
+                ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os))) {
+
+            oos.writeObject(windowStates);
+
+        } catch (FileNotFoundException e) {
+            throw new IOException("Can't find file structure.", e);
         }
     }
 
