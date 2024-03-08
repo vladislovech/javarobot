@@ -19,10 +19,12 @@ public class MainApplicationFrame extends JFrame {
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
+
         setContentPane(desktopPane);
 
         addWindow(logWindow);
         addWindow(gameWindow);
+        //gameWindow.setPreferredSize(getPreferredSize());
 
         setJMenuBar(MenuBarBuilder.buildMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);

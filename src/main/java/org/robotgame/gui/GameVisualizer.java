@@ -52,10 +52,7 @@ public class GameVisualizer extends JPanel
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Point point = e.getPoint();
-                SwingUtilities.convertPointToScreen(point, GameVisualizer.this);
-                Point imagePoint = new Point(point.x - getLocationOnScreen().x, point.y - getLocationOnScreen().y);
-
+                Point imagePoint = new Point(e.getX(), e.getY());
                 setTargetPosition(imagePoint);
                 repaint();
             }
@@ -186,7 +183,7 @@ public class GameVisualizer extends JPanel
 
         m_robotPositionX = applyLimits(newX, 0, this.getWidth());
         m_robotPositionY = applyLimits(newY, 0, this.getHeight());
-        //System.out.println("X: " + getWidth() + " Y: " + getHeight());
+        //System.out.println("X: " + this.getWidth() + " Y: " + this.getHeight());
 
         double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
         m_robotDirection = newDirection;
