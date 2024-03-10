@@ -5,6 +5,8 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 import course.oop.saving.LoadException;
 import course.oop.saving.SaveException;
@@ -22,6 +24,17 @@ public class GameWindow extends JInternalFrame implements Saveable {
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
+        addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            public void internalFrameIconified(InternalFrameEvent event) {
+                try {
+                    save();
+                } catch (SaveException | LoadException e) {
+                    System.err.println("can't save game window.");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**

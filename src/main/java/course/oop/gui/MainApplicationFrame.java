@@ -1,10 +1,10 @@
 package course.oop.gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import javax.swing.JDesktopPane;
@@ -121,19 +121,23 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     }
 
     /**
-     * Добавляет переданное окно в это (главное)
+     * Добавляет переданное окно в это (главное).
+     * формально в {@code desktopPane} - контейнер внутри этого окна.
      * 
      * @param frame окно
      */
     private void addWindow(JInternalFrame frame) {
-        desktopPane.add(frame);
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            desktopPane.add(frame);
+            frame.setVisible(true);
+        });
     }
 
     /**
      * Создает окно лога
      */
     private LogWindow createLogWindow() {
+
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
         try {
             logWindow.load();
@@ -164,21 +168,19 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      */
     private void saveWindowStates() {
         try {
-            gameWindow.save();
-        } catch (SaveException | LoadException e) {
-            System.err.println("can't save state of game_window");
-        }
-
-        try {
-            logWindow.save();
-        } catch (SaveException | LoadException e) {
-            System.err.println("can't save state of log_window");
-        }
-
-        try {
             save();
         } catch (SaveException | LoadException e) {
-            System.err.println("can't save state of log_window");
+            System.err.println("can't save state of main window");
+        }
+
+        for (Component c : desktopPane.getComponents()) {
+            if (c instanceof Saveable) {
+                try {
+                    ((Saveable) c).save();
+                } catch (SaveException | LoadException e) {
+                    System.err.println("can't save state of main window");
+                }
+            }
         }
 
         try {

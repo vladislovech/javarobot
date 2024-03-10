@@ -7,6 +7,8 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 import course.oop.log.LogChangeListener;
 import course.oop.log.LogEntry;
@@ -33,6 +35,17 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Save
         getContentPane().add(panel);
         pack();
         updateLogContent();
+        addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            public void internalFrameIconified(InternalFrameEvent event) {
+                try {
+                    save();
+                } catch (SaveException | LoadException e) {
+                    System.err.println("can't save log window.");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void updateLogContent() {
