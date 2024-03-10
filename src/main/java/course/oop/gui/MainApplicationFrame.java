@@ -26,23 +26,13 @@ import course.oop.saving.WindowConfigsIO;
  * Класс главного окна программы
  */
 public class MainApplicationFrame extends JFrame implements Saveable {
-    private final JDesktopPane desktopPane = new JDesktopPane();
-
-    /**
-     * Ссылка на дочернее окно. (формально, из за {@code desktopPane} - дочернее
-     * дочернее)
-     */
-    private final LogWindow logWindow;
-    /**
-     * Ссылка на дочернее окно. (формально, из за {@code desktopPane} - дочернее
-     * дочернее)
-     */
-    private final GameWindow gameWindow;
+    private final JDesktopPane desktopPane;
 
     /**
      * Создает главное окно программы
      */
     public MainApplicationFrame() {
+        desktopPane = new JDesktopPane();
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
 
@@ -56,11 +46,8 @@ public class MainApplicationFrame extends JFrame implements Saveable {
 
         setContentPane(desktopPane);
 
-        logWindow = createLogWindow();
-        addWindow(logWindow);
-
-        gameWindow = createGameWindow();
-        addWindow(gameWindow);
+        addWindow(createLogWindow());
+        addWindow(createGameWindow());
 
         setJMenuBar(new MainMenuBar(this));
 
