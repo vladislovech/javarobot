@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 
 public class WindowConfigsIOTest {
 
@@ -21,6 +22,7 @@ public class WindowConfigsIOTest {
      * Чистит директорию с данными приложения
      */
     @BeforeClass
+	@AfterClass
     public static void clearAppFolder() {
         String appDirPath = System.getProperty("user.home")
                 + File.separator + "Robots";

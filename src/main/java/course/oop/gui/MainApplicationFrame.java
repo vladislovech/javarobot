@@ -143,7 +143,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
             logWindow.load();
         } catch (LoadException e) {
             logWindow.setLocation(0, 0);
-            logWindow.setSize(300, 800);
+            logWindow.setSize(300, 500);
         }
         Logger.debug("Протокол работает");
         return logWindow;
@@ -158,7 +158,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
             gameWindow.load();
         } catch (LoadException e) {
             gameWindow.setLocation(300, 0);
-            gameWindow.setSize(800, 800);
+            gameWindow.setSize(500, 500);
         }
         return gameWindow;
     }
