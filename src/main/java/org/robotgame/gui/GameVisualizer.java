@@ -25,12 +25,13 @@ public class GameVisualizer extends JPanel
     private volatile double m_robotPositionY = 100;
     private volatile double m_robotDirection = 0;
 
-    private volatile int m_targetPositionX = 150;
+    private volatile int m_targetPositionX = 100;
     private volatile int m_targetPositionY = 100;
+    private volatile int m_targetPositionXold = 0;
+    private volatile int m_targetPositionYold = 0;
 
-    private static final double maxVelocity = 0.1;
-    private static final double maxAngularVelocity = 0.001;
-
+    private static final double maxVelocity = 0.06;
+    private static final double maxAngularVelocity = 0.01;
     public GameVisualizer()
     {
         m_timer.schedule(new TimerTask()
@@ -40,7 +41,7 @@ public class GameVisualizer extends JPanel
             {
                 onRedrawEvent();
             }
-        }, 0, 10);
+        }, 0, 7);
         m_timer.schedule(new TimerTask()
         {
             @Override
@@ -48,12 +49,11 @@ public class GameVisualizer extends JPanel
             {
                 onModelUpdateEvent();
             }
-        }, 0, 10);
+        }, 0, 5);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Point imagePoint = new Point(e.getX(), e.getY());
-                setTargetPosition(imagePoint);
+                setTargetPosition(e.getX(), e.getY());
                 repaint();
             }
         });
@@ -62,32 +62,35 @@ public class GameVisualizer extends JPanel
             @Override
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
+                int x = m_targetPositionX;
+                int y = m_targetPositionY;
                 switch (keyCode) {
                     case KeyEvent.VK_W: // Движение вверх
-                        m_targetPositionY -= 20;
+                        y -= 20;
                         break;
                     case KeyEvent.VK_A: // Движение влево
-                        m_targetPositionX -= 20;
+                        x -= 20;
                         break;
                     case KeyEvent.VK_S: // Движение вниз
-                        m_targetPositionY += 20;
+                        y += 20;
                         break;
                     case KeyEvent.VK_D: // Движение вправо
-                        m_targetPositionX += 20;
+                        x += 20;
                         break;
                     case KeyEvent.VK_UP:
-                        m_targetPositionY -= 20; // Движение вверх
+                        y -= 20;
                         break;
                     case KeyEvent.VK_LEFT:
-                        m_targetPositionX -= 20; // Движение влево
+                        x -= 20;
                         break;
                     case KeyEvent.VK_DOWN:
-                        m_targetPositionY += 20; // Движение вниз
+                        y += 20;
                         break;
                     case KeyEvent.VK_RIGHT:
-                        m_targetPositionX += 20; // Движение вправо
+                        x += 20;
                         break;
                 }
+                setTargetPosition(x,y);
                 repaint();
             }
             @Override
@@ -101,10 +104,21 @@ public class GameVisualizer extends JPanel
         setFocusable(true);
     }
 
-    protected void setTargetPosition(Point p)
+    protected void setTargetPosition(int x, int y)
     {
-        m_targetPositionX = (int) applyLimits(p.x, 0, this.getWidth());
-        m_targetPositionY = (int) applyLimits(p.y, 0, this.getHeight());
+       if (this.getWidth() != 0 && this.getHeight() != 0)
+       {
+           x = (int) applyLimits(x, 1, getWidth() - 1);
+           y = (int) applyLimits(y, 1, getHeight() - 1);
+       }
+        if (distance(x, y, m_targetPositionX, m_targetPositionY) < 10)
+            return;
+
+        m_targetPositionXold = m_targetPositionX;
+        m_targetPositionYold = m_targetPositionY;
+
+        m_targetPositionX = x;
+        m_targetPositionY = y;
     }
 
     protected void onRedrawEvent()
@@ -127,31 +141,27 @@ public class GameVisualizer extends JPanel
         return asNormalizedRadians(Math.atan2(diffY, diffX));
     }
 
-    protected void onModelUpdateEvent()
-    {
-        m_targetPositionX = (int) applyLimits(m_targetPositionX, 0, this.getWidth());
-        m_targetPositionY = (int) applyLimits(m_targetPositionY, 0, this.getHeight());
+    protected void onModelUpdateEvent() {
+        setTargetPosition(m_targetPositionX, m_targetPositionY);
 
-        double distance = distance(m_targetPositionX, m_targetPositionY,
-                m_robotPositionX, m_robotPositionY);
-        if (distance < 0.5)
-        {
+        double distance = distance(m_targetPositionX, m_targetPositionY, m_robotPositionX, m_robotPositionY);
+        if (distance <  1) {
             return;
         }
+
         double velocity = maxVelocity;
         double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
-        double angularVelocity = 0;
-        if (angleToTarget > m_robotDirection)
-        {
-            angularVelocity = maxAngularVelocity;
-        }
-        if (angleToTarget < m_robotDirection)
-        {
-            angularVelocity = -maxAngularVelocity;
-        }
 
-        moveRobot(velocity, angularVelocity, 10);
+        double angleDifference = angleToTarget - m_robotDirection;
+        if (Math.abs(angleDifference) > Math.PI) {
+            angleDifference -= Math.signum(angleDifference) * 2 * Math.PI;
+        }
+        double angularVelocity = maxAngularVelocity * angleDifference;
+
+        moveRobot(velocity, angularVelocity, 5, distance);
     }
+
+
 
     private static double applyLimits(double value, double min, double max)
     {
@@ -162,10 +172,22 @@ public class GameVisualizer extends JPanel
         return value;
     }
 
-    private void moveRobot(double velocity, double angularVelocity, double duration)
-    {
+    private void moveRobot(double velocity, double angularVelocity, double duration, double distance) {
+        double diffTargets = distance(m_targetPositionX, m_targetPositionY, m_targetPositionXold, m_targetPositionYold);
+
+        if (diffTargets < 30 && distance <=3)
+        {
+            angularVelocity = applyLimits(angularVelocity*5, -maxAngularVelocity * 5, maxAngularVelocity * 5);
+        }
+        else if (diffTargets < 30)
+        {
+            angularVelocity = applyLimits(angularVelocity*3, -maxAngularVelocity * 3, maxAngularVelocity * 3);
+        }
+        else
+        {
+            angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
+        }
         velocity = applyLimits(velocity, 0, maxVelocity);
-        angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
         double newX = m_robotPositionX + velocity / angularVelocity *
                 (Math.sin(m_robotDirection  + angularVelocity * duration) -
                         Math.sin(m_robotDirection));
@@ -180,14 +202,13 @@ public class GameVisualizer extends JPanel
         {
             newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
         }
-
         m_robotPositionX = applyLimits(newX, 0, this.getWidth());
         m_robotPositionY = applyLimits(newY, 0, this.getHeight());
-        //System.out.println("X: " + this.getWidth() + " Y: " + this.getHeight());
 
         double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
         m_robotDirection = newDirection;
     }
+
 
     private static double asNormalizedRadians(double angle)
     {
@@ -210,7 +231,7 @@ public class GameVisualizer extends JPanel
     @Override
     public void paint(Graphics g)
     {
-        super.paint(g);
+        super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         drawRobot(g2d, round(m_robotPositionX), round(m_robotPositionY), m_robotDirection);
         drawTarget(g2d, m_targetPositionX, m_targetPositionY);
@@ -230,25 +251,47 @@ public class GameVisualizer extends JPanel
     {
         int robotCenterX = round(m_robotPositionX);
         int robotCenterY = round(m_robotPositionY);
-        AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY);
-        g.setTransform(t);
-        g.setColor(Color.MAGENTA);
-        fillOval(g, robotCenterX, robotCenterY, 60, 20);
+
+        AffineTransform originalTransform = g.getTransform();
+
+        g.rotate(direction, robotCenterX, robotCenterY);
+
+        g.setColor(Color.CYAN);
+        fillOval(g, robotCenterX, robotCenterY, 30, 10);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX, robotCenterY, 60, 20);
+        drawOval(g, robotCenterX, robotCenterY, 30, 10);
         g.setColor(Color.WHITE);
-        fillOval(g, robotCenterX  + 20, robotCenterY, 10, 10);
+        fillOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX  + 20, robotCenterY, 10, 10);
+        drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+
+        g.setTransform(originalTransform);
     }
 
     private void drawTarget(Graphics2D g, int x, int y)
     {
-        AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
-        g.setTransform(t);
-        g.setColor(Color.GREEN);
-        fillOval(g, x, y, 10, 10);
+        //AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
+        //g.setTransform(t);
+
+        g.setColor(Color.RED);
+        fillOval(g, x, y, 5, 5);
         g.setColor(Color.BLACK);
-        drawOval(g, x, y, 10, 10);
+        drawOval(g, x, y, 5, 5);
+    }
+    public Point getTargetPoint(){
+        return new Point(m_targetPositionX, m_targetPositionY);
+    }
+    public Point getRobotPoint(){
+            return new Point((int) m_robotPositionX, (int) m_robotPositionY);
+    }
+    public void setRobotPosition(int x, int y){
+        if (this.getWidth() != 0 && this.getHeight() != 0)
+        {
+            x = (int) applyLimits(x, 1, getWidth() - 1);
+            y = (int) applyLimits(y, 1, getHeight() - 1);
+        }
+
+        m_robotPositionX = x;
+        m_robotPositionY = y;
     }
 }

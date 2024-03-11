@@ -1,50 +1,52 @@
 package org.robotgame.log;
 
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.List;
 
 public class LogWindowSource {
     private final int m_iQueueLength;
-    private final BlockingQueue<LogEntry> m_messages;
-    private final BlockingQueue<LogChangeListener> m_listeners;
+    private final BlockingDeque<LogEntry> m_messages;
+    private final BlockingDeque<LogChangeListener> m_listeners;
     private volatile LogChangeListener[] m_activeListeners;
 
     public LogWindowSource(int iQueueLength) {
         m_iQueueLength = iQueueLength;
-        m_messages = new ArrayBlockingQueue<>(iQueueLength);
-        m_listeners = new ArrayBlockingQueue<>(iQueueLength);
+        m_messages = new LinkedBlockingDeque<>(iQueueLength);
+        m_listeners = new LinkedBlockingDeque<>();
     }
 
     public void registerListener(LogChangeListener listener) {
         m_listeners.offer(listener);
-        // При регистрации нового слушателя обновляем активных слушателей
         updateActiveListeners();
     }
 
     public void unregisterListener(LogChangeListener listener) {
         m_listeners.remove(listener);
-        // При удалении слушателя обновляем активных слушателей
         updateActiveListeners();
     }
 
     public void append(LogLevel logLevel, String strMessage) {
         LogEntry entry = new LogEntry(logLevel, strMessage);
-        m_messages.offer(entry);
-        if (m_messages.size() > m_iQueueLength) {
-            m_messages.poll();
+
+        if (m_messages.size() >= m_iQueueLength) {
+            m_messages.pollFirst();
         }
+
+        m_messages.offerLast(entry);
+
         notifyListeners();
     }
 
-    private void notifyListeners() {
+
+
+    public synchronized void notifyListeners() {
         LogChangeListener[] activeListeners = m_activeListeners;
         if (activeListeners == null) {
-            // Если активные слушатели не были инициализированы, обновляем их
             updateActiveListeners();
             activeListeners = m_activeListeners;
         }
-        // Проверяем наличие активных слушателей перед оповещением
         if (activeListeners != null) {
             for (LogChangeListener listener : activeListeners) {
                 listener.onLogChanged();
@@ -53,7 +55,6 @@ public class LogWindowSource {
     }
 
     private void updateActiveListeners() {
-        // Обновляем массив активных слушателей
         m_activeListeners = m_listeners.toArray(new LogChangeListener[0]);
     }
 
@@ -62,13 +63,21 @@ public class LogWindowSource {
     }
 
     public Iterable<LogEntry> range(int startFrom, int count) {
-        // Возвращаем подсписок сообщений в указанном диапазоне
-        ArrayList<LogEntry> range = new ArrayList<>(m_messages);
-        int end = Math.min(startFrom + count, range.size());
-        return range.subList(startFrom, end);
+        List<LogEntry> range = new ArrayList<>();
+        int i = 0;
+        for (LogEntry entry : m_messages) {
+            if (i >= startFrom && i < startFrom + count) {
+                range.add(entry);
+            }
+            i++;
+        }
+        return range;
     }
 
     public Iterable<LogEntry> all() {
         return new ArrayList<>(m_messages);
+    }
+    public int getCountListener() {
+        return m_listeners.size();
     }
 }
