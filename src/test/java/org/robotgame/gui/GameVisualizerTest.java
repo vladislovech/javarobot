@@ -23,27 +23,27 @@ public class GameVisualizerTest {
 
         visualizer.setTargetPosition(-100, -100);
         p = visualizer.getTargetPoint();
-        assertEquals(new Point(1, 1), p);
+        assertEquals(new Point(0, 0), p);
 
         visualizer.setTargetPosition(1000, 1000);
         p = visualizer.getTargetPoint();
-        assertEquals(new Point(499, 499), p);
+        assertEquals(new Point(500, 500), p);
 
         visualizer.setTargetPosition(-100, 100);
         p = visualizer.getTargetPoint();
-        assertEquals(new Point(1, 100), p);
+        assertEquals(new Point(0, 100), p);
 
         visualizer.setTargetPosition(500, 500);
         p = visualizer.getTargetPoint();
-        assertEquals(new Point(499, 499), p);
+        assertEquals(new Point(500, 500), p);
 
         visualizer.setTargetPosition(100, -100);
         p = visualizer.getTargetPoint();
-        assertEquals(new Point(100, 1), p);
+        assertEquals(new Point(100, 0), p);
 
         visualizer.setTargetPosition(0, 0);
         p = visualizer.getTargetPoint();
-        assertEquals(new Point(1, 1), p);
+        assertEquals(new Point(0, 0), p);
     }
     @Test
     public void testMoveRobot() {
@@ -60,11 +60,11 @@ public class GameVisualizerTest {
 
         visualizer.setRobotPosition(-100, -100);
         robotPosition = visualizer.getRobotPoint();
-        assertEquals(new Point(1, 1), robotPosition);
+        assertEquals(new Point(0, 0), robotPosition);
 
         visualizer.setRobotPosition(500, 500);
         robotPosition = visualizer.getRobotPoint();
-        assertEquals(new Point(499, 499), robotPosition);
+        assertEquals(new Point(500, 500), robotPosition);
     }
     @Test
     public void TestMove(){

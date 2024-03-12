@@ -108,10 +108,10 @@ public class GameVisualizer extends JPanel
     {
        if (this.getWidth() != 0 && this.getHeight() != 0)
        {
-           x = (int) applyLimits(x, 1, getWidth() - 1);
-           y = (int) applyLimits(y, 1, getHeight() - 1);
+           x = (int) applyLimits(x, 0, getWidth());
+           y = (int) applyLimits(y, 0, getHeight());
        }
-        if (distance(x, y, m_targetPositionX, m_targetPositionY) < 10)
+        if (distance(x, y, m_targetPositionX, m_targetPositionY) < 5)
             return;
 
         m_targetPositionXold = m_targetPositionX;
@@ -152,7 +152,14 @@ public class GameVisualizer extends JPanel
         double velocity = maxVelocity;
         double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
 
-        double angleDifference = angleToTarget - m_robotDirection;
+        double angleDifference;
+        if (Math.abs(angleToTarget - m_robotDirection) > Math.exp(-17))
+        {
+            angleDifference = angleToTarget - m_robotDirection;
+        } else {
+            angleDifference = Math.exp(-16);
+        }
+
         if (Math.abs(angleDifference) > Math.PI) {
             angleDifference -= Math.signum(angleDifference) * 2 * Math.PI;
         }
@@ -175,7 +182,7 @@ public class GameVisualizer extends JPanel
     private void moveRobot(double velocity, double angularVelocity, double duration, double distance) {
         double diffTargets = distance(m_targetPositionX, m_targetPositionY, m_targetPositionXold, m_targetPositionYold);
 
-        if (diffTargets < 30 && distance <=3)
+        if ((diffTargets < 30 && distance <=3))
         {
             angularVelocity = applyLimits(angularVelocity*5, -maxAngularVelocity * 5, maxAngularVelocity * 5);
         }
@@ -287,8 +294,8 @@ public class GameVisualizer extends JPanel
     public void setRobotPosition(int x, int y){
         if (this.getWidth() != 0 && this.getHeight() != 0)
         {
-            x = (int) applyLimits(x, 1, getWidth() - 1);
-            y = (int) applyLimits(y, 1, getHeight() - 1);
+            x = (int) applyLimits(x, 0, getWidth());
+            y = (int) applyLimits(y, 0, getHeight());
         }
 
         m_robotPositionX = x;

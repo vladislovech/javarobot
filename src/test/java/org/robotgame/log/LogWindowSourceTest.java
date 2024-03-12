@@ -18,7 +18,6 @@ public class LogWindowSourceTest {
         LogChangeListener listener = new LogChangeListener() {
             @Override
             public void onLogChanged() {
-                // Пустая реализация, так как нам не важно, что происходит при изменении лога
             }
         };
 
