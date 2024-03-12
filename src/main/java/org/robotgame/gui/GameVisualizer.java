@@ -57,49 +57,6 @@ public class GameVisualizer extends JPanel
                 repaint();
             }
         });
-
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int keyCode = e.getKeyCode();
-                int x = m_targetPositionX;
-                int y = m_targetPositionY;
-                switch (keyCode) {
-                    case KeyEvent.VK_W: // Движение вверх
-                        y -= 20;
-                        break;
-                    case KeyEvent.VK_A: // Движение влево
-                        x -= 20;
-                        break;
-                    case KeyEvent.VK_S: // Движение вниз
-                        y += 20;
-                        break;
-                    case KeyEvent.VK_D: // Движение вправо
-                        x += 20;
-                        break;
-                    case KeyEvent.VK_UP:
-                        y -= 20;
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        x -= 20;
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        y += 20;
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        x += 20;
-                        break;
-                }
-                setTargetPosition(x,y);
-                repaint();
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-        });
         setDoubleBuffered(true);
         setFocusable(true);
     }

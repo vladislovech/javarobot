@@ -20,7 +20,6 @@ public class LogWindowSourceTest {
             public void onLogChanged() {
             }
         };
-
         logWindowSource.registerListener(listener);
         assertEquals(1, logWindowSource.getCountListener());
     }

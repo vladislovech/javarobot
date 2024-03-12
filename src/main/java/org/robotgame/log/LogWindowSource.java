@@ -4,12 +4,15 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LogWindowSource {
     private final int m_iQueueLength;
     private final BlockingDeque<LogEntry> m_messages;
     private final BlockingDeque<LogChangeListener> m_listeners;
     private volatile LogChangeListener[] m_activeListeners;
+    private boolean m_statusOperation = false;
+    AtomicInteger m_counter = new AtomicInteger(0);
 
     public LogWindowSource(int iQueueLength) {
         m_iQueueLength = iQueueLength;
@@ -30,18 +33,21 @@ public class LogWindowSource {
     public void append(LogLevel logLevel, String strMessage) {
         LogEntry entry = new LogEntry(logLevel, strMessage);
 
-        if (m_messages.size() >= m_iQueueLength) {
-            m_messages.pollFirst();
-        }
-
-        m_messages.offerLast(entry);
+        do {
+            if (m_counter.getAndIncrement() >= m_iQueueLength)
+            {
+                m_messages.pollFirst();
+                m_counter.getAndDecrement();
+            }
+            m_statusOperation = m_messages.offerLast(entry);
+        } while(!m_statusOperation);
 
         notifyListeners();
     }
 
 
 
-    public synchronized void notifyListeners() {
+    public void notifyListeners() {
         LogChangeListener[] activeListeners = m_activeListeners;
         if (activeListeners == null) {
             updateActiveListeners();
