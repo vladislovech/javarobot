@@ -5,59 +5,61 @@ import java.awt.Point;
 import java.io.Serializable;
 
 /**
- * Класс-сущность, хранящий данные, которые окно сохраняет и загружает
+ * Неизменяемый класс, хранящий состояние окна:
+ * - положение
+ * - размер
+ * - свернутость
  */
-public class WindowConfig implements Serializable {
-    /**
-     * Размер окна
-     */
-    private Dimension size;
-    /**
-     * Расположение окна
-     */
-    private Point location;
-    /**
-     * Было ли окно свернуто
-     */
+public class FrameConfig implements Serializable {
+    private Pair size;
+    private Pair location;
     private boolean isIcon;
 
-    public WindowConfig(Dimension size, Point location, boolean isIcon) {
+    /**
+     * Типовой конструктор
+     */
+    public FrameConfig(Pair size, Pair location, boolean isIcon) {
         this.size = size;
         this.location = location;
         this.isIcon = isIcon;
     }
 
     /**
-     * Конструктор копирования
+     * Удобный конструктор при работе с окнами
      */
-    public WindowConfig(WindowConfig orig) {
-        this.size = new Dimension(orig.size);
-        this.location = new Point(orig.location);
-        this.isIcon = orig.isIcon;
+    public FrameConfig(Dimension size, Point location, boolean isIcon) {
+        this.size = new Pair(size);
+        this.location = new Pair(location);
+        this.isIcon = isIcon;
     }
 
-    public Dimension getSize() {
+    /**
+     * Геттер
+     */
+    public Pair getSize() {
         return size;
     }
 
-    public void setSize(Dimension size) {
-        this.size = size;
-    }
-
-    public Point getLocation() {
+    /**
+     * Геттер
+     */
+    public Pair getLocation() {
         return location;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
+    /**
+     * Геттер
+     */
     public boolean isIcon() {
         return isIcon;
     }
 
-    public void setIcon(boolean isIcon) {
-        this.isIcon = isIcon;
+    /**
+     * Возвращает строковое представление объекта
+     */
+    public String toStringFormatted() {
+        return "WindowConfig [size=" + size.toStringFormatted() + ", location=" + location.toStringFormatted()
+                + ", isIcon=" + isIcon + "]";
     }
 
     @Override
@@ -78,7 +80,7 @@ public class WindowConfig implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        WindowConfig other = (WindowConfig) obj;
+        FrameConfig other = (FrameConfig) obj;
         if (size == null) {
             if (other.size != null)
                 return false;
@@ -92,9 +94,5 @@ public class WindowConfig implements Serializable {
         if (isIcon != other.isIcon)
             return false;
         return true;
-    }
-
-    public String toStringFormatted() {
-        return "WindowConfig [size=" + size + ", location=" + location + ", isIcon=" + isIcon + "]";
     }
 }

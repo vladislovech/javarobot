@@ -1,11 +1,9 @@
 package course.oop.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -16,11 +14,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import course.oop.log.Logger;
-import course.oop.saving.LoadException;
-import course.oop.saving.SaveException;
 import course.oop.saving.Saveable;
-import course.oop.saving.WindowConfig;
-import course.oop.saving.WindowConfigsIO;
+import course.oop.saving.FrameConfig;
 
 /**
  * Класс главного окна программы
@@ -36,13 +31,9 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
 
-        try {
-            load();
-        } catch (LoadException e) {
-            int inset = 50;
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
-        }
+        int inset = 50;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
 
         setContentPane(desktopPane);
 
@@ -124,14 +115,9 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Создает окно лога
      */
     private LogWindow createLogWindow() {
-
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-        try {
-            logWindow.load();
-        } catch (LoadException e) {
-            logWindow.setLocation(0, 0);
-            logWindow.setSize(300, 500);
-        }
+        logWindow.setLocation(0, 0);
+        logWindow.setSize(300, 500);
         Logger.debug("Протокол работает");
         return logWindow;
     }
@@ -141,12 +127,8 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      */
     private GameWindow createGameWindow() {
         GameWindow gameWindow = new GameWindow();
-        try {
-            gameWindow.load();
-        } catch (LoadException e) {
-            gameWindow.setLocation(300, 0);
-            gameWindow.setSize(500, 500);
-        }
+        gameWindow.setLocation(300, 0);
+        gameWindow.setSize(500, 500);
         return gameWindow;
     }
 
@@ -154,52 +136,22 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Сохраняет состояния дочерних окон и главного окна с записью в файл.
      */
     private void saveWindowStates() {
-        try {
-            save();
-        } catch (SaveException | LoadException e) {
-            System.err.println("can't save state of main window");
-        }
-
-        for (Component c : desktopPane.getComponents()) {
-            if (c instanceof Saveable) {
-                try {
-                    ((Saveable) c).save();
-                } catch (SaveException | LoadException e) {
-                    System.err.println("can't save state of main window");
-                }
-            }
-        }
-
-        try {
-            WindowConfigsIO.getInstance().flush();
-        } catch (IOException | LoadException e) {
-            System.err.println("can't write states to file.");
-        }
+        // TODO
     }
 
     /**
-     * Сохраняет текущую конфигурацию окна в {@link WindowConfigsIO}
+     * Возвращает свой уникальный идентификатор
      */
     @Override
-    public void save() throws SaveException, LoadException {
-        WindowConfigsIO wio = WindowConfigsIO.getInstance();
-        WindowConfig wc = new WindowConfig(
-                getSize(),
-                getLocation(),
-                false); // контролирует уже ос
-        wio.save("main_window", wc);
+    public String getFrameId() {
+        return "main";
     }
 
     /**
-     * Загружает конфигурацию окна из {@link WindowConfigsIO}
-     * и применяет ее к окну. Если не удается загрузить данные об окне,
-     * поднимается исключение.
+     * Возвращает свое текущее состояние
      */
     @Override
-    public void load() throws LoadException {
-        WindowConfigsIO wio = WindowConfigsIO.getInstance();
-        WindowConfig wc = wio.load("main_window");
-        setLocation(wc.getLocation());
-        setSize(wc.getSize());
+    public FrameConfig getWindowConfig() {
+        return new FrameConfig(getSize(), getLocation(), false);
     }
 }

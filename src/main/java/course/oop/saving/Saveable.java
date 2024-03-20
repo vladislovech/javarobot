@@ -5,13 +5,14 @@ package course.oop.saving;
  * данные о котором могут быть сохранены и загружены.
  */
 public interface Saveable {
-    /**
-     * метод для сохранения данных об объекте.
-     */
-    void save() throws SaveException, LoadException;
 
     /**
-     * метод для восстановления объекта по сохраненным данным.
+     * Возвращает состояние окна, которое нужно сохранить
      */
-    void load() throws LoadException;
+    FrameConfig getWindowConfig();
+
+    /**
+     * Возвращает уникальный идентификатор окна
+     */
+    String getFrameId();
 }
