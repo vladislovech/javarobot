@@ -1,14 +1,13 @@
-package org.robotgame.gui;
+package org.robotgame.gui.buildingInternalFrame;
 
 import java.awt.*;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
-public class GameWindow extends JInternalFrame
+public class GameWindow extends AbstractWindow
 {
     private final GameVisualizer m_visualizer;
-    public GameWindow() 
+    public GameWindow()
     {
         super("Игровое поле", true, true, true, true);
         m_visualizer = new GameVisualizer();
@@ -17,7 +16,9 @@ public class GameWindow extends JInternalFrame
         getContentPane().add(panel);
         pack();
     }
-    public void dispose() {
-        super.dispose();
+
+    @Override
+    protected void closeWindow() {
+
     }
 }

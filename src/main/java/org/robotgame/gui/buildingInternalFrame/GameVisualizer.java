@@ -1,4 +1,4 @@
-package org.robotgame.gui;
+package org.robotgame.gui.buildingInternalFrame;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -234,8 +234,6 @@ public class GameVisualizer extends JPanel
 
     private void drawTarget(Graphics2D g, int x, int y)
     {
-        //AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
-        //g.setTransform(t);
 
         g.setColor(Color.RED);
         fillOval(g, x, y, 5, 5);

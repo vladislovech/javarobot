@@ -1,9 +1,12 @@
-package org.robotgame.gui.buildingMenu;
+package org.robotgame.gui.buildingMainFrame;
 
 import org.robotgame.log.Logger;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.Dimension;
 
 public class MenuBarBuilder {
     public static JMenuBar buildMenuBar() {
@@ -11,9 +14,11 @@ public class MenuBarBuilder {
 
         JMenu lookAndFeelMenu = buildLookAndFeelMenu(menuBar);
         JMenu testMenu = buildTestMenu(menuBar);
+        JMenuItem exitMenuItem = buildExitMenuItem();
 
         menuBar.add(lookAndFeelMenu);
         menuBar.add(testMenu);
+        menuBar.add(exitMenuItem);
 
         return menuBar;
     }
@@ -54,6 +59,25 @@ public class MenuBarBuilder {
         testMenu.add(addLogMessageItem);
 
         return testMenu;
+    }
+
+    private static JMenuItem buildExitMenuItem() {
+        JMenuItem exitMenuItem = new JMenuItem("Выйти");
+        exitMenuItem.setMnemonic(KeyEvent.VK_T);
+
+        exitMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null,
+                        "Вы уверены, что хотите выйти?", "Подтверждение",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
+        exitMenuItem.setPreferredSize(new Dimension(62, 20));
+        exitMenuItem.setMaximumSize(new Dimension(62, 20));
+        return exitMenuItem;
     }
 
     private static void setLookAndFeel(String className) {

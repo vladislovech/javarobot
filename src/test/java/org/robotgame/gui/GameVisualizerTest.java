@@ -1,6 +1,7 @@
 package org.robotgame.gui;
 
 import org.junit.jupiter.api.Test;
+import org.robotgame.gui.buildingInternalFrame.GameVisualizer;
 
 import java.awt.*;
 

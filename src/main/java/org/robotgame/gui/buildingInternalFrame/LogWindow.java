@@ -1,18 +1,16 @@
-package org.robotgame.gui;
+package org.robotgame.gui.buildingInternalFrame;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.TextArea;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import org.robotgame.log.LogChangeListener;
 import org.robotgame.log.LogEntry;
 import org.robotgame.log.LogWindowSource;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener
-{
+public class LogWindow extends AbstractWindow implements LogChangeListener {
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
 
@@ -47,9 +45,10 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
     {
         EventQueue.invokeLater(this::updateLogContent);
     }
-    public void dispose() {
+
+    @Override
+    public void closeWindow() {
         m_logSource.unregisterListener(this);
-        super.dispose();
     }
 }
 
