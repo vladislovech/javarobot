@@ -16,6 +16,15 @@ public class FrameConfig implements Serializable {
     private boolean isIcon;
 
     /**
+     * Пустой конструктор
+     */
+    public FrameConfig() {
+        size = new Pair();
+        location = new Pair();
+        isIcon = false;
+    }
+
+    /**
      * Типовой конструктор
      */
     public FrameConfig(Pair size, Pair location, boolean isIcon) {

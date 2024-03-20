@@ -1,5 +1,6 @@
 package course.oop.gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -16,6 +17,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import course.oop.log.Logger;
 import course.oop.saving.Saveable;
 import course.oop.saving.FrameConfig;
+import course.oop.saving.FrameSaver;
+import course.oop.saving.SaveException;
 
 /**
  * Класс главного окна программы
@@ -46,7 +49,6 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                saveWindowStates();
                 startExitDialog();
             }
         });
@@ -94,8 +96,10 @@ public class MainApplicationFrame extends JFrame implements Saveable {
                 "Вы уверены?",
                 "Выйти",
                 JOptionPane.YES_NO_OPTION);
-        if (userChoice == JOptionPane.YES_OPTION)
+        if (userChoice == JOptionPane.YES_OPTION) {
+            saveWindowStates();
             setDefaultCloseOperation(EXIT_ON_CLOSE);
+        }
     }
 
     /**
@@ -136,7 +140,18 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Сохраняет состояния дочерних окон и главного окна с записью в файл.
      */
     private void saveWindowStates() {
-        // TODO
+        FrameSaver fs = new FrameSaver();
+        fs.addSaveableFrame(this);
+        for(Component c : desktopPane.getComponents())
+            if (c instanceof Saveable)
+                fs.addSaveableFrame((Saveable) c);
+        
+        try {
+            fs.save();
+        } catch (SaveException e) {
+            System.err.println("Не удалось сохранить окна");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -153,5 +168,14 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     @Override
     public FrameConfig getWindowConfig() {
         return new FrameConfig(getSize(), getLocation(), false);
+    }
+
+    /**
+     * Устанавливает параметры окна в соответствии с переданной конфигурацией
+     */
+    @Override
+    public void loadConfig(FrameConfig config) {
+        setSize(config.getSize().toDimension());
+        setLocation(config.getLocation().toPoint());
     }
 }

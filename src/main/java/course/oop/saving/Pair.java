@@ -12,6 +12,14 @@ public class Pair implements Serializable {
     private int second;
 
     /**
+     * Пустой конструктор
+     */
+    public Pair() {
+        first = 0;
+        second = 0;
+    }
+
+    /**
      * Стандартный конструктор
      */
     public Pair(int first, int second) {

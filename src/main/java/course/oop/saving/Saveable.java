@@ -15,4 +15,9 @@ public interface Saveable {
      * Возвращает уникальный идентификатор окна
      */
     String getFrameId();
+
+    /**
+     * Обновляет свое состояние, беря данные из параметра
+     */
+    void loadConfig(FrameConfig config);
 }

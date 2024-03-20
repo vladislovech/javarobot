@@ -1,6 +1,7 @@
 package course.oop.gui;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -33,5 +34,19 @@ public class GameWindow extends JInternalFrame implements Saveable {
     @Override
     public FrameConfig getWindowConfig() {
         return new FrameConfig(getSize(), getLocation(), isIcon());
+    }
+
+    /**
+     * Устанавливает параметры окна в соответствии с переданной конфигурацией
+     */
+    @Override
+    public void loadConfig(FrameConfig config) {
+        setSize(config.getSize().toDimension());
+        setLocation(config.getLocation().toPoint());
+        try {
+            setIcon(config.isIcon());
+        } catch (PropertyVetoException e) {
+            System.err.println("Не удалось свернуть окно");
+        }
     }
 }

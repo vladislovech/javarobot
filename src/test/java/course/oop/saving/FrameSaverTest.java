@@ -46,6 +46,11 @@ public class FrameSaverTest {
             public String getFrameId() {
                 return "tmp_w";
             }
+
+            @Override
+            public void loadConfig(FrameConfig frameConfig) {
+
+            }
         });
         try {
             fs.save();
