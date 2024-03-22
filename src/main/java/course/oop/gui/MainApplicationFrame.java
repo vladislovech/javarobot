@@ -18,6 +18,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import course.oop.log.Logger;
 import course.oop.saving.Saveable;
+import course.oop.saving.SaveableDelegate;
 import course.oop.saving.FrameConfig;
 import course.oop.saving.FrameLoader;
 import course.oop.saving.FrameSaver;
@@ -38,6 +39,10 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Следовательно Нужно сохранять ссылки на них)
      */
     private final List<Component> childs;
+    /**
+     * Делегирует реализацию интерфейса Saveable этому объекту
+     */
+    private final SaveableDelegate saveableDelegate;
 
     /**
      * Создает главное окно программы
@@ -45,6 +50,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     public MainApplicationFrame() {
         desktopPane = new JDesktopPane();
         childs = new ArrayList<>();
+        saveableDelegate = new SaveableDelegate(this, "main");
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
 
@@ -212,7 +218,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      */
     @Override
     public String getFrameId() {
-        return "main";
+        return saveableDelegate.getFrameId();
     }
 
     /**
@@ -220,7 +226,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      */
     @Override
     public FrameConfig getWindowConfig() {
-        return new FrameConfig(getSize(), getLocation(), false);
+        return saveableDelegate.getWindowConfig();
     }
 
     /**
@@ -228,7 +234,6 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      */
     @Override
     public void loadConfig(FrameConfig config) {
-        setSize(config.getSize().toDimension());
-        setLocation(config.getLocation().toPoint());
+        saveableDelegate.loadConfig(config);
     }
 }

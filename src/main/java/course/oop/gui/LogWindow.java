@@ -12,14 +12,20 @@ import course.oop.log.LogChangeListener;
 import course.oop.log.LogEntry;
 import course.oop.log.LogWindowSource;
 import course.oop.saving.Saveable;
+import course.oop.saving.SaveableDelegate;
 import course.oop.saving.FrameConfig;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener, Saveable {
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
+    /**
+     * Делегирует реализацию интерфейса Saveable этому объекту
+     */
+    private final SaveableDelegate saveableDelegate;
 
     public LogWindow(LogWindowSource logSource) {
         super("Протокол работы", true, true, true, true);
+        saveableDelegate = new SaveableDelegate(this, "log");
         m_logSource = logSource;
         m_logSource.registerListener(this);
         m_logContent = new TextArea("");
@@ -51,7 +57,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Save
      */
     @Override
     public String getFrameId() {
-        return "log";
+        return saveableDelegate.getFrameId();
     }
 
     /**
@@ -59,7 +65,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Save
      */
     @Override
     public FrameConfig getWindowConfig() {
-        return new FrameConfig(getSize(), getLocation(), isIcon());
+        return saveableDelegate.getWindowConfig();
     }
 
     /**
@@ -67,12 +73,6 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Save
      */
     @Override
     public void loadConfig(FrameConfig config) {
-        setSize(config.getSize().toDimension());
-        setLocation(config.getLocation().toPoint());
-        try {
-            setIcon(config.isIcon());
-        } catch (PropertyVetoException e) {
-            System.err.println("Не удалось свернуть окно");
-        }
+        saveableDelegate.loadConfig(config);
     }
 }
