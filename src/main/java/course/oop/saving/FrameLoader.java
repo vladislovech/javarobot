@@ -23,7 +23,8 @@ import java.util.HashMap;
  */
 public class FrameLoader extends FrameSaveLoader {
     /**
-     * Конструктор.
+     * Стандартный конструктор. Устанавливает путь для сохранения такой, какой
+     * требует вторая задача: $HOME/Robots/config/windowStates.conf
      */
     public FrameLoader() {
         super();
@@ -34,10 +35,11 @@ public class FrameLoader extends FrameSaveLoader {
      */
     public void loadStates() throws LoadException {
         try {
-            InputStream is = new FileInputStream(new File(saveLocation, confilename));
+            File conFile = new File(super.saveLocation, super.confilename);
+            InputStream is = new FileInputStream(conFile);
             ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(is));
             try {
-                states = (HashMap<String, FrameConfig>) ois.readObject();
+                super.states = (HashMap<String, FrameConfig>) ois.readObject();
             } catch (ClassNotFoundException e) {
                 throw new LoadException("Не удалось прочитать файл. класс hashmap не нашелся.");
             } finally {
@@ -45,7 +47,7 @@ public class FrameLoader extends FrameSaveLoader {
                 is.close();
             }
         } catch (FileNotFoundException e) {
-            throw new LoadException("Ну удалось создать поток вывода");
+            throw new LoadException("Ну удалось создать поток ввода");
         } catch (IOException e) {
             throw new LoadException("Не удалось создать иерархию фильтров");
         }
@@ -56,8 +58,10 @@ public class FrameLoader extends FrameSaveLoader {
      * поднимает ошибку, что загружать нечего.
      */
     public void loadFrame(Saveable saveable) throws LoadException {
-        if (!states.containsKey(saveable.getFrameId()))
-            throw new LoadException("Нет данных для загрузки этого окна.");
+        if (!super.states.containsKey(saveable.getFrameId())) {
+            System.err.println("Нет данных для загрузки окна %s".formatted(saveable.getFrameId()));
+            return;
+        }
         saveable.loadConfig(states.get(saveable.getFrameId()));
     }
 }

@@ -33,25 +33,12 @@ public class FrameSaverTest {
             Assert.assertTrue(false);
         }
 
-        fs.addSaveableFrame(new Saveable() {
-            @Override
-            public FrameConfig getWindowConfig() {
-                return new FrameConfig(
-                        new Pair(1, 2),
-                        new Pair(3, 4),
-                        false);
-            }
+        SaveableStub ss = new SaveableStub(new FrameConfig(
+            new Pair(1, 2),
+            new Pair(3, 4),
+            false), null, "tmp_w");
 
-            @Override
-            public String getFrameId() {
-                return "tmp_w";
-            }
-
-            @Override
-            public void loadConfig(FrameConfig frameConfig) {
-
-            }
-        });
+        fs.addSaveableFrame(ss);
         try {
             fs.save();
         } catch (SaveException e) {
@@ -63,10 +50,8 @@ public class FrameSaverTest {
             ObjectInputStream ois = new ObjectInputStream(is);
             try {
                 Map<String, FrameConfig> actual = (HashMap<String, FrameConfig>) ois.readObject();
-                FrameConfig fc = new FrameConfig(new Pair(1, 2),
-                        new Pair(3, 4),
-                        false);
-                Assert.assertEquals(fc, actual.get("tmp_w"));
+                Assert.assertTrue(ss.saved != actual.get("tmp_w"));
+                Assert.assertEquals(ss.saved, actual.get("tmp_w"));
             } catch (Exception e) {
                 Assert.assertTrue(false);
             } finally {

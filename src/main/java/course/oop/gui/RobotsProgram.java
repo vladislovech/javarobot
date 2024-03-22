@@ -3,9 +3,12 @@ package course.oop.gui;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import course.oop.saving.FrameSaver;
+
 public class RobotsProgram {
   public static void main(String[] args) {
     try {
+      new FrameSaver().initHierachy(); // создание конфигурационного файла, если его еще нет.
       UIManager.put("OptionPane.yesButtonText", "Да");
       UIManager.put("OptionPane.noButtonText", "Нет");
       UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");

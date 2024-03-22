@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
@@ -15,19 +16,21 @@ import org.apache.commons.io.FileUtils;
  * Класс отвечающий за сохранение состояний окон. Использование:
  * <ul>
  * <li>Создать экземпляр класса</li>
- * <li><i>(опционально)</i> указать путь, куда должны сохраняться состояния, используя методы setSaveLocation, setConfilename</li>
+ * <li><i>(опционально)</i> указать путь, куда должны сохраняться состояния,
+ * используя методы setSaveLocation, setConfilename</li>
  * <li>Добавить сохраняемые окна, которые нужно сохранить, используя метод
  * addSaveableFrame</li>
  * <li>Вызвать метод save() у созданного экземпляра</li>
  * </ul>
  */
-public class FrameSaver extends FrameSaveLoader{
+public class FrameSaver extends FrameSaveLoader {
     /**
-     * Конструктор.
+     * Стандартный конструктор. Устанавливает путь для сохранения такой, какой
+     * требует вторая задача: $HOME/Robots/config/windowStates.conf
      */
     public FrameSaver() {
         super();
-        states = new HashMap<String, FrameConfig>();
+        super.states = new HashMap<String, FrameConfig>();
     }
 
     /**
@@ -35,13 +38,21 @@ public class FrameSaver extends FrameSaveLoader{
      * их во внутренний map.
      */
     public void addSaveableFrame(Saveable saveable) {
-        states.put(saveable.getFrameId(), saveable.getWindowConfig());
+        super.states.put(saveable.getFrameId(), saveable.getWindowConfig());
     }
 
     /**
      * Сохраняет сформированный map в указанный во внутреннем поле файл.
      */
     public void save() throws SaveException {
+        save(super.states);
+    }
+
+    /**
+     * Приватный метод. Аналог публичного save с возможностью передать
+     * map с состояниями
+     */
+    private void save(Map<String, FrameConfig> s) throws SaveException {
         try {
             FileUtils.forceMkdir(saveLocation);
         } catch (IOException e) {
@@ -58,7 +69,7 @@ public class FrameSaver extends FrameSaveLoader{
             OutputStream os = new FileOutputStream(saveFile);
             ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(os));
             try {
-                oos.writeObject(states);
+                oos.writeObject(s);
             } catch (IOException e) {
                 throw new SaveException("Не удалось записать состояний в файл");
             } finally {
@@ -70,5 +81,15 @@ public class FrameSaver extends FrameSaveLoader{
         } catch (IOException e) {
             throw new SaveException("Не удалось создать иерархию фильтров");
         }
+    }
+
+    /**
+     * Создает файл конфигурации с 0 сохраненных состояний,
+     * если файл конфигурации еще не существует
+     */
+    public void initHierachy() throws SaveException {
+        File conFile = new File(super.saveLocation, super.confilename);
+        if (!conFile.exists())
+            save(new HashMap<String, FrameConfig>());
     }
 }
