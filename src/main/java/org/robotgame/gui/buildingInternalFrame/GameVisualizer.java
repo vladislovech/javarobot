@@ -61,7 +61,7 @@ public class GameVisualizer extends JPanel
         setFocusable(true);
     }
 
-    protected void setTargetPosition(int x, int y)
+    public void setTargetPosition(int x, int y)
     {
        if (this.getWidth() != 0 && this.getHeight() != 0)
        {
@@ -98,7 +98,7 @@ public class GameVisualizer extends JPanel
         return asNormalizedRadians(Math.atan2(diffY, diffX));
     }
 
-    protected void onModelUpdateEvent() {
+    public void onModelUpdateEvent() {
         setTargetPosition(m_targetPositionX, m_targetPositionY);
 
         double distance = distance(m_targetPositionX, m_targetPositionY, m_robotPositionX, m_robotPositionY);

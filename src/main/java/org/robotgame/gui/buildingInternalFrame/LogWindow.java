@@ -6,6 +6,7 @@ import java.awt.TextArea;
 
 import javax.swing.JPanel;
 
+import org.robotgame.gui.LocalizationManager;
 import org.robotgame.log.LogChangeListener;
 import org.robotgame.log.LogEntry;
 import org.robotgame.log.LogWindowSource;
@@ -16,7 +17,7 @@ public class LogWindow extends AbstractWindow implements LogChangeListener {
 
     public LogWindow(LogWindowSource logSource)
     {
-        super("Протокол работы", true, true, true, true);
+        super(LocalizationManager.getString("logWindow.theProtocolOfWork"), true, true, true, true);
         m_logSource = logSource;
         m_logSource.registerListener(this);
         m_logContent = new TextArea("");

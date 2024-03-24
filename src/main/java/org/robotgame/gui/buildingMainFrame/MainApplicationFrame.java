@@ -1,5 +1,6 @@
 package org.robotgame.gui.buildingMainFrame;
 
+import org.robotgame.gui.LocalizationManager;
 import org.robotgame.gui.buildingInternalFrame.AbstractWindow;
 import org.robotgame.gui.buildingInternalFrame.GameWindow;
 import org.robotgame.gui.buildingInternalFrame.LogWindow;
@@ -32,7 +33,9 @@ public class MainApplicationFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 int result = JOptionPane.showConfirmDialog(MainApplicationFrame.this,
-                        "Вы уверены, что хотите закрыть окно?", "Подтверждение", JOptionPane.YES_NO_OPTION);
+                        LocalizationManager.getString("window.closing.message"),
+                        LocalizationManager.getString("confirmation"),
+                        JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     dispose();
                 }
@@ -45,7 +48,7 @@ public class MainApplicationFrame extends JFrame {
         logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         logWindow.pack();
-        Logger.debug("Логи запущены");
+        Logger.debug(LocalizationManager.getString("logger.logsAreRunning"));
         return logWindow;
     }
 

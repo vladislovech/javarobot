@@ -1,5 +1,7 @@
 package org.robotgame.gui.buildingInternalFrame;
 
+import org.robotgame.gui.LocalizationManager;
+
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -15,8 +17,8 @@ public abstract class AbstractWindow extends JInternalFrame {
             public void internalFrameClosing(InternalFrameEvent e) {
                 int result = JOptionPane.showConfirmDialog(
                         AbstractWindow.this,
-                        "Вы уверены, что хотите закрыть окно?",
-                        "Подтверждение",
+                        LocalizationManager.getString("window.closing.message"),
+                        LocalizationManager.getString("confirmation"),
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     dispose();
