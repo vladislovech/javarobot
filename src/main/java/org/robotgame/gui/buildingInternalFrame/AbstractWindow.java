@@ -15,11 +15,14 @@ public abstract class AbstractWindow extends JInternalFrame {
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
-                int result = JOptionPane.showConfirmDialog(
-                        AbstractWindow.this,
+                Object[] options = {LocalizationManager.getString("yes"),
+                        LocalizationManager.getString("no")};
+
+                int result = JOptionPane.showOptionDialog(AbstractWindow.this,
                         LocalizationManager.getString("window.closing.message"),
                         LocalizationManager.getString("confirmation"),
-                        JOptionPane.YES_NO_OPTION);
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                        null, options, options[0]);
                 if (result == JOptionPane.YES_OPTION) {
                     dispose();
                 }

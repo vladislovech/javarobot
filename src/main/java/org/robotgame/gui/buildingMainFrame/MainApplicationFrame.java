@@ -32,10 +32,14 @@ public class MainApplicationFrame extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int result = JOptionPane.showConfirmDialog(MainApplicationFrame.this,
+                Object[] options = {LocalizationManager.getString("yes"),
+                        LocalizationManager.getString("no")};
+
+                int result = JOptionPane.showOptionDialog(MainApplicationFrame.this,
                         LocalizationManager.getString("window.closing.message"),
                         LocalizationManager.getString("confirmation"),
-                        JOptionPane.YES_NO_OPTION);
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                        null, options, options[0]);
                 if (result == JOptionPane.YES_OPTION) {
                     closeAllWindows();
                     dispose();

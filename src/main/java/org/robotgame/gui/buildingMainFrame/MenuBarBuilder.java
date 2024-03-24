@@ -70,10 +70,14 @@ public class MenuBarBuilder {
 
         exitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int result = JOptionPane.showConfirmDialog(null,
-                        LocalizationManager.getString("menu.exit.confirmation.message"),
+                Object[] options = {LocalizationManager.getString("yes"),
+                        LocalizationManager.getString("no")};
+
+                int result = JOptionPane.showOptionDialog(null,
+                        LocalizationManager.getString("window.closing.message"),
                         LocalizationManager.getString("confirmation"),
-                        JOptionPane.YES_NO_OPTION);
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                        null, options, options[0]);
                 if (result == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
