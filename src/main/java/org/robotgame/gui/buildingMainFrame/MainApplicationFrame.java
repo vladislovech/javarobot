@@ -37,7 +37,9 @@ public class MainApplicationFrame extends JFrame {
                         LocalizationManager.getString("confirmation"),
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
+                    closeAllWindows();
                     dispose();
+                    System.exit(0);
                 }
             }
         });
@@ -61,5 +63,13 @@ public class MainApplicationFrame extends JFrame {
     protected void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
         frame.setVisible(true);
+    }
+
+    private void closeAllWindows() {
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            if (frame instanceof AbstractWindow) {
+                frame.dispose();
+            }
+        }
     }
 }

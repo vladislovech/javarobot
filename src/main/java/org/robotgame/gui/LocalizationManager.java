@@ -42,7 +42,7 @@ public class LocalizationManager {
         return messages.getString(key);
     }
 
-    public static void changeLanguage( String language) {
+    public static void changeLanguage(String language) {
         Properties props = new Properties();
         try {
             FileOutputStream out = new FileOutputStream("src/main/resources/config.properites");

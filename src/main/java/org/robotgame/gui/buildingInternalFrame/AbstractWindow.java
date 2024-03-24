@@ -24,7 +24,8 @@ public abstract class AbstractWindow extends JInternalFrame {
                     dispose();
                 }
             }
-        });    }
+        });
+    }
 
     protected abstract void closeWindow();
 
