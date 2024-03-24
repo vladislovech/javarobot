@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 import org.robots.log.Logger;
+import org.robots.state.StateManager;
 
 /**
  * Что требуется сделать:
@@ -20,6 +21,7 @@ public class MainApplicationFrame extends JFrame {
 
     private LogWindow logWindow;
     private GameWindow gameWindow;
+    private final StateManager stateManager;
 
 
     public MainApplicationFrame() {
@@ -39,6 +41,8 @@ public class MainApplicationFrame extends JFrame {
         addWindow(logWindow, 10, 10, 300, 800);
         addWindow(gameWindow, 300, 10, 400, 400);
 
+        stateManager = new StateManager(this, gameWindow, logWindow);
+
         setJMenuBar(new MenuBar(this));
 
         addWindowListener(new WindowAdapter(){
@@ -47,14 +51,14 @@ public class MainApplicationFrame extends JFrame {
                 MainApplicationFrame.this.confirmWindowClose();
             }
         });
-
+        stateManager.restoreState();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     public void confirmWindowClose(){
         if (JOptionPane.showConfirmDialog(this, "Вы уверены, что хотите закрыть приложение?",
                 "Закрыть?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-
+            stateManager.saveState();
             logWindow.dispose();
             gameWindow.dispose();
             this.dispose();
