@@ -2,6 +2,7 @@ package org.robots.state;
 
 import org.robots.gui.*;
 
+import java.beans.PropertyVetoException;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +30,13 @@ public class StateManager implements WindowState{
         state.put("gameWindowY", Integer.toString(gameWindow.getY()));
         state.put("gameWindowWidth", Integer.toString(gameWindow.getWidth()));
         state.put("gameWindowHeight", Integer.toString(gameWindow.getHeight()));
+        state.put("gameWindowIsIcon", Boolean.toString(gameWindow.isIcon()));
 
         state.put("logWindowX", Integer.toString(logWindow.getX()));
         state.put("logWindowY", Integer.toString(logWindow.getY()));
         state.put("logWindowWidth", Integer.toString(logWindow.getWidth()));
         state.put("logWindowHeight", Integer.toString(logWindow.getHeight()));
+        state.put("logWindowIsIcon", Boolean.toString(logWindow.isIcon()));
 
         String stateFilePath = System.getProperty("user.home") + File.separator + "state.dat";
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(stateFilePath))){
@@ -74,6 +77,16 @@ public class StateManager implements WindowState{
                     Integer.parseInt(state.get("logWindowWidth")),
                     Integer.parseInt(state.get("logWindowHeight"))
             );
+
+            try{
+                gameWindow.setIcon(Boolean.parseBoolean(state.get("gameWindowIsIcon")));
+            }
+            catch (PropertyVetoException e){}
+
+            try{
+                logWindow.setIcon(Boolean.parseBoolean(state.get("logWindowIsIcon")));
+            }
+            catch (PropertyVetoException e){}
         }
     }
 }
