@@ -28,15 +28,13 @@ public class FrameStatesManagerTest {
     /**
      * Проверяет, что корректно сохраняется внутренний map JFrame
      * и JInternalFrame с реализованными Saveable
+     * 
+     * @throws ClassNotFoundException
      */
     @Test
-    public void testCorrectSaving() {
+    public void testCorrectSaving() throws IOException, PropertyVetoException, SaveException, ClassNotFoundException {
         FrameStatesManager frameStatesManager = new FrameStatesManager();
-        try {
-            frameStatesManager.setSaveLocation(tempFolder.newFile());
-        } catch (IOException e) {
-            Assert.assertTrue(false);
-        }
+        frameStatesManager.setSaveLocation(tempFolder.newFile());
 
         MainApplicationFrame mainApplicationFrame = new MainApplicationFrame();
         mainApplicationFrame.setSize(new Dimension(1, 2));
@@ -45,59 +43,38 @@ public class FrameStatesManagerTest {
         GameWindow gameWindow = new GameWindow();
         gameWindow.setSize(new Dimension(5, 6));
         gameWindow.setLocation(new Point(7, 8));
-        try {
-            gameWindow.setIcon(true);
-        } catch (PropertyVetoException e) {
-            Assert.assertTrue(false);
-        }
+        gameWindow.setIcon(true);
 
         frameStatesManager.addSaveableFrame((Saveable) mainApplicationFrame);
         frameStatesManager.addSaveableFrame((Saveable) gameWindow);
-        try {
-            frameStatesManager.save();
-        } catch (SaveException e) {
-            Assert.assertTrue(false);
-        }
+        frameStatesManager.save();
 
-        try {
-            InputStream is = new FileInputStream(frameStatesManager.getSaveLocation());
-            ObjectInputStream ois = new ObjectInputStream(is);
-            try {
-                HashMap<String, FrameConfig> actual = (HashMap<String, FrameConfig>) ois.readObject();
-                Assert.assertEquals(
-                        new FrameConfig(
-                                new Pair(1, 2),
-                                new Pair(3, 4),
-                                false),
-                        actual.get("main"));
-                Assert.assertEquals(
-                        new FrameConfig(
-                                new Pair(5, 6),
-                                new Pair(7, 8),
-                                true),
-                        actual.get("game"));
-            } catch (Exception e) {
-                Assert.assertTrue(false);
-            } finally {
-                ois.close();
-                is.close();
-            }
-        } catch (Exception e) {
-            Assert.assertTrue(false);
-        }
+        InputStream is = new FileInputStream(frameStatesManager.getSaveLocation());
+        ObjectInputStream ois = new ObjectInputStream(is);
+        HashMap<String, FrameConfig> actual = (HashMap<String, FrameConfig>) ois.readObject();
+        Assert.assertEquals(
+                new FrameConfig(
+                        new Pair(1, 2),
+                        new Pair(3, 4),
+                        false),
+                actual.get("main"));
+        Assert.assertEquals(
+                new FrameConfig(
+                        new Pair(5, 6),
+                        new Pair(7, 8),
+                        true),
+                actual.get("game"));
+        ois.close();
+        is.close();
     }
 
     /**
      * Проверяет, что корректно загружаются сохраненные ранее состояния окон
      */
     @Test
-    public void testCorrectLoading() {
+    public void testCorrectLoading() throws IOException, PropertyVetoException, SaveException, LoadException {
         FrameStatesManager frameStatesManager = new FrameStatesManager();
-        try {
-            frameStatesManager.setSaveLocation(tempFolder.newFile());
-        } catch (IOException e) {
-            Assert.assertTrue(false);
-        }
+        frameStatesManager.setSaveLocation(tempFolder.newFile());
 
         File oldLocation = frameStatesManager.getSaveLocation();
 
@@ -108,20 +85,12 @@ public class FrameStatesManagerTest {
         GameWindow gameWindow = new GameWindow();
         gameWindow.setSize(new Dimension(5, 6));
         gameWindow.setLocation(new Point(7, 8));
-        try {
-            gameWindow.setIcon(true);
-        } catch (PropertyVetoException e) {
-            Assert.assertTrue(false);
-        }
+        gameWindow.setIcon(true);
 
         frameStatesManager.addSaveableFrame((Saveable) mainApplicationFrame);
         frameStatesManager.addSaveableFrame((Saveable) gameWindow);
 
-        try {
-            frameStatesManager.save();
-        } catch (SaveException e) {
-            Assert.assertTrue(false);
-        }
+        frameStatesManager.save();
 
         frameStatesManager = new FrameStatesManager();
         frameStatesManager.setSaveLocation(oldLocation);
@@ -129,18 +98,10 @@ public class FrameStatesManagerTest {
         MainApplicationFrame mainApplicationFrameLoaded = new MainApplicationFrame();
         GameWindow gameWindowLoaded = new GameWindow();
 
-        try {
-            frameStatesManager.loadStates();
-        } catch (LoadException e) {
-            Assert.assertTrue(false);
-        }
+        frameStatesManager.loadStates();
 
-        try {
-            frameStatesManager.loadFrame(mainApplicationFrameLoaded);
-            frameStatesManager.loadFrame(gameWindowLoaded);
-        } catch (LoadException e) {
-            Assert.assertTrue(false);
-        }
+        frameStatesManager.loadFrame(mainApplicationFrameLoaded);
+        frameStatesManager.loadFrame(gameWindowLoaded);
 
         Assert.assertEquals(mainApplicationFrame.getSize(), mainApplicationFrameLoaded.getSize());
         Assert.assertEquals(mainApplicationFrame.getLocation(), mainApplicationFrameLoaded.getLocation());
