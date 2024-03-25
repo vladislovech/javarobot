@@ -11,9 +11,9 @@ import java.io.Serializable;
  * - свернутость
  */
 public class FrameConfig implements Serializable {
-    private Pair size;
-    private Pair location;
-    private boolean isIcon;
+    private final Pair size;
+    private final Pair location;
+    private final boolean isIcon;
 
     /**
      * Пустой конструктор
@@ -66,8 +66,9 @@ public class FrameConfig implements Serializable {
     /**
      * Возвращает строковое представление объекта
      */
-    public String toStringFormatted() {
-        return "WindowConfig [size=" + size.toStringFormatted() + ", location=" + location.toStringFormatted()
+    @Override
+    public String toString() {
+        return "WindowConfig [size=" + size + ", location=" + location
                 + ", isIcon=" + isIcon + "]";
     }
 

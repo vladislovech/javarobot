@@ -8,8 +8,8 @@ import java.io.Serializable;
  * Неизменяемый класс, хранящий пару целых чисел.
  */
 public class Pair implements Serializable {
-    private int first;
-    private int second;
+    private final int first;
+    private final int second;
 
     /**
      * Пустой конструктор
@@ -82,7 +82,8 @@ public class Pair implements Serializable {
     /**
      * Возвращает строковое представление объекта
      */
-    public String toStringFormatted() {
+    @Override
+    public String toString() {
         return "Pair [first=" + first + ", second=" + second + "]";
     }
 

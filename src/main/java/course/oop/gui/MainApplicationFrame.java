@@ -18,10 +18,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import course.oop.log.Logger;
 import course.oop.saving.Saveable;
-import course.oop.saving.SaveableDelegate;
-import course.oop.saving.FrameConfig;
 import course.oop.saving.FrameLoader;
 import course.oop.saving.FrameSaver;
+import course.oop.saving.FrameStatesManager;
 import course.oop.saving.LoadException;
 import course.oop.saving.SaveException;
 
@@ -30,37 +29,27 @@ import course.oop.saving.SaveException;
  */
 public class MainApplicationFrame extends JFrame implements Saveable {
     /**
-     * Контейнер, куда складываются внутренние окна.
-     */
-    private final JDesktopPane desktopPane;
-    /**
      * Контейнер, хранящий ссылки на окна-потомки
      * (так как при сворачивании окон, swing оказывается их убивает.
      * Следовательно Нужно сохранять ссылки на них)
      */
     private final List<Component> childs;
-    /**
-     * Делегирует реализацию интерфейса Saveable этому объекту
-     */
-    private final SaveableDelegate saveableDelegate;
 
     /**
      * Создает главное окно программы
      */
     public MainApplicationFrame() {
-        desktopPane = new JDesktopPane();
         childs = new ArrayList<>();
-        saveableDelegate = new SaveableDelegate(this, "main");
+
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
-
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
 
         setJMenuBar(new MainMenuBar(this));
 
-        setContentPane(desktopPane);
+        setContentPane(new JDesktopPane());
 
         addWindow(createLogWindow());
         addWindow(createGameWindow());
@@ -74,19 +63,17 @@ public class MainApplicationFrame extends JFrame implements Saveable {
                 startExitDialog();
             }
         });
-
-        paintFrames();
     }
 
     /**
-     * Устанавливает системный внещний вид для главного окна.
+     * Устанавливает системный внешний вид для главного окна.
      */
     public void setSystemLookAndFeel() {
         setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }
 
     /**
-     * Устанавливает универсальный внещний вид для главного окна.
+     * Устанавливает универсальный внешний вид для главного окна.
      */
     public void setCrossPlatformLookAndFeel() {
         setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -129,11 +116,12 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     /**
      * Добавляет переданное окно в это (главное).
      * формально в {@code desktopPane} - контейнер внутри этого окна.
-     * и поле childs
+     * и поле childs. Делает его видимым
      */
     private void addWindow(JInternalFrame frame) {
-        desktopPane.add(frame);
+        getContentPane().add(frame);
         childs.add(frame);
+        frame.setVisible(true);
     }
 
     /**
@@ -161,14 +149,14 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Сохраняет состояния дочерних окон и главного окна.
      */
     private void saveWindowStates() {
-        FrameSaver fs = new FrameSaver();
-        fs.addSaveableFrame(this);
-        for (Component c : childs)
-            if (c instanceof Saveable)
-                fs.addSaveableFrame((Saveable) c);
+        FrameSaver frameSaver = new FrameStatesManager();
+        frameSaver.addSaveableFrame(this);
+        for (Component component : childs)
+            if (component instanceof Saveable)
+                frameSaver.addSaveableFrame((Saveable) component);
 
         try {
-            fs.save();
+            frameSaver.save();
         } catch (SaveException e) {
             System.err.println("Не удалось сохранить окна");
             e.printStackTrace();
@@ -180,24 +168,24 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * если возможно.
      */
     private void loadWindowStates() {
-        FrameLoader fl = new FrameLoader();
+        FrameLoader frameLoader = new FrameStatesManager();
         try {
-            fl.loadStates();
+            frameLoader.loadStates();
         } catch (LoadException e) {
             e.printStackTrace();
             return;
         }
 
         try {
-            fl.loadFrame(this);
+            frameLoader.loadFrame(this);
         } catch (LoadException e) {
             e.printStackTrace();
         }
 
-        for (Component c : childs) {
-            if (c instanceof Saveable) {
+        for (Component component : childs) {
+            if (component instanceof Saveable) {
                 try {
-                    fl.loadFrame((Saveable) c);
+                    frameLoader.loadFrame((Saveable) component);
                 } catch (LoadException e) {
                     e.printStackTrace();
                 }
@@ -206,34 +194,10 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     }
 
     /**
-     * Делает окна видимыми, рисуя их.
-     */
-    private void paintFrames() {
-        for (Component c : childs)
-            c.setVisible(true);
-    }
-
-    /**
      * Возвращает свой уникальный идентификатор
      */
     @Override
     public String getFrameId() {
-        return saveableDelegate.getFrameId();
-    }
-
-    /**
-     * Возвращает свое текущее состояние
-     */
-    @Override
-    public FrameConfig getWindowConfig() {
-        return saveableDelegate.getWindowConfig();
-    }
-
-    /**
-     * Устанавливает параметры окна в соответствии с переданной конфигурацией
-     */
-    @Override
-    public void loadConfig(FrameConfig config) {
-        saveableDelegate.loadConfig(config);
+        return "main";
     }
 }
