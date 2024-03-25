@@ -9,12 +9,10 @@ import javax.swing.*;
 
 import log.Logger;
 
-/**
- * Что требуется сделать:
- * 1. Метод создания меню перегружен функционалом и трудно читается.
- * Следует разделить его на серию более простых методов (или вообще выделить отдельный класс).
- *
- */
+import java.beans.PropertyVetoException;
+import java.io.*;
+import java.util.Properties;
+
 public class MainApplicationFrame extends JFrame
 {
     private final JDesktopPane desktopPane = new JDesktopPane();
@@ -40,6 +38,7 @@ public class MainApplicationFrame extends JFrame
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        loadWindowStateFromFile();
     }
 
     protected LogWindow createLogWindow()
@@ -57,41 +56,6 @@ public class MainApplicationFrame extends JFrame
     {
         desktopPane.add(frame);
         frame.setVisible(true);
-    }
-
-    protected JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-
-        JMenu menu = new JMenu("File");
-        menuBar.add(menu);
-
-        JMenuItem menuItem = new JMenuItem("New", KeyEvent.VK_N);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Open", KeyEvent.VK_O);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Save", KeyEvent.VK_S);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Exit", KeyEvent.VK_Q);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        JMenuItem exitItem = new JMenuItem("Exit", KeyEvent.VK_E);
-        exitItem.addActionListener((event) -> {
-            int result = JOptionPane.showConfirmDialog(this, "Вы уверены, что хотите выйти из приложения?", "Выход",
-                    JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
-        });
-        menu.add(exitItem);
-
-        return menuBar;
     }
 
     private JMenuBar generateMenuBar()
@@ -135,9 +99,10 @@ public class MainApplicationFrame extends JFrame
         }
         JMenuItem exitItem =  new JMenuItem("Выход", KeyEvent.VK_E);
         exitItem.addActionListener((event) -> {
+            saveWindowStateToFile();
             UIManager.put("OptionPane.yesButtonText", "Да");;
             UIManager.put("OptionPane.noButtonText", "Нет");
-            UIManager.put("OptionPane.cancelButtonText", "Отмена");
+            UIManager.put("OptionPane.cancelButtonText", "Извиняюсь!");
             int result = JOptionPane.showConfirmDialog(this, "Вы уверены, что хотите выйти из приложения?", "Выход",
                     JOptionPane.YES_NO_CANCEL_OPTION);
 
@@ -166,4 +131,42 @@ public class MainApplicationFrame extends JFrame
             // just ignore
         }
     }
+    private void saveWindowStateToFile() {
+        Properties prop = new Properties();
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            prop.setProperty(frame.getTitle() + ".x", String.valueOf(frame.getX()));
+            prop.setProperty(frame.getTitle() + ".y", String.valueOf(frame.getY()));
+            prop.setProperty(frame.getTitle() + ".width", String.valueOf(frame.getWidth()));
+            prop.setProperty(frame.getTitle() + ".height", String.valueOf(frame.getHeight()));
+            prop.setProperty(frame.getTitle() + ".isIcon", String.valueOf(frame.isIcon()));
+        }
+
+        try {
+            prop.store(new FileOutputStream("windowState.properties"), null);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadWindowStateFromFile() {
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream("windowState.properties"));
+            for (JInternalFrame frame : desktopPane.getAllFrames()) {
+                int x = Integer.parseInt(prop.getProperty(frame.getTitle() + ".x"));
+                int y = Integer.parseInt(prop.getProperty(frame.getTitle() + ".y"));
+                int width = Integer.parseInt(prop.getProperty(frame.getTitle() + ".width"));
+                int height = Integer.parseInt(prop.getProperty(frame.getTitle() + ".height"));
+                boolean isIcon = Boolean.parseBoolean(prop.getProperty(frame.getTitle() + ".isIcon"));
+
+                frame.setBounds(x, y, width, height);
+                if (isIcon) {
+                    frame.setIcon(true);
+                }
+            }
+        } catch (IOException | PropertyVetoException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
+
