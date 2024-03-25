@@ -1,28 +1,36 @@
 package org.robotgame.gui;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class LocalizationManager {
     private static ResourceBundle messages;
+    private static final String PROPERTIES_FILE_PATH = "src/main/resources/config.properites";
+    private static final String BUNDLE_BASE_NAME = "messages";
+    private static final Object lock = new Object();
+
 
     static {
+        loadResourceBundle();
+    }
 
+    private static void loadResourceBundle() {
         Properties props = new Properties();
         try {
-            FileInputStream in = new FileInputStream("src/main/resources/config.properites");
-
-            props.load(in);
-            in.close();
-
+            FileInputStream in = new FileInputStream(PROPERTIES_FILE_PATH);
+            synchronized (lock) {
+                props.load(in);
+                in.close();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         Locale locale;
-
         switch (props.getProperty("Language")) {
             case "EN":
                 locale = Locale.ENGLISH;
@@ -35,7 +43,7 @@ public class LocalizationManager {
                 break;
         }
 
-        messages = ResourceBundle.getBundle("messages", locale);
+        messages = ResourceBundle.getBundle(BUNDLE_BASE_NAME, locale);
     }
 
     public static String getString(String key) {
@@ -44,18 +52,16 @@ public class LocalizationManager {
 
     public static void changeLanguage(String language) {
         Properties props = new Properties();
-        try {
-            FileOutputStream out = new FileOutputStream("src/main/resources/config.properites");
-            FileInputStream in = new FileInputStream("src/main/resources/config.properites");
-
-            props.load(in);
-            in.close();
-
-            props.setProperty("Language", language);
-            props.store(out, null);
-            out.close();
+        try (FileOutputStream out = new FileOutputStream(PROPERTIES_FILE_PATH);
+             FileInputStream in = new FileInputStream(PROPERTIES_FILE_PATH)) {
+            synchronized (lock) {
+                props.load(in);
+                props.setProperty("Language", language);
+                props.store(out, null);
+            }
+            loadResourceBundle();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

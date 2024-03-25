@@ -10,12 +10,13 @@ import java.awt.event.KeyEvent;
 import java.awt.Dimension;
 
 public class MenuBarBuilder {
-    public static JMenuBar buildMenuBar() {
+    public static JMenuBar buildMenuBar(MainApplicationFrame desktop) {
+
         JMenuBar menuBar = new JMenuBar();
 
         JMenu lookAndFeelMenu = buildLookAndFeelMenu(menuBar);
-        JMenu languageMenu = buildLanguageMenu();
-        JMenu testMenu = buildTestMenu(menuBar);
+        JMenu languageMenu = buildLanguageMenu(desktop);
+        JMenu testMenu = buildTestMenu();
         JMenuItem exitMenuItem = buildExitMenuItem();
 
         menuBar.add(lookAndFeelMenu);
@@ -49,7 +50,7 @@ public class MenuBarBuilder {
         return lookAndFeelMenu;
     }
 
-    private static JMenu buildTestMenu(JMenuBar menuBar) {
+    private static JMenu buildTestMenu() {
         JMenu testMenu = new JMenu(LocalizationManager.getString("menu.tests"));
         testMenu.setMnemonic(KeyEvent.VK_T);
         testMenu.getAccessibleContext().setAccessibleDescription(
@@ -88,7 +89,7 @@ public class MenuBarBuilder {
         return exitMenuItem;
     }
 
-    private static JMenu buildLanguageMenu(){
+    private static JMenu buildLanguageMenu(MainApplicationFrame desktop){
         JMenu languageMenu = new JMenu(LocalizationManager.getString("menu.language"));
         languageMenu.getAccessibleContext().setAccessibleDescription(
                 "Настройки языка");
@@ -96,22 +97,27 @@ public class MenuBarBuilder {
         JMenuItem languageRu = new JMenuItem("Русский", KeyEvent.VK_S);
         languageRu.addActionListener((event) -> {
             LocalizationManager.changeLanguage("RU");
+            desktop.updateDesktopPane();
         });
         languageMenu.add(languageRu);
 
         JMenuItem languageEn = new JMenuItem("English", KeyEvent.VK_S);
         languageEn.addActionListener((event) -> {
             LocalizationManager.changeLanguage("EN");
+            desktop.updateDesktopPane();
         });
         languageMenu.add(languageEn);
 
         JMenuItem languageDefault = new JMenuItem(LocalizationManager.getString("menu.language.default"), KeyEvent.VK_S);
         languageDefault.addActionListener((event) -> {
             LocalizationManager.changeLanguage("");
+            desktop.updateDesktopPane();
         });
         languageMenu.add(languageDefault);
+
         return languageMenu;
     }
+
 
     private static void setLookAndFeel(String className) {
         try {

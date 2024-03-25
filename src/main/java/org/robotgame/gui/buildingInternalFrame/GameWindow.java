@@ -21,6 +21,11 @@ public class GameWindow extends AbstractWindow
 
     @Override
     protected void closeWindow() {
+    }
 
+    public void updateLabels() {
+        setTitle(LocalizationManager.getString("gameWindow.thePlayingField"));
+        revalidate();
+        repaint();
     }
 }

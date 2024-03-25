@@ -37,4 +37,6 @@ public abstract class AbstractWindow extends JInternalFrame {
         closeWindow();
         super.dispose();
     }
+
+    public abstract void updateLabels();
 }

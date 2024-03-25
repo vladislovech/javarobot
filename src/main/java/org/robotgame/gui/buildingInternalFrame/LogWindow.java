@@ -51,5 +51,11 @@ public class LogWindow extends AbstractWindow implements LogChangeListener {
     public void closeWindow() {
         m_logSource.unregisterListener(this);
     }
+    @Override
+    public void updateLabels() {
+        setTitle(LocalizationManager.getString("logWindow.theProtocolOfWork"));
+        revalidate();
+        repaint();
+    }
 }
 

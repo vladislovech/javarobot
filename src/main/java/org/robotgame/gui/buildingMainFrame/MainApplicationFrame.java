@@ -12,11 +12,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MainApplicationFrame extends JFrame {
-    private final JDesktopPane desktopPane = new JDesktopPane();
-    private AbstractWindow logWindow = createLogWindow();
-    private AbstractWindow gameWindow = createGameWindow();
+    private static JDesktopPane desktopPane = null;
+    private static AbstractWindow logWindow = null;
+    private static AbstractWindow gameWindow = null;
 
     public MainApplicationFrame() {
+
+        desktopPane = new JDesktopPane();
+        logWindow = createLogWindow();
+        gameWindow = createGameWindow();
+
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
@@ -26,7 +31,7 @@ public class MainApplicationFrame extends JFrame {
         addWindow(logWindow);
         addWindow(gameWindow);
 
-        setJMenuBar(MenuBarBuilder.buildMenuBar());
+        setJMenuBar(MenuBarBuilder.buildMenuBar(this));
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -75,5 +80,18 @@ public class MainApplicationFrame extends JFrame {
                 frame.dispose();
             }
         }
+    }
+    public void updateDesktopPane() {
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            if (frame instanceof AbstractWindow) {
+                ((AbstractWindow) frame).updateLabels();
+            }
+        }
+        updateMainFrame();
+    }
+    public void updateMainFrame() {
+        setJMenuBar(MenuBarBuilder.buildMenuBar(this));
+        desktopPane.revalidate();
+        desktopPane.repaint();
     }
 }
