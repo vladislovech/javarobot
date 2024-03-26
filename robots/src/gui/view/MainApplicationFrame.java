@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.viewmodel.ViewModel;
 import log.Logger;
 
 import javax.swing.*;
@@ -20,10 +21,12 @@ public class MainApplicationFrame extends JFrame {
 
         setContentPane(desktopPane);
 
+        ViewModel viewModel = new ViewModel();
+
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
+        GameWindow gameWindow = new GameWindow(viewModel);
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
     }

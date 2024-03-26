@@ -6,34 +6,25 @@ import java.awt.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import javax.swing.JPanel;
 
-public class RobotRenderer extends JPanel implements EntityRenderer<RobotEntity> {
-    public void render(RobotEntity robot) {}
+public class RobotRenderer implements EntityRenderer<RobotEntity> {
+    @Override
+    public void render(RobotEntity robot, Graphics graphics) {
+        Graphics2D g = (Graphics2D)graphics;
+
+        Point2D.Double robotPosition = robot.getRobotPosition();
+        Point targetPosition = robot.getTargetPosition();
+        double m_robotDirection = robot.getRobotDirection();
+
+        drawRobot(g, round(robotPosition.x), round(robotPosition.y), m_robotDirection, robot);
+        drawTarget(g, targetPosition.x, targetPosition.y);
+    }
     private static int round(double value)
     {
         return (int)(value + 0.5);
     }
-    @Override
-    public void paint(Graphics g, RobotEntity robot)
-    {
-        super.paint(g);
-        Graphics2D g2d = (Graphics2D)g;
-
-        double[] robotPosition = robot.getRobotPosition();
-        double m_robotPositionX = robotPosition[0];
-        double m_robotPositionY = robotPosition[1];
-
-        int[] targetPosition = robot.getTargetPosition();
-        int m_targetPositionX = targetPosition[0];
-        int m_targetPositionY = targetPosition[1];
-
-        double m_robotDirection = robot.getRobotDirection();
-
-        drawRobot(g2d, round(m_robotPositionX), round(m_robotPositionY), m_robotDirection, robot);
-        drawTarget(g2d, m_targetPositionX, m_targetPositionY);
-    }
-
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2)
     {
         g.fillOval(centerX - diam1 / 2, centerY - diam2 / 2, diam1, diam2);
@@ -46,11 +37,9 @@ public class RobotRenderer extends JPanel implements EntityRenderer<RobotEntity>
 
     private void drawRobot(Graphics2D g, int x, int y, double direction, RobotEntity robot)
     {
-        double[] robotPosition = robot.getRobotPosition();
-        double m_robotPositionX = robotPosition[0];
-        double m_robotPositionY = robotPosition[1];
-        int robotCenterX = round(m_robotPositionX);
-        int robotCenterY = round(m_robotPositionY);
+        Point2D.Double robotPosition = robot.getRobotPosition();
+        int robotCenterX = round(robotPosition.x);
+        int robotCenterY = round(robotPosition.y);
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY);
         g.setTransform(t);
         g.setColor(Color.MAGENTA);

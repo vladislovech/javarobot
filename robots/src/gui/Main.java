@@ -23,8 +23,6 @@ public class Main {
             frame.pack();
             frame.setVisible(true);
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-
-            //ViewModel viewModel = new ViewModel();
         });
     }
 }

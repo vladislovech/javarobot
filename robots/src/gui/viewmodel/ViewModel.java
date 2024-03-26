@@ -1,23 +1,25 @@
 package gui.viewmodel;
 
+import gui.model.Entity;
 import gui.model.Model;
 import gui.model.RobotEntity;
-import gui.view.GameWindow;
-import gui.view.LogWindow;
-import gui.view.MainApplicationFrame;
+import gui.view.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
 
 public class ViewModel extends JPanel {
     private final Model model;
     RobotEntity robot = new RobotEntity();
+    private Map<Class<?>, EntityRenderer<?>> renderes = Map.of(
+            RobotEntity.class, new RobotRenderer()
+    );
     private static Timer initTimer()
     {
         Timer timer = new Timer("events generator", true);
@@ -41,7 +43,7 @@ public class ViewModel extends JPanel {
             @Override
             public void run()
             {
-                robot.onModelUpdateEvent();
+                updateLogic();
             }
         }, 0, 10);
         addMouseListener(new MouseAdapter()
@@ -50,8 +52,6 @@ public class ViewModel extends JPanel {
             public void mouseClicked(MouseEvent e)
             {
                 robot.setTargetPosition(e.getPoint());
-                updateLogic();
-                repaint();
             }
         });
         setDoubleBuffered(true);
@@ -64,7 +64,14 @@ public class ViewModel extends JPanel {
     public void updateLogic() {
         model.updateModel();
     }
-//    public void render() {
-//
-//    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        List<Entity> entities = model.getEntities();
+        for (Entity entity : entities) {
+            EntityRenderer<Entity> entityRenderer = (EntityRenderer<Entity>)renderes.get(entity.getClass());
+            entityRenderer.render(entity, g);
+        }
+    }
 }

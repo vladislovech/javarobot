@@ -1,17 +1,15 @@
 package gui.model;
 
-import java.awt.Point;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 // TODO: как разделить GameVisualizer, на какие классы и что в них должно быть?
 
-public class RobotEntity implements Entity {
-    private volatile double m_robotPositionX = 100;
-    private volatile double m_robotPositionY = 100;
+public class RobotEntity extends JPanel implements Entity {
+    Point2D.Double robotPosition = new Point2D.Double(100, 100);
+    Point targetPosition = new Point(150, 100);
     private volatile double m_robotDirection = 0;
-
-    private volatile int m_targetPositionX = 150;
-    private volatile int m_targetPositionY = 100;
-
     private static final double maxVelocity = 0.1;
     private static final double maxAngularVelocity = 0.001;
     public RobotEntity() {
@@ -19,21 +17,39 @@ public class RobotEntity implements Entity {
     }
     public void update()
     {
-        //redraw();
+        double distance = distance(targetPosition.x, targetPosition.y,
+                robotPosition.x, robotPosition.y);
+        if (distance < 0.5)
+        {
+            return;
+        }
+        double velocity = maxVelocity;
+        double angleToTarget = angleTo(robotPosition.x, robotPosition.y, targetPosition.x, targetPosition.y);
+        double angularVelocity = 0;
+        if (angleToTarget > m_robotDirection)
+        {
+            angularVelocity = maxAngularVelocity;
+        }
+        if (angleToTarget < m_robotDirection)
+        {
+            angularVelocity = -maxAngularVelocity;
+        }
+
+        moveRobot(velocity, angularVelocity, 10);
     }
-    public double[] getRobotPosition() {
-        return new double[] {m_robotPositionX, m_robotPositionY};
+    public Point2D.Double getRobotPosition() {
+        return robotPosition;
     }
-    public int[] getTargetPosition() {
-        return new int[] {m_targetPositionX, m_targetPositionY};
+    public Point getTargetPosition() {
+        return targetPosition;
     }
     public double getRobotDirection() {
         return m_robotDirection;
     }
     public void setTargetPosition(Point p)
     {
-        m_targetPositionX = p.x;
-        m_targetPositionY = p.y;
+        targetPosition.x = p.x;
+        targetPosition.y = p.y;
     }
     private static double distance(double x1, double y1, double x2, double y2)
     {
@@ -68,48 +84,26 @@ public class RobotEntity implements Entity {
             return max;
         return value;
     }
-    public void onModelUpdateEvent()
-    {
-        double distance = distance(m_targetPositionX, m_targetPositionY,
-                m_robotPositionX, m_robotPositionY);
-        if (distance < 0.5)
-        {
-            return;
-        }
-        double velocity = maxVelocity;
-        double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
-        double angularVelocity = 0;
-        if (angleToTarget > m_robotDirection)
-        {
-            angularVelocity = maxAngularVelocity;
-        }
-        if (angleToTarget < m_robotDirection)
-        {
-            angularVelocity = -maxAngularVelocity;
-        }
-
-        moveRobot(velocity, angularVelocity, 10);
-    }
     private void moveRobot(double velocity, double angularVelocity, double duration)
     {
         velocity = applyLimits(velocity, 0, maxVelocity);
         angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-        double newX = m_robotPositionX + velocity / angularVelocity *
+        double newX = robotPosition.x + velocity / angularVelocity *
                 (Math.sin(m_robotDirection  + angularVelocity * duration) -
                         Math.sin(m_robotDirection));
         if (!Double.isFinite(newX))
         {
-            newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
+            newX = robotPosition.x + velocity * duration * Math.cos(m_robotDirection);
         }
-        double newY = m_robotPositionY - velocity / angularVelocity *
+        double newY = robotPosition.y - velocity / angularVelocity *
                 (Math.cos(m_robotDirection  + angularVelocity * duration) -
                         Math.cos(m_robotDirection));
         if (!Double.isFinite(newY))
         {
-            newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
+            newY = robotPosition.y + velocity * duration * Math.sin(m_robotDirection);
         }
-        m_robotPositionX = newX;
-        m_robotPositionY = newY;
+        robotPosition.x = newX;
+        robotPosition.y = newY;
         double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
         m_robotDirection = newDirection;
     }
