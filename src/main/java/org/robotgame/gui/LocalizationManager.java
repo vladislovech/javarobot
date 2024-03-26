@@ -50,7 +50,7 @@ public class LocalizationManager {
         return messages.getString(key);
     }
 
-    public static void changeLanguage(String language) {
+    public static synchronized boolean changeLanguage(String language) {
         Properties props = new Properties();
         try (FileOutputStream out = new FileOutputStream(PROPERTIES_FILE_PATH);
              FileInputStream in = new FileInputStream(PROPERTIES_FILE_PATH)) {
@@ -60,8 +60,10 @@ public class LocalizationManager {
                 props.store(out, null);
             }
             loadResourceBundle();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

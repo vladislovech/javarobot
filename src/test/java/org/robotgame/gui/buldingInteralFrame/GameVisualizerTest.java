@@ -1,4 +1,4 @@
-package org.robotgame.gui;
+package org.robotgame.gui.buldingInteralFrame;
 
 import org.junit.jupiter.api.Test;
 import org.robotgame.gui.buildingInternalFrame.GameVisualizer;
