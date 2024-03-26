@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -28,8 +29,6 @@ public class FrameStatesManagerTest {
     /**
      * Проверяет, что корректно сохраняется внутренний map JFrame
      * и JInternalFrame с реализованными Saveable
-     * 
-     * @throws ClassNotFoundException
      */
     @Test
     public void testCorrectSaving() throws IOException, PropertyVetoException, SaveException, ClassNotFoundException {
@@ -49,9 +48,11 @@ public class FrameStatesManagerTest {
         frameStatesManager.addSaveableFrame((Saveable) gameWindow);
         frameStatesManager.save();
 
-        InputStream is = new FileInputStream(frameStatesManager.getSaveLocation());
-        ObjectInputStream ois = new ObjectInputStream(is);
-        HashMap<String, FrameConfig> actual = (HashMap<String, FrameConfig>) ois.readObject();
+        Map<String, FrameConfig> actual;
+        try (InputStream is = new FileInputStream(frameStatesManager.getSaveLocation());
+                ObjectInputStream ois = new ObjectInputStream(is)) {
+            actual = (HashMap<String, FrameConfig>) ois.readObject();
+        }
         Assert.assertEquals(
                 new FrameConfig(
                         new Pair(1, 2),
@@ -64,8 +65,6 @@ public class FrameStatesManagerTest {
                         new Pair(7, 8),
                         true),
                 actual.get("game"));
-        ois.close();
-        is.close();
     }
 
     /**

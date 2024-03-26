@@ -16,15 +16,6 @@ public class FrameConfig implements Serializable {
     private final boolean isIcon;
 
     /**
-     * Пустой конструктор
-     */
-    public FrameConfig() {
-        size = new Pair();
-        location = new Pair();
-        isIcon = false;
-    }
-
-    /**
      * Типовой конструктор
      */
     public FrameConfig(Pair size, Pair location, boolean isIcon) {
@@ -37,9 +28,7 @@ public class FrameConfig implements Serializable {
      * Удобный конструктор при работе с окнами
      */
     public FrameConfig(Dimension size, Point location, boolean isIcon) {
-        this.size = new Pair(size);
-        this.location = new Pair(location);
-        this.isIcon = isIcon;
+        this(new Pair(size), new Pair(location), isIcon);
     }
 
     /**
