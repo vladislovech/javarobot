@@ -11,8 +11,17 @@ import java.io.Serializable;
  * - свернутость
  */
 public class FrameConfig implements Serializable {
+    /**
+     * Размер окна
+     */
     private final Pair size;
+    /**
+     * Расположение окна
+     */
     private final Pair location;
+    /**
+     * Свернутость окна
+     */
     private final boolean isIcon;
 
     /**
@@ -31,23 +40,14 @@ public class FrameConfig implements Serializable {
         this(new Pair(size), new Pair(location), isIcon);
     }
 
-    /**
-     * Геттер
-     */
     public Pair getSize() {
         return size;
     }
 
-    /**
-     * Геттер
-     */
     public Pair getLocation() {
         return location;
     }
 
-    /**
-     * Геттер
-     */
     public boolean isIcon() {
         return isIcon;
     }

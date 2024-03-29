@@ -8,20 +8,23 @@ import java.io.Serializable;
  * Неизменяемый класс, хранящий пару целых чисел.
  */
 public class Pair implements Serializable {
+    /**
+     * Первый элемент пары
+     */
     private final int first;
+    /**
+     * Второй элемент пары
+     */
     private final int second;
 
     /**
-     * Пустой конструктор
+     * first = 0
+     * second = 0
      */
     public Pair() {
-        first = 0;
-        second = 0;
+        this(0, 0);
     }
 
-    /**
-     * Стандартный конструктор
-     */
     public Pair(int first, int second) {
         this.first = first;
         this.second = second;
@@ -31,36 +34,20 @@ public class Pair implements Serializable {
      * Конструктор из java.awt.Dimension
      */
     public Pair(Dimension dimension) {
-        this.first = dimension.width;
-        this.second = dimension.height;
+        this(dimension.width, dimension.height);
     }
 
     /**
      * Конструктор из java.awt.Point
      */
     public Pair(Point point) {
-        this.first = point.x;
-        this.second = point.y;
+        this(point.x, point.y);
     }
 
-    /**
-     * Конструктор копирования
-     */
-    public Pair(Pair other) {
-        this.first = other.first;
-        this.second = other.second;
-    }
-
-    /**
-     * геттер
-     */
     public int getFirst() {
         return first;
     }
 
-    /**
-     * геттер
-     */
     public int getSecond() {
         return second;
     }
@@ -79,17 +66,11 @@ public class Pair implements Serializable {
         return new Point(first, second);
     }
 
-    /**
-     * Возвращает строковое представление объекта
-     */
     @Override
     public String toString() {
         return "Pair [first=" + first + ", second=" + second + "]";
     }
 
-    /**
-     * Возвращает хеш объекта
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -99,9 +80,6 @@ public class Pair implements Serializable {
         return result;
     }
 
-    /**
-     * Проверяет объект на равенство с другим
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

@@ -52,16 +52,10 @@ public class FrameStatesManager implements FrameSaver, FrameLoader {
         this.saveLocation = saveLocation;
     }
 
-    /**
-     * Заменяет стандартное расположение файла с состояниями на произвольное
-     */
     public void setSaveLocation(File location) {
         saveLocation = location;
     }
 
-    /**
-     * Возвращает файл, куда сохраняются состояния окон
-     */
     public File getSaveLocation() {
         return saveLocation;
     }
