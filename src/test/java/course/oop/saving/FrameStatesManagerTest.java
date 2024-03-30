@@ -18,6 +18,7 @@ import org.junit.rules.TemporaryFolder;
 
 import course.oop.gui.GameWindow;
 import course.oop.gui.MainApplicationFrame;
+import course.oop.model.Game;
 
 /**
  * Тестирует класс course.oop.saving.FrameStatesManager
@@ -39,7 +40,7 @@ public class FrameStatesManagerTest {
         mainApplicationFrame.setSize(new Dimension(1, 2));
         mainApplicationFrame.setLocation(new Point(3, 4));
 
-        GameWindow gameWindow = new GameWindow();
+        GameWindow gameWindow = new GameWindow(new Game());
         gameWindow.setSize(new Dimension(5, 6));
         gameWindow.setLocation(new Point(7, 8));
         gameWindow.setIcon(true);
@@ -81,7 +82,7 @@ public class FrameStatesManagerTest {
         mainApplicationFrame.setSize(new Dimension(1, 2));
         mainApplicationFrame.setLocation(new Point(3, 4));
 
-        GameWindow gameWindow = new GameWindow();
+        GameWindow gameWindow = new GameWindow(new Game());
         gameWindow.setSize(new Dimension(5, 6));
         gameWindow.setLocation(new Point(7, 8));
         gameWindow.setIcon(true);
@@ -95,7 +96,7 @@ public class FrameStatesManagerTest {
         frameStatesManager.setSaveLocation(oldLocation);
 
         MainApplicationFrame mainApplicationFrameLoaded = new MainApplicationFrame();
-        GameWindow gameWindowLoaded = new GameWindow();
+        GameWindow gameWindowLoaded = new GameWindow(new Game());
 
         frameStatesManager.loadStates();
 

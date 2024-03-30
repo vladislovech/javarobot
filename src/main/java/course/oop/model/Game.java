@@ -1,5 +1,8 @@
 package course.oop.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import javax.vecmath.Vector2d;
 
 /**
@@ -15,6 +18,10 @@ import javax.vecmath.Vector2d;
  * </ul>
  */
 public class Game {
+    /**
+     * Класс, делегирующий интерфейс Observable
+     */
+    private PropertyChangeSupport pcs;
     /**
      * При угле между направлением робота и вектором разности робота и цели
      * меньшем, чем это число, считаем, что угол между
@@ -63,6 +70,8 @@ public class Game {
         this.direction = new Vector2d(direction.x, direction.y);
         this.robot = new Vector2d(robot.x, robot.y);
         this.target = new Vector2d(target.x, target.y);
+
+        pcs = new PropertyChangeSupport(this);
     }
 
     /**
@@ -79,7 +88,8 @@ public class Game {
     }
 
     /**
-     * Пересчитывает положение робота через переданное количество времени(такт)
+     * Пересчитывает положение робота через переданное количество
+     * времени(такт), затем уведомляет об изменении слушателей.
      */
     public void nextState(double time) {
         if (distance().lengthSquared() < epsilon) {
@@ -87,6 +97,7 @@ public class Game {
         }
         rotateRobot();
         moveRobot();
+        notifyListeners();
     }
 
     public Vector2d getRobot() {
@@ -103,6 +114,20 @@ public class Game {
 
     public void setTarget(Vector2d target) {
         this.target = new Vector2d(target.x, target.y);
+    }
+
+    /**
+     * Метод для добавления слушателя изменения модели
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Метод для удаления слушателя модели
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
     }
 
     /**
@@ -161,5 +186,12 @@ public class Game {
         return new Vector2d(
                 Math.cos(a) * v.x + -Math.sin(a) * v.y,
                 Math.sin(a) * v.x + Math.cos(a) * v.y);
+    }
+
+    /**
+     * Уведомляет слушателей об изменении положения робота.
+     */
+    private void notifyListeners() {
+        pcs.firePropertyChange("robot_update", null, getRobot());
     }
 }

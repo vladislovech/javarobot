@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,7 +18,7 @@ import javax.vecmath.Vector2d;
 
 import course.oop.model.Game;
 
-public class GameVisualizer extends JPanel {
+public class GameVisualizer extends JPanel implements PropertyChangeListener {
     private final Timer m_timer;
     /**
      * Модель игры
@@ -28,15 +30,10 @@ public class GameVisualizer extends JPanel {
         return timer;
     }
 
-    public GameVisualizer() {
+    public GameVisualizer(Game game) {
         m_timer = initTimer();
-        game = new Game();
-        m_timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                onRedrawEvent();
-            }
-        }, 0, 50);
+        this.game = game;
+        game.addPropertyChangeListener(this);
         m_timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -118,5 +115,12 @@ public class GameVisualizer extends JPanel {
      */
     private double atan_ox_and(Vector2d vector) {
         return Math.atan2(vector.y, vector.x);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if (event.getPropertyName().equals("robot_update")) {
+            onRedrawEvent();       
+        }
     }
 }

@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import course.oop.log.Logger;
+import course.oop.model.Game;
 import course.oop.saving.Saveable;
 import course.oop.saving.FrameStatesManager;
 import course.oop.saving.LoadException;
@@ -34,10 +35,19 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     private final List<Component> childs;
 
     /**
+     * Модель игры
+     */
+    private Game game;
+
+    /**
      * Создает главное окно программы
      */
     public MainApplicationFrame() {
         childs = new ArrayList<>();
+        /**
+         * Модель игры
+         */
+        game = new Game();
 
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
@@ -51,6 +61,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
 
         addWindow(createLogWindow());
         addWindow(createGameWindow());
+        addWindow(createRobotLocationWindow());
 
         loadWindowStates();
 
@@ -137,10 +148,23 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Создает игровое окно
      */
     private GameWindow createGameWindow() {
-        GameWindow gameWindow = new GameWindow();
+        GameWindow gameWindow = new GameWindow(game);
         gameWindow.setLocation(300, 0);
         gameWindow.setSize(500, 500);
         return gameWindow;
+    }
+
+    /**
+     * Создает окно, отображающее координаты робота
+     * 
+     * @return
+     */
+    private RobotLocationWindow createRobotLocationWindow() {
+        RobotLocationWindow robotLocationWindow = new RobotLocationWindow();
+        robotLocationWindow.setLocation(800, 0);
+        robotLocationWindow.setSize(200, 100);
+        game.addPropertyChangeListener(robotLocationWindow);
+        return robotLocationWindow;
     }
 
     /**
