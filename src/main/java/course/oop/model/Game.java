@@ -17,7 +17,8 @@ import javax.vecmath.Vector2d;
 public class Game {
     /**
      * При угле между направлением робота и вектором разности робота и цели
-     * меньшим, чем это число, считаем, что они равны
+     * меньшем, чем это число, считаем, что угол между
+     * направлением робота и вектором разности робота и цели равен 0
      */
     private final double angularEpsilon = 0.001;
     /**
@@ -89,15 +90,15 @@ public class Game {
     }
 
     public Vector2d getRobot() {
-        return robot;
+        return new Vector2d(robot);
     }
 
     public Vector2d getTarget() {
-        return target;
+        return new Vector2d(target);
     }
 
     public Vector2d getDirection() {
-        return direction;
+        return new Vector2d(direction);
     }
 
     public void setTarget(Vector2d target) {

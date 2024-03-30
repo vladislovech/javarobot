@@ -18,6 +18,9 @@ import course.oop.model.Game;
 
 public class GameVisualizer extends JPanel {
     private final Timer m_timer;
+    /**
+     * Модель игры
+     */
     private Game game;
 
     private Timer initTimer() {
@@ -62,17 +65,7 @@ public class GameVisualizer extends JPanel {
         game.nextState(10);
     }
 
-    private static double asNormalizedRadians(double angle) {
-        while (angle < 0) {
-            angle += 2 * Math.PI;
-        }
-        while (angle >= 2 * Math.PI) {
-            angle -= 2 * Math.PI;
-        }
-        return angle;
-    }
-
-    private static int round(double value) {
+    private int round(double value) {
         return (int) (value + 0.5);
     }
 
@@ -81,7 +74,7 @@ public class GameVisualizer extends JPanel {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        drawRobot(g2d, round(game.getRobot().x), round(game.getRobot().y), asNormalizedRadians(atan_ox_and(game.getDirection())));
+        drawRobot(g2d, round(game.getRobot().x), round(game.getRobot().y), atan_ox_and(game.getDirection()));
         drawTarget(g2d, round(game.getTarget().x), round(game.getTarget().y));
     }
 
@@ -121,9 +114,9 @@ public class GameVisualizer extends JPanel {
     }
 
     /**
-     * Возвращает арктангенс угла между осью ox и переданным вектором
+     * Возвращает угол между осью ox и переданным вектором.
      */
     private double atan_ox_and(Vector2d vector) {
-        return Math.atan(vector.y / vector.x);
+        return Math.atan2(vector.y, vector.x);
     }
 }
