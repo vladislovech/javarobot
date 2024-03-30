@@ -16,6 +16,11 @@ import javax.vecmath.Vector2d;
  */
 public class Game {
     /**
+     * При угле между направлением робота и вектором разности робота и цели
+     * меньшим, чем это число, считаем, что они равны
+     */
+    private final double angularEpsilon = 0.001;
+    /**
      * <b>расстояние</b>, которое робот может пройти за такт
      */
     private final double maxVelocity;
@@ -114,7 +119,7 @@ public class Game {
      */
     private void rotateRobot() {
         Vector2d distance = distance();
-        if (distance.angle(direction) < maxAngularVelocity) {
+        if (distance.angle(direction) <= maxAngularVelocity) {
             distance.normalize();
             direction = distance;
             return;
@@ -137,9 +142,13 @@ public class Game {
      */
     private void moveRobot() {
         Vector2d max_displacement = new Vector2d(direction);
+        Vector2d distance = distance();
         max_displacement.scale(maxVelocity);
-        if (distance().lengthSquared() < max_displacement.lengthSquared()) {
+
+        if (distance.angle(max_displacement) < angularEpsilon
+                && distance.lengthSquared() <= max_displacement.lengthSquared()) {
             robot = new Vector2d(target);
+            return;
         }
         robot.add(robot, max_displacement);
     }
