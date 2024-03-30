@@ -10,8 +10,9 @@ import javax.swing.JPanel;
 import org.robots.log.LogChangeListener;
 import org.robots.log.LogEntry;
 import org.robots.log.LogWindowSource;
+import org.robots.state.SaveableWindow;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener {
+public class LogWindow extends SaveableWindow implements LogChangeListener {
     private LogWindowSource logSource;
     private TextArea logContent;
 

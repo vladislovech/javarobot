@@ -13,6 +13,7 @@ public class MenuBar extends JMenuBar{
         this.parent = parent;
         this.add(initTestMenu());
         this.add(initLookAndFeelMenu());
+        this.add(initSaveMenu());
         this.add(initExitMenu());
     }
 
@@ -37,6 +38,21 @@ public class MenuBar extends JMenuBar{
 
         return menu;
     }
+
+    private JMenu initSaveMenu() {
+        JMenu saveMenu = createJMenu(
+                "Сохранение",
+                KeyEvent.VK_C,
+                "Сохранение положений и размеров окон"
+        );
+        saveMenu.add(createJMenuItem(
+                "Сохранить положение и размеры окон",
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_MASK),
+                e -> parent.saveWindows()
+        ));
+        return saveMenu;
+    }
+
     private JMenuItem createJMenuItem(String label, KeyStroke key, ActionListener listener){
         JMenuItem menuItem = new JMenuItem(label);
         menuItem.setAccelerator(key);
@@ -66,10 +82,10 @@ public class MenuBar extends JMenuBar{
         JMenu menu = createJMenu("Режим отображения", KeyEvent.VK_V,
                 "Управление режимом отображения приложения");
 
-        menu.add(createJMenuItem("Системная схема", KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_MASK),
+        menu.add(createJMenuItem("Системная схема", KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK),
                 event -> setLookAndFeel(UIManager.getSystemLookAndFeelClassName())));
 
-        menu.add(createJMenuItem("Универсальная схема", KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_MASK),
+        menu.add(createJMenuItem("Универсальная схема", KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.ALT_MASK),
                 event -> setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName())));
 
         return menu;

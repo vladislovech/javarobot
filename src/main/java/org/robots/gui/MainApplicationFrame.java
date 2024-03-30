@@ -8,7 +8,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 import org.robots.log.Logger;
-import org.robots.state.StateManager;
+import org.robots.state.SaveableWindow;
 
 /**
  * Что требуется сделать:
@@ -21,8 +21,6 @@ public class MainApplicationFrame extends JFrame {
 
     private LogWindow logWindow;
     private GameWindow gameWindow;
-    private final StateManager stateManager;
-
 
     public MainApplicationFrame() {
         //Make the big window be indented 50 pixels from each edge
@@ -41,8 +39,6 @@ public class MainApplicationFrame extends JFrame {
         addWindow(logWindow, 10, 10, 300, 800);
         addWindow(gameWindow, 300, 10, 400, 400);
 
-        stateManager = new StateManager(this, gameWindow, logWindow);
-
         setJMenuBar(new MenuBar(this));
 
         addWindowListener(new WindowAdapter(){
@@ -51,19 +47,39 @@ public class MainApplicationFrame extends JFrame {
                 MainApplicationFrame.this.confirmWindowClose();
             }
         });
-        stateManager.restoreState();
+        restoreWindows();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
+    public void saveWindows(){
+        for (var frame : desktopPane.getAllFrames()){
+            if (frame instanceof SaveableWindow)
+                ((SaveableWindow) frame).saveState();
+        }
+    }
 
+    private void restoreWindows(){
+        for (var frame : desktopPane.getAllFrames()){
+            if (frame instanceof SaveableWindow)
+                ((SaveableWindow) frame).restoreState();
+        }
+    }
+
+    private void confirmSave(){
+        if (JOptionPane.showConfirmDialog(this, "Хотите сохранить состояние окон?",
+                "Сохранить?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+            saveWindows();
+        }
+    }
     public void confirmWindowClose(){
         if (JOptionPane.showConfirmDialog(this, "Вы уверены, что хотите закрыть приложение?",
                 "Закрыть?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-            stateManager.saveState();
+            confirmSave();
             logWindow.dispose();
             gameWindow.dispose();
             this.dispose();
         }
     }
+
 
     protected GameWindow createGameWindow(){
         GameWindow gameWindow = new GameWindow();
