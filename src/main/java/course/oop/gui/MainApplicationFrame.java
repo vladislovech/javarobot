@@ -18,8 +18,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import course.oop.log.Logger;
 import course.oop.saving.Saveable;
-import course.oop.saving.FrameLoader;
-import course.oop.saving.FrameSaver;
 import course.oop.saving.FrameStatesManager;
 import course.oop.saving.LoadException;
 import course.oop.saving.SaveException;
@@ -149,7 +147,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Сохраняет состояния дочерних окон и главного окна.
      */
     private void saveWindowStates() {
-        FrameSaver frameSaver = new FrameStatesManager();
+        FrameStatesManager frameSaver = new FrameStatesManager();
         frameSaver.addSaveableFrame(this);
         for (Component component : childs)
             if (component instanceof Saveable)
@@ -168,7 +166,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * если возможно.
      */
     private void loadWindowStates() {
-        FrameLoader frameLoader = new FrameStatesManager();
+        FrameStatesManager frameLoader = new FrameStatesManager();
         try {
             frameLoader.loadStates();
         } catch (LoadException e) {

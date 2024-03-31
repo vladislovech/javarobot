@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 /**
  * Осуществляет сохранение и загрузку окон
  */
-public class FrameStatesManager implements FrameSaver, FrameLoader {
+public class FrameStatesManager {
     /**
      * Файл, куда сохраняются состояния окон.
      */
@@ -64,7 +64,6 @@ public class FrameStatesManager implements FrameSaver, FrameLoader {
      * Извлекает данные для сохранения у переданного окна и сохраняет
      * их во внутренний map.
      */
-    @Override
     public void addSaveableFrame(Saveable saveable) {
         if (saveable instanceof JFrame jf) {
             states.put(saveable.getFrameId(), getFrameConfigForJFrame(jf));
@@ -80,7 +79,6 @@ public class FrameStatesManager implements FrameSaver, FrameLoader {
     /**
      * сохраняет поле states в указанный в полях файл.
      */
-    @Override
     public void save() throws SaveException {
         try {
             FileUtils.forceMkdir(saveLocation.getParentFile());
@@ -127,7 +125,6 @@ public class FrameStatesManager implements FrameSaver, FrameLoader {
     /**
      * Читает указанный конфигурационный файл, заполняя внутреннее поле states
      */
-    @Override
     public void loadStates() throws LoadException {
         try {
             InputStream is = new FileInputStream(saveLocation);
@@ -151,7 +148,6 @@ public class FrameStatesManager implements FrameSaver, FrameLoader {
      * Пытается найти сохраненное состояние для указанного окна. Если его нет,
      * поднимает ошибку, что загружать нечего.
      */
-    @Override
     public void loadFrame(Saveable saveable) throws LoadException {
         if (!states.containsKey(saveable.getFrameId())) {
             System.err.println("Нет данных для загрузки окна %s".formatted(saveable.getFrameId()));
