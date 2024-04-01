@@ -38,7 +38,7 @@ public class MainApplicationFrame extends JFrame
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        loadWindowStateFromFile();
+        WindowStateManager.loadWindowStateFromFile(desktopPane);
     }
 
     protected LogWindow createLogWindow()
@@ -99,7 +99,7 @@ public class MainApplicationFrame extends JFrame
         }
         JMenuItem exitItem =  new JMenuItem("Выход", KeyEvent.VK_E);
         exitItem.addActionListener((event) -> {
-            saveWindowStateToFile();
+            WindowStateManager.saveWindowStateToFile(desktopPane);
             UIManager.put("OptionPane.yesButtonText", "Да");;
             UIManager.put("OptionPane.noButtonText", "Нет");
             UIManager.put("OptionPane.cancelButtonText", "Извиняюсь!");
@@ -131,42 +131,4 @@ public class MainApplicationFrame extends JFrame
             // just ignore
         }
     }
-    private void saveWindowStateToFile() {
-        Properties prop = new Properties();
-        for (JInternalFrame frame : desktopPane.getAllFrames()) {
-            prop.setProperty(frame.getTitle() + ".x", String.valueOf(frame.getX()));
-            prop.setProperty(frame.getTitle() + ".y", String.valueOf(frame.getY()));
-            prop.setProperty(frame.getTitle() + ".width", String.valueOf(frame.getWidth()));
-            prop.setProperty(frame.getTitle() + ".height", String.valueOf(frame.getHeight()));
-            prop.setProperty(frame.getTitle() + ".isIcon", String.valueOf(frame.isIcon()));
-        }
-
-        try {
-            prop.store(new FileOutputStream("windowState.properties"), null);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void loadWindowStateFromFile() {
-        Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream("windowState.properties"));
-            for (JInternalFrame frame : desktopPane.getAllFrames()) {
-                int x = Integer.parseInt(prop.getProperty(frame.getTitle() + ".x"));
-                int y = Integer.parseInt(prop.getProperty(frame.getTitle() + ".y"));
-                int width = Integer.parseInt(prop.getProperty(frame.getTitle() + ".width"));
-                int height = Integer.parseInt(prop.getProperty(frame.getTitle() + ".height"));
-                boolean isIcon = Boolean.parseBoolean(prop.getProperty(frame.getTitle() + ".isIcon"));
-
-                frame.setBounds(x, y, width, height);
-                if (isIcon) {
-                    frame.setIcon(true);
-                }
-            }
-        } catch (IOException | PropertyVetoException ex) {
-            ex.printStackTrace();
-        }
-    }
 }
-
