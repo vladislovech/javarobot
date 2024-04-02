@@ -4,62 +4,45 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.vecmath.Vector2d;
 
-import course.oop.model.Game;
+import course.oop.controller.GameController;
+import course.oop.model.GameModel;
+import course.oop.model.GameModelParams;
 
 public class GameVisualizer extends JPanel implements PropertyChangeListener {
-    private final Timer m_timer;
     /**
-     * Модель игры
+     * координаты робота и цели
      */
-    private Game game;
+    private int robot_x, robot_y, target_x, target_y;
 
-    private Timer initTimer() {
-        Timer timer = new Timer("events generator", true);
-        return timer;
-    }
+    /**
+     * Направление робота через угол относительно оси ox в радианах.
+     */
+    private double direction;
 
-    public GameVisualizer(Game game) {
-        m_timer = initTimer();
-        this.game = game;
-        game.addPropertyChangeListener(this);
-        m_timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                onModelUpdateEvent();
-            }
-        }, 0, 10);
+    public GameVisualizer(GameController gameController, GameModel gameModel) {
+        gameModel.addPropertyChangeListener(this);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setTargetPosition(e.getPoint());
+                gameController.targetUpdate(e.getPoint());
                 repaint();
             }
         });
         setDoubleBuffered(true);
     }
 
-    protected void setTargetPosition(Point p) {
-        game.setTarget(new Vector2d(p.x, p.y));
-    }
-
     protected void onRedrawEvent() {
         EventQueue.invokeLater(this::repaint);
-    }
-
-    protected void onModelUpdateEvent() {
-        game.nextState(10);
     }
 
     private int round(double value) {
@@ -71,8 +54,8 @@ public class GameVisualizer extends JPanel implements PropertyChangeListener {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        drawRobot(g2d, round(game.getRobot().x), round(game.getRobot().y), atan_ox_and(game.getDirection()));
-        drawTarget(g2d, round(game.getTarget().x), round(game.getTarget().y));
+        drawRobot(g2d, robot_x, robot_y, direction);
+        drawTarget(g2d, target_x, target_y);
     }
 
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2) {
@@ -84,30 +67,25 @@ public class GameVisualizer extends JPanel implements PropertyChangeListener {
     }
 
     private void drawRobot(Graphics2D g, int x, int y, double direction) {
-        int robotCenterX = round(game.getRobot().x);
-        int robotCenterY = round(game.getRobot().y);
-        AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY);
+        AffineTransform t = AffineTransform.getRotateInstance(direction, x, y);
         g.setTransform(t);
         g.setColor(Color.MAGENTA);
-        fillOval(g, robotCenterX, robotCenterY, 30, 10);
+        fillOval(g, x, y, 30, 10);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX, robotCenterY, 30, 10);
+        drawOval(g, x, y, 30, 10);
         g.setColor(Color.WHITE);
-        fillOval(g, robotCenterX + 10, robotCenterY, 5, 5);
+        fillOval(g, x + 10, y, 5, 5);
         g.setColor(Color.BLACK);
-        drawOval(g, robotCenterX + 10, robotCenterY, 5, 5);
+        drawOval(g, x + 10, y, 5, 5);
     }
 
     private void drawTarget(Graphics2D g, int x, int y) {
-        Vector2d target = game.getTarget();
-        int new_x = round(target.x);
-        int new_y = round(target.y);
         AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
         g.setTransform(t);
         g.setColor(Color.GREEN);
-        fillOval(g, new_x, new_y, 5, 5);
+        fillOval(g, x, y, 5, 5);
         g.setColor(Color.BLACK);
-        drawOval(g, new_x, new_y, 5, 5);
+        drawOval(g, x, y, 5, 5);
     }
 
     /**
@@ -117,10 +95,28 @@ public class GameVisualizer extends JPanel implements PropertyChangeListener {
         return Math.atan2(vector.y, vector.x);
     }
 
+    /**
+     * Обновляет поля класса на основе переданного состояния игры
+     */
+    private void updateViewFields(Map<GameModelParams, Vector2d> gameState) {
+        Vector2d vector = gameState.get(GameModelParams.ROBOT);
+        robot_x = round(vector.x);
+        robot_y = round(vector.y);
+
+        vector = gameState.get(GameModelParams.TARGET);
+        target_x = round(vector.x);
+        target_y = round(vector.y);
+
+        vector = gameState.get(GameModelParams.DIRECTION);
+        direction = atan_ox_and(vector);
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        if (event.getPropertyName().equals("robot_update")) {
-            onRedrawEvent();       
+        if (event.getPropertyName().equals("model_update")) {
+            Map<GameModelParams, Vector2d> gameState = (Map<GameModelParams, Vector2d>) event.getNewValue();
+            updateViewFields(gameState);
+            onRedrawEvent();
         }
     }
 }

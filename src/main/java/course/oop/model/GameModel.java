@@ -2,6 +2,8 @@ package course.oop.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.vecmath.Vector2d;
 
@@ -17,7 +19,7 @@ import javax.vecmath.Vector2d;
  * <li>Передвинуться на расстояние меньшее или равное максимальному за такт</li>
  * </ul>
  */
-public class Game {
+public class GameModel {
     /**
      * Класс, делегирующий интерфейс Observable
      */
@@ -37,7 +39,7 @@ public class Game {
      */
     private final double maxAngularVelocity;
     /**
-     * При расстоянии между роботом и целью меньшим, чем это число,
+     * При квадрате расстояния между роботом и целью меньшем, чем это число,
      * считаем, что робот достиг цели.
      */
     private final double epsilon;
@@ -57,7 +59,7 @@ public class Game {
     /**
      * Задает начальное состояние игры по переданным данным.
      */
-    public Game(
+    public GameModel(
             double maxVelocity,
             double maxAngularVelocity,
             double epsilon,
@@ -77,10 +79,10 @@ public class Game {
     /**
      * Задает начальное состояние игры такое же, как у Александра Владимировича
      */
-    public Game() {
+    public GameModel() {
         this(
                 1, // используются максимальные за такт расстояния
-                0.01, // используется максимальное за такт поворот
+                0.01, // используется максимальный за такт поворот
                 0.25, // сравниваются квадраты длин
                 new Vector2d(1, 0),
                 new Vector2d(100.0, 100.0),
@@ -88,7 +90,7 @@ public class Game {
     }
 
     /**
-     * Пересчитывает положение робота через переданное количество
+     * Пересчитывает положение робота (и цели) через переданное количество
      * времени(такт), затем уведомляет об изменении слушателей.
      */
     public void nextState(double time) {
@@ -189,9 +191,20 @@ public class Game {
     }
 
     /**
-     * Уведомляет слушателей об изменении положения робота.
+     * Возвращает актуальное состояние модели для отправки обозревателям
+     */
+    private Map<GameModelParams, Vector2d> getModelState() {
+        Map<GameModelParams, Vector2d> modelState = new HashMap<>();
+        modelState.put(GameModelParams.ROBOT, getRobot());
+        modelState.put(GameModelParams.TARGET, getTarget());
+        modelState.put(GameModelParams.DIRECTION, getDirection());
+        return modelState;
+    }
+
+    /**
+     * Уведомляет слушателей об изменении состояния модели.
      */
     private void notifyListeners() {
-        pcs.firePropertyChange("robot_update", null, getRobot());
+        pcs.firePropertyChange("model_update", null, getModelState());
     }
 }

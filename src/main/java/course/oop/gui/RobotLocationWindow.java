@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
+import java.util.Map;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -12,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Vector2d;
 
+import course.oop.model.GameModel;
+import course.oop.model.GameModelParams;
 import course.oop.saving.Saveable;
 
 /**
@@ -23,10 +26,17 @@ public class RobotLocationWindow extends JInternalFrame implements Saveable, Pro
     /** Координата y робота */
     JLabel yCoord;
 
+    /**
+     * Формат вывода координат робота
+     */
     private DecimalFormat df = new DecimalFormat("#.##");
 
-    public RobotLocationWindow() {
+    /**
+     * Создает окно, подписывается на изменения переданной модели.
+     */
+    public RobotLocationWindow(GameModel gameModel) {
         super("Internal Frame", true, true, true, true);
+        gameModel.addPropertyChangeListener(this);
         setSize(300, 200);
         xCoord = new JLabel("x");
         yCoord = new JLabel("y");
@@ -41,8 +51,9 @@ public class RobotLocationWindow extends JInternalFrame implements Saveable, Pro
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        if (event.getPropertyName().equals("robot_update")) {
-            updateCoords((Vector2d) event.getNewValue());
+        if (event.getPropertyName().equals("model_update")) {
+            Map<GameModelParams,Vector2d> gameState = (Map<GameModelParams, Vector2d>) event.getNewValue();
+            updateCoords(gameState.get(GameModelParams.ROBOT));
         }
     }
 
@@ -52,12 +63,12 @@ public class RobotLocationWindow extends JInternalFrame implements Saveable, Pro
     }
 
     /**
-     * Обновляет текстовые поля новыми координатами робота
+     * Обновляет текстовые поля gui новыми координатами робота
      */
-    private void updateCoords(Vector2d vector) {
+    private void updateCoords(Vector2d robot) {
         SwingUtilities.invokeLater(() -> {
-            xCoord.setText("x: " + df.format(vector.x));
-            yCoord.setText("y: " + df.format(vector.y));
+            xCoord.setText("x: " + df.format(robot.x));
+            yCoord.setText("y: " + df.format(robot.y));
         });
     }
 }
