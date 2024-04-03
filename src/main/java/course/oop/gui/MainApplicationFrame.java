@@ -170,13 +170,13 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         FrameStatesManager frameSaver = new FrameStatesManager();
         frameSaver.addSaveableFrame(this);
         for (Component component : childs)
-            if (component instanceof Saveable)
-                frameSaver.addSaveableFrame((Saveable) component);
+            if (component instanceof Saveable saveable)
+                frameSaver.addSaveableFrame(saveable);
 
         try {
             frameSaver.save();
         } catch (SaveException e) {
-            System.err.println("Не удалось сохранить окна");
+            System.err.println("Не удалось сохранить окна:");
             e.printStackTrace();
         }
     }
@@ -190,6 +190,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         try {
             frameLoader.loadStates();
         } catch (LoadException e) {
+            System.err.println("Не удалось загрузить состояния окон:");
             e.printStackTrace();
             return;
         }
@@ -197,14 +198,18 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         try {
             frameLoader.loadFrame(this);
         } catch (LoadException e) {
+            System.err.println("Не удалось загрузить состояние для "
+                    + getFrameId() + ":");
             e.printStackTrace();
         }
 
         for (Component component : childs) {
-            if (component instanceof Saveable) {
+            if (component instanceof Saveable saveable) {
                 try {
-                    frameLoader.loadFrame((Saveable) component);
+                    frameLoader.loadFrame(saveable);
                 } catch (LoadException e) {
+                    System.err.println("Не удалось загрузить состояние для "
+                            + saveable.getFrameId() + ":");
                     e.printStackTrace();
                 }
             }
