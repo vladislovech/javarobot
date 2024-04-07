@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="aa8d1d09-12b1-4491-93e6-d3b6c0ed511d" name="Changes" comment="add map, and moving entries">
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/robotgame/GameController/GameVisualizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/robotgame/GameController/GameVisualizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/robotgame/gui/buldingInteralFrame/GameVisualizerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/robotgame/gui/buldingInteralFrame/GameVisualizerTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="task2" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2cxITTlqMopkLQ88lrgcEP1xnct" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.GameVisualizerTest.BlockedMove.executor": "Run",
+    "JUnit.GameVisualizerTest.TestMove.executor": "Run",
+    "JUnit.GameVisualizerTest.executor": "Run",
+    "JUnit.GameVisualizerTest.testMoveRobot.executor": "Run",
+    "JUnit.GameVisualizerTest.testSetTargetPosition.executor": "Run",
+    "JUnit.LocalizationManagerTest.TestChangeLanguage.executor": "Run",
+    "JUnit.LocalizationManagerTest.TestGetString2.executor": "Run",
+    "JUnit.LocalizationManagerTest.executor": "Run",
+    "JUnit.LogWindowSourceTest.executor": "Run",
+    "JUnit.LogWindowSourceTest.testAppend.executor": "Run",
+    "JUnit.LogWindowSourceTest.testRegisterListener.executor": "Run",
+    "JUnit.LogWindowSourceTest.testSize.executor": "Run",
+    "JUnit.LogWindowSourceTest.testUnregisterListener.executor": "Run",
+    "JUnit.LogWindowSourceTest.testValidDeque.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "task2",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/andrey/IdeaProjects/Robots",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "org.infernus.idea.checkstyle.CheckStyleConfigurable"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/map" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/java" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.robotgame.gui" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.GameVisualizerTest.testSetTargetPosition">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.Main" />
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.robotgame.gui.buildingInternalFrame.GameController.Entities.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GameVisualizerTest.testSetTargetPosition" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.robotgame.gui.buldingInteralFrame.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.robotgame.gui.buldingInteralFrame" />
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.buldingInteralFrame.GameVisualizerTest" />
+      <option name="METHOD_NAME" value="testSetTargetPosition" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LocalizationManagerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.robotgame.gui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.robotgame.gui" />
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.LocalizationManagerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LocalizationManagerTest.TestChangeLanguage" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.robotgame.gui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.robotgame.gui" />
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.LocalizationManagerTest" />
+      <option name="METHOD_NAME" value="TestChangeLanguage" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LocalizationManagerTest.TestGetString2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.robotgame.gui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.robotgame.gui" />
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.LocalizationManagerTest" />
+      <option name="METHOD_NAME" value="TestGetString2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.GameVisualizerTest.testSetTargetPosition" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.LocalizationManagerTest" />
+        <item itemvalue="JUnit.LocalizationManagerTest.TestGetString2" />
+        <item itemvalue="JUnit.LocalizationManagerTest.TestChangeLanguage" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-20.0.2-corretto-20.0.2.1-4caba194b151-d89c1816" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aa8d1d09-12b1-4491-93e6-d3b6c0ed511d" name="Changes" comment="" />
+      <created>1709046810907</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1709046810907</updated>
+    </task>
+    <task id="LOCAL-00001" summary="return back and replace struct in log queue">
+      <option name="closed" value="true" />
+      <created>1709362167881</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1709362167881</updated>
+    </task>
+    <task id="LOCAL-00002" summary="refactor code">
+      <option name="closed" value="true" />
+      <created>1709903707065</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1709903707065</updated>
+    </task>
+    <task id="LOCAL-00003" summary="finish coding task1">
+      <option name="closed" value="true" />
+      <created>1710184562001</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710184562001</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fix bug">
+      <option name="closed" value="true" />
+      <created>1710229702790</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710229702790</updated>
+    </task>
+    <task id="LOCAL-00005" summary="fix bug task1">
+      <option name="closed" value="true" />
+      <created>1710269701255</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1710269701255</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Begin task2: add closable and AbstractWindow in each internal frame. Add button &quot;Exit&quot; in menubar in main frame">
+      <option name="closed" value="true" />
+      <created>1710959495312</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1710959495312</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fix bugs with exit">
+      <option name="closed" value="true" />
+      <created>1711313599633</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1711313599633</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add realtime repaint localization">
+      <option name="closed" value="true" />
+      <created>1711381953424</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1711381953424</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add test">
+      <option name="closed" value="true" />
+      <created>1711447600116</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1711447600116</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fix bugs">
+      <option name="closed" value="true" />
+      <created>1712475783732</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1712475783732</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add map, and moving entries">
+      <option name="closed" value="true" />
+      <created>1712496677003</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1712496677004</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="return back and replace struct in log queue" />
+    <MESSAGE value="refactor code" />
+    <MESSAGE value="finish coding task1" />
+    <MESSAGE value="fix bug" />
+    <MESSAGE value="fix bug task1" />
+    <MESSAGE value="Begin task2: add closable and AbstractWindow in each internal frame. Add button &quot;Exit&quot; in menubar in main frame" />
+    <MESSAGE value="fix bugs with exit" />
+    <MESSAGE value="add realtime repaint localization" />
+    <MESSAGE value="add test" />
+    <MESSAGE value="fix bugs" />
+    <MESSAGE value="add map, and moving entries" />
+    <option name="LAST_COMMIT_MESSAGE" value="add map, and moving entries" />
+  </component>
+</project>

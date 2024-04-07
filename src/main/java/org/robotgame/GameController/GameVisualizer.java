@@ -249,4 +249,11 @@ public class GameVisualizer extends JPanel {
     public void updateScreenSize(){
         cameraMap.setScreenSize(getWidth(), getHeight());
     }
+
+    public Point getTargetPoint() {
+        return new Point(target.getPositionX(), target.getPositionY());
+    }
+    public Point getRobotPoint() {
+        return new Point((int)robot.getPositionX(), (int)robot.getPositionY());
+    }
 }
