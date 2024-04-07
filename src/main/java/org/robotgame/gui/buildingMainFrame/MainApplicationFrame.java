@@ -62,8 +62,10 @@ public class MainApplicationFrame extends JFrame {
     }
 
     protected AbstractWindow createGameWindow() {
-        AbstractWindow gameWindow = new GameWindow();
-        gameWindow.setSize(500, 500);
+        int width = 600;
+        int height = 600;
+        AbstractWindow gameWindow = new GameWindow(width, height);
+        gameWindow.setSize(width, height);
         return gameWindow;
     }
 
