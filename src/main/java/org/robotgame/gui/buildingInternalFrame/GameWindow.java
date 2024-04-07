@@ -1,6 +1,7 @@
 package org.robotgame.gui.buildingInternalFrame;
 
 import org.robotgame.gui.LocalizationManager;
+import org.robotgame.gui.buildingInternalFrame.GameController.GameVisualizer;
 
 import java.awt.*;
 

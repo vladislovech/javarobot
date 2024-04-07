@@ -1,7 +1,7 @@
 package org.robotgame.gui.buldingInteralFrame;
 
 import org.junit.jupiter.api.Test;
-import org.robotgame.gui.buildingInternalFrame.GameVisualizer;
+import org.robotgame.gui.buildingInternalFrame.GameController.GameVisualizer;
 
 import java.awt.*;
 

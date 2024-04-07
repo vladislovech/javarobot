@@ -13,14 +13,12 @@ import java.awt.event.WindowEvent;
 
 public class MainApplicationFrame extends JFrame {
     private static JDesktopPane desktopPane = null;
-    private static AbstractWindow logWindow = null;
-    private static AbstractWindow gameWindow = null;
 
     public MainApplicationFrame() {
 
         desktopPane = new JDesktopPane();
-        logWindow = createLogWindow();
-        gameWindow = createGameWindow();
+        AbstractWindow logWindow = createLogWindow();
+        AbstractWindow gameWindow = createGameWindow();
 
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

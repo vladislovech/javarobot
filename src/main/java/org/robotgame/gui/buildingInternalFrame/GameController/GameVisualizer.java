@@ -1,8 +1,6 @@
-package org.robotgame.gui.buildingInternalFrame;
+package org.robotgame.gui.buildingInternalFrame.GameController;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -256,4 +254,5 @@ public class GameVisualizer extends JPanel
         m_robotPositionX = x;
         m_robotPositionY = y;
     }
+
 }

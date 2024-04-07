@@ -45,9 +45,7 @@ public class LogWindowSource {
         notifyListeners();
     }
 
-
-
-    public void notifyListeners() {
+    public synchronized void notifyListeners() {
         LogChangeListener[] activeListeners = m_activeListeners;
         if (activeListeners == null) {
             updateActiveListeners();
@@ -60,7 +58,7 @@ public class LogWindowSource {
         }
     }
 
-    private void updateActiveListeners() {
+    private synchronized void updateActiveListeners() {
         m_activeListeners = m_listeners.toArray(new LogChangeListener[0]);
     }
 
