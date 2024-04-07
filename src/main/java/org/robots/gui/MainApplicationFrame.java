@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 import org.robots.log.Logger;
+import org.robots.model.Robot;
 import org.robots.state.SaveableWindow;
 
 /**
@@ -21,12 +22,14 @@ public class MainApplicationFrame extends JFrame {
 
     private LogWindow logWindow;
     private GameWindow gameWindow;
-
+    private Robot robot;
     public MainApplicationFrame() {
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
         int inset = 50;        
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        this.robot = new Robot(100, 100);
 
         setBounds(inset, inset,
             screenSize.width  - inset * 2,
@@ -35,7 +38,7 @@ public class MainApplicationFrame extends JFrame {
         setContentPane(desktopPane);
 
         logWindow = createLogWindow();
-        gameWindow = createGameWindow();
+        gameWindow = createGameWindow(robot);
         addWindow(logWindow, 10, 10, 300, 800);
         addWindow(gameWindow, 300, 10, 400, 400);
 
@@ -81,8 +84,8 @@ public class MainApplicationFrame extends JFrame {
     }
 
 
-    protected GameWindow createGameWindow(){
-        GameWindow gameWindow = new GameWindow();
+    protected GameWindow createGameWindow(Robot robot){
+        GameWindow gameWindow = new GameWindow(robot);
 
         return gameWindow;
     }
