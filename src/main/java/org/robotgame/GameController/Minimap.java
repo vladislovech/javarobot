@@ -26,7 +26,7 @@ public class Minimap extends JPanel {
         this.gameVisualizer = gameVisualizer;
 
         try {
-            backgroundImage = ImageIO.read(new File("src/main/resources/map/map.jpg"));
+            backgroundImage = ImageIO.read(new File(getClass().getClassLoader().getResource("map/map.jpg").getFile()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,6 +78,12 @@ public class Minimap extends JPanel {
 
         drawRobot(g2d, x, y);
 
+        if (gameVisualizer.getBase().getBaseBuilt()) {
+            x = gameVisualizer.getBase().getPositionX();
+            y = gameVisualizer.getBase().getPositionY();
+
+            drawBase(g2d, x, y);
+        }
     }
 
 
@@ -102,6 +108,29 @@ public class Minimap extends JPanel {
         fillOval(g, robotCenterX, robotCenterY, 5, 5);
         g.setColor(Color.BLACK);
         drawOval(g, robotCenterX, robotCenterY, 5, 5);
+    }
+    private void drawBase(Graphics2D g, double x, double y){
+        // Определение масштабирования координат базы
+        double scale = (double) getWidth() / gameVisualizer.getCameraMap().getMapSizeX();
+
+        // Преобразование координат базы с учетом масштабирования
+        int baseCenterX = (int) (x * scale);
+        int baseCenterY = (int) (y * scale);
+
+        //определение HP базы
+        int hpBase = gameVisualizer.getBase().getHealthPoint();
+
+        // Нарисовать базу на миникарте
+        g.setColor(Color.WHITE);
+        g.fillRect(baseCenterX-10, baseCenterY-5, 25, 2);
+        if (hpBase==0) {g.setColor(Color.RED);}
+        else if(hpBase<50){g.setColor(Color.ORANGE);}
+        else {g.setColor(Color.GREEN);}
+        g.fillRect(baseCenterX, baseCenterY, 5, 5);
+        g.fillRect(baseCenterX-10, baseCenterY-5, (int)(25*(hpBase/100.0)), 2);
+        g.setColor(Color.BLACK);
+        g.drawRect(baseCenterX, baseCenterY, 5, 5);
+        g.drawRect(baseCenterX-10, baseCenterY-5, 25, 2);
     }
 
     private void updateScreenSize() {

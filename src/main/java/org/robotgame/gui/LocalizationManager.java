@@ -3,13 +3,14 @@ package org.robotgame.gui;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class LocalizationManager {
     private static ResourceBundle messages;
-    private static final String PROPERTIES_FILE_PATH = "src/main/resources/config.properites";
+    private static final String PROPERTIES_FILE_PATH = "config.properties";
     private static final String BUNDLE_BASE_NAME = "messages";
     private static final Object lock = new Object();
 
@@ -21,7 +22,7 @@ public class LocalizationManager {
     private static void loadResourceBundle() {
         Properties props = new Properties();
         try {
-            FileInputStream in = new FileInputStream(PROPERTIES_FILE_PATH);
+            InputStream in = LocalizationManager.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE_PATH);
             synchronized (lock) {
                 props.load(in);
                 in.close();
@@ -30,19 +31,11 @@ public class LocalizationManager {
             throw new RuntimeException(e);
         }
 
-        Locale locale;
-        switch (props.getProperty("Language")) {
-            case "EN":
-                locale = Locale.ENGLISH;
-                break;
-            case "RU":
-                locale = new Locale("ru");
-                break;
-            default:
-                locale = Locale.getDefault();
-                break;
-        }
-
+        Locale locale = switch (props.getProperty("Language")) {
+            case "EN" -> Locale.ENGLISH;
+            case "RU" -> new Locale("ru");
+            default -> Locale.getDefault();
+        };
         messages = ResourceBundle.getBundle(BUNDLE_BASE_NAME, locale);
     }
 
@@ -52,8 +45,8 @@ public class LocalizationManager {
 
     public static synchronized boolean changeLanguage(String language) {
         Properties props = new Properties();
-        try (FileOutputStream out = new FileOutputStream(PROPERTIES_FILE_PATH);
-             FileInputStream in = new FileInputStream(PROPERTIES_FILE_PATH)) {
+        try (FileOutputStream out = new FileOutputStream(LocalizationManager.class.getClassLoader().getResource(PROPERTIES_FILE_PATH).getFile());
+             FileInputStream in = new FileInputStream(LocalizationManager.class.getClassLoader().getResource(PROPERTIES_FILE_PATH).getFile())) {
             synchronized (lock) {
                 props.load(in);
                 props.setProperty("Language", language);

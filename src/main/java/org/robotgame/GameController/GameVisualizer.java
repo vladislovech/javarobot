@@ -1,13 +1,11 @@
 package org.robotgame.GameController;
 
+import org.robotgame.GameController.Entities.Base;
 import org.robotgame.GameController.Entities.Robot;
 import org.robotgame.GameController.Entities.Target;
 
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +18,7 @@ public class GameVisualizer extends JPanel {
     private final Timer m_timer = initTimer();
     private final Robot robot;
     private final Target target;
+    private final Base base;
     private final CameraMap cameraMap;
     private Image backgroundImage;
 
@@ -33,11 +32,13 @@ public class GameVisualizer extends JPanel {
         int startRobotY = 100;
         robot = new Robot(startRobotX, startRobotY, 0);
         target = new Target(startRobotX, startRobotY);
+        base = new Base();
         cameraMap = new CameraMap(startRobotX, startRobotY, width, height,2000, 2000);
 
 
         try {
-            backgroundImage = ImageIO.read(new File("src/main/resources/map/map.jpg"));
+            //backgroundImage = ImageIO.read(new File("src/main/resources/map/map.jpg"));
+            backgroundImage = ImageIO.read(new File(getClass().getClassLoader().getResource("map/map.jpg").getFile()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,11 +55,27 @@ public class GameVisualizer extends JPanel {
                 onModelUpdateEvent();
             }
         }, 0, 5);
+        m_timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                base.takePositionRobot(robot.getPositionX(), robot.getPositionY());
+            }
+        }, 0,500);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 setTargetPosition(e.getX(), e.getY());
                 repaint();
+            }
+        });
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyTyped(e);
+                if (e.getKeyText(e.getKeyCode()).equals("B") && !(base.getBaseBuilt())){
+                    base.buildBase(robot.getPositionX(),robot.getPositionY());
+                };
             }
         });
 
@@ -189,6 +206,9 @@ public class GameVisualizer extends JPanel {
         drawBackgroundImage(g2d, cameraX, cameraY);
         drawRobot(g2d, robot.getPositionX() - cameraX, robot.getPositionY() - cameraY, robot.getDirection());
         drawTarget(g2d, target.getPositionX() - cameraX, target.getPositionY() - cameraY);
+        if (base.getBaseBuilt()) {
+            drawBase(g2d, base.getPositionX() - cameraX, base.getPositionY() - cameraY);
+        }
     }
 
 
@@ -232,6 +252,24 @@ public class GameVisualizer extends JPanel {
         drawOval(g, targetCenterX, targetCenterY, 5, 5);
     }
 
+    private void drawBase(Graphics2D g, double x, double y){
+        int baseCenterX = round(x);
+        int baseCenterY = round(y);
+
+        if (base.getHealthPoint() == 0) {g.setColor(Color.GRAY);}
+        else if (base.getHealthPoint()<50){g.setColor(Color.RED);}
+        else {g.setColor(Color.ORANGE);}
+        g.fill3DRect(baseCenterX-25, baseCenterY-25, 50, 50, true);
+        g.setColor(Color.BLACK);
+        g.draw3DRect(baseCenterX-25, baseCenterY-25, 50, 50, true);
+        g.drawRect(baseCenterX-20, baseCenterY-20, 40, 5);
+        g.setColor(Color.WHITE);
+        g.fillRect(baseCenterX-20, baseCenterY-20, 40, 5);
+        g.setColor(Color.GREEN);
+        g.fillRect(baseCenterX-20, baseCenterY-20, (int)(40*(base.getHealthPoint()/100.0)), 5);
+
+    }
+
     private void drawBackgroundImage(Graphics2D g, double cameraX, double cameraY) {
         int destX = 0; // Координата X верхнего левого угла области
         int destY = 0; // Координата Y верхнего левого угла области
@@ -261,5 +299,8 @@ public class GameVisualizer extends JPanel {
     }
     public CameraMap getCameraMap(){
         return cameraMap;
+    }
+    public Base getBase(){
+        return base;
     }
 }
