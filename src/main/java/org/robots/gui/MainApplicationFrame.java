@@ -22,6 +22,7 @@ public class MainApplicationFrame extends JFrame {
 
     private LogWindow logWindow;
     private GameWindow gameWindow;
+    private RobotStateWindow robotStateWindow;
     private Robot robot;
     public MainApplicationFrame() {
         //Make the big window be indented 50 pixels from each edge
@@ -39,9 +40,10 @@ public class MainApplicationFrame extends JFrame {
 
         logWindow = createLogWindow();
         gameWindow = createGameWindow(robot);
+        robotStateWindow = new RobotStateWindow(robot);
         addWindow(logWindow, 10, 10, 300, 800);
         addWindow(gameWindow, 300, 10, 400, 400);
-
+        addWindow(robotStateWindow, 800, 10, 200, 100);
         setJMenuBar(new MenuBar(this));
 
         addWindowListener(new WindowAdapter(){

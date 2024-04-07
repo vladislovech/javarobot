@@ -17,6 +17,11 @@ public class Robot extends Observable{
         robotPositionY = y;
     }
 
+    public String getInfo(){
+        return String.format("Positon: (%f, %f) \n Direction: %f",
+                robotPositionX, robotPositionY, robotDirection);
+    }
+
     public double getRobotPositionX(){
         return robotPositionX;
     }
@@ -24,6 +29,7 @@ public class Robot extends Observable{
     public double getRobotPositionY(){
         return robotPositionY;
     }
+
     public double getRobotDirection(){
         return robotDirection;
     }
