@@ -28,4 +28,7 @@ public class GameWindow extends AbstractWindow
         revalidate();
         repaint();
     }
+    public GameVisualizer get_visualizer(){
+        return m_visualizer;
+    }
 }

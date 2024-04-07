@@ -1,5 +1,6 @@
 package org.robotgame.gui.buildingInternalFrame;
 
+import org.robotgame.GameController.GameVisualizer;
 import org.robotgame.gui.LocalizationManager;
 
 import javax.swing.*;
@@ -39,4 +40,6 @@ public abstract class AbstractWindow extends JInternalFrame {
     }
 
     public abstract void updateLabels();
+
+    public abstract GameVisualizer get_visualizer();
 }

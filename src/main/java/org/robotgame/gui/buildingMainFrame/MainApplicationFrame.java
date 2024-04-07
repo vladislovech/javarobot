@@ -4,30 +4,31 @@ import org.robotgame.gui.LocalizationManager;
 import org.robotgame.gui.buildingInternalFrame.AbstractWindow;
 import org.robotgame.gui.buildingInternalFrame.GameWindow;
 import org.robotgame.gui.buildingInternalFrame.LogWindow;
+import org.robotgame.gui.buildingInternalFrame.MiniMapWindow;
 import org.robotgame.log.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MainApplicationFrame extends JFrame {
     private static JDesktopPane desktopPane = null;
+    AbstractWindow logWindow;
+    AbstractWindow gameWindow;
+    AbstractWindow minimapWindow;
 
     public MainApplicationFrame() {
-
         desktopPane = new JDesktopPane();
-        AbstractWindow logWindow = createLogWindow();
-        AbstractWindow gameWindow = createGameWindow();
 
-        int inset = 50;
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
+        logWindow = createLogWindow();
+        gameWindow = createGameWindow();
+        minimapWindow = createMiniMapWindow();
 
         setContentPane(desktopPane);
 
         addWindow(logWindow);
         addWindow(gameWindow);
+        addWindow(minimapWindow);
 
         setJMenuBar(MenuBarBuilder.buildMenuBar(this));
 
@@ -35,14 +36,10 @@ public class MainApplicationFrame extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Object[] options = {LocalizationManager.getString("yes"),
-                        LocalizationManager.getString("no")};
-
-                int result = JOptionPane.showOptionDialog(MainApplicationFrame.this,
+                int result = JOptionPane.showConfirmDialog(MainApplicationFrame.this,
                         LocalizationManager.getString("window.closing.message"),
                         LocalizationManager.getString("confirmation"),
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-                        null, options, options[0]);
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (result == JOptionPane.YES_OPTION) {
                     closeAllWindows();
                     dispose();
@@ -54,20 +51,30 @@ public class MainApplicationFrame extends JFrame {
 
     protected AbstractWindow createLogWindow() {
         AbstractWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-        logWindow.setLocation(10, 10);
+        logWindow.setLocation(10, 10); // Расположение в верхнем левом углу
         logWindow.setSize(300, 800);
-        logWindow.pack();
         Logger.debug(LocalizationManager.getString("logger.logsAreRunning"));
         return logWindow;
     }
 
     protected AbstractWindow createGameWindow() {
-        int width = 600;
-        int height = 600;
-        AbstractWindow gameWindow = new GameWindow(width, height);
-        gameWindow.setSize(width, height);
+        int gameWindowWidth = 600;
+        int gameWindowHeight = 600;
+        AbstractWindow gameWindow = new GameWindow(gameWindowWidth, gameWindowHeight);
+        gameWindow.setSize(gameWindowWidth, gameWindowHeight);
+        gameWindow.setLocation(320, 10);
         return gameWindow;
     }
+
+    protected AbstractWindow createMiniMapWindow() {
+        int minimapWindowWidth = 200;
+        int minimapWindowHeight = 200;
+        AbstractWindow minimapWindow = new MiniMapWindow(this.gameWindow);
+        minimapWindow.setSize(minimapWindowWidth, minimapWindowHeight);
+        minimapWindow.setLocation(930, 10);
+        return minimapWindow;
+    }
+
 
     protected void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
@@ -81,6 +88,7 @@ public class MainApplicationFrame extends JFrame {
             }
         }
     }
+
     public void updateDesktopPane() {
         for (JInternalFrame frame : desktopPane.getAllFrames()) {
             if (frame instanceof AbstractWindow) {
@@ -89,9 +97,13 @@ public class MainApplicationFrame extends JFrame {
         }
         updateMainFrame();
     }
+
     public void updateMainFrame() {
         setJMenuBar(MenuBarBuilder.buildMenuBar(this));
         desktopPane.revalidate();
         desktopPane.repaint();
+    }
+
+    public void restoreAllWindows() {
     }
 }

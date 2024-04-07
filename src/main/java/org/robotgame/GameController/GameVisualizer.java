@@ -256,4 +256,10 @@ public class GameVisualizer extends JPanel {
     public Point getRobotPoint() {
         return new Point((int)robot.getPositionX(), (int)robot.getPositionY());
     }
+    public Robot getRobot(){
+        return robot;
+    }
+    public CameraMap getCameraMap(){
+        return cameraMap;
+    }
 }

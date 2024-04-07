@@ -118,7 +118,6 @@ public class MenuBarBuilder {
         return languageMenu;
     }
 
-
     private static void setLookAndFeel(String className) {
         try {
             UIManager.setLookAndFeel(className);

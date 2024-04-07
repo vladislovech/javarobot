@@ -6,6 +6,7 @@ import java.awt.TextArea;
 
 import javax.swing.JPanel;
 
+import org.robotgame.GameController.GameVisualizer;
 import org.robotgame.gui.LocalizationManager;
 import org.robotgame.log.LogChangeListener;
 import org.robotgame.log.LogEntry;
@@ -56,6 +57,11 @@ public class LogWindow extends AbstractWindow implements LogChangeListener {
         setTitle(LocalizationManager.getString("logWindow.theProtocolOfWork"));
         revalidate();
         repaint();
+    }
+
+    @Override
+    public GameVisualizer get_visualizer() {
+        return null;
     }
 }
 
