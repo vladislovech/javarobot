@@ -8,7 +8,7 @@ public class Robot extends Observable{
     private volatile double robotDirection = 0;
 
     private static final double maxVelocity = 0.1;
-    private static final double maxAngularVelocity = 0.001;
+    private static final double maxAngularVelocity = 0.003;
     public static final String robotMoved = "robot moved";
 
     public Robot(int x, int y){
@@ -18,7 +18,7 @@ public class Robot extends Observable{
     }
 
     public String getInfo(){
-        return String.format("Positon: (%f, %f) \n Direction: %f",
+        return String.format("Positon: (%f, %f)\nDirection: %f",
                 robotPositionX, robotPositionY, robotDirection);
     }
 
@@ -41,22 +41,37 @@ public class Robot extends Observable{
             return;
         }
 
-        double velocity = maxVelocity;
         double angleToTarget = angleTo(robotPositionX, robotPositionY, targetPositionX, targetPositionY);
         double angularVelocity = 0;
 
-        if (angleToTarget > robotDirection) {
+        double diff = asNormalizedRadians(angleToTarget - robotDirection);
+
+        if (diff < Math.PI)
             angularVelocity = maxAngularVelocity;
-        }
 
-        if (angleToTarget < robotDirection) {
+        if (diff > Math.PI)
             angularVelocity = -maxAngularVelocity;
-        }
 
-        moveRobot(velocity, angularVelocity, 10);
+        if (unreachable(targetPositionX, targetPositionY))
+            angularVelocity = 0;
+
+        moveRobot(maxVelocity, angularVelocity, 10);
         setChanged();
         notifyObservers(robotMoved);
         clearChanged();
+    }
+    private boolean unreachable(double targetPositionX, double targetPositionY) {
+        double dx = targetPositionX - robotPositionX;
+        double dy = targetPositionY - robotPositionY;
+
+        double newDX = Math.cos(robotDirection) * dx + Math.sin(robotDirection) * dy;
+        double newDY = Math.cos(robotDirection) * dy - Math.sin(robotDirection) * dx;
+
+        double maxCurve = maxVelocity / maxAngularVelocity;
+        double dist1 = distance(newDX, newDY, 0, maxCurve);
+        double dist2 = distance(newDX, newDY + maxCurve, 0, 0);
+
+        return !(dist1 > maxCurve) || !(dist2 > maxCurve);
     }
 
     private static double distance(double x1, double y1, double x2, double y2) {
