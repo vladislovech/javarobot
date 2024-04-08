@@ -26,7 +26,7 @@ public class Minimap extends JPanel {
         this.gameVisualizer = gameVisualizer;
 
         try {
-            backgroundImage = ImageIO.read(new File(getClass().getClassLoader().getResource("map/map.jpg").getFile()));
+            backgroundImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("map/map.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -38,7 +38,7 @@ public class GameVisualizer extends JPanel {
 
         try {
             //backgroundImage = ImageIO.read(new File("src/main/resources/map/map.jpg"));
-            backgroundImage = ImageIO.read(new File(getClass().getClassLoader().getResource("map/map.jpg").getFile()));
+            backgroundImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("map/map.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }

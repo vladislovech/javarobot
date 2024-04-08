@@ -46,7 +46,7 @@ public class LocalizationManager {
     public static synchronized boolean changeLanguage(String language) {
         Properties props = new Properties();
         try (FileOutputStream out = new FileOutputStream(LocalizationManager.class.getClassLoader().getResource(PROPERTIES_FILE_PATH).getFile());
-             FileInputStream in = new FileInputStream(LocalizationManager.class.getClassLoader().getResource(PROPERTIES_FILE_PATH).getFile())) {
+             InputStream in = LocalizationManager.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE_PATH)) {
             synchronized (lock) {
                 props.load(in);
                 props.setProperty("Language", language);
