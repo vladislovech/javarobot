@@ -134,6 +134,5 @@ public class Minimap extends JPanel {
     }
 
     private void updateScreenSize() {
-        // Добавьте обновление размера экрана здесь, если необходимо
     }
 }

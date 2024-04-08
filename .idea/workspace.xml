@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aa8d1d09-12b1-4491-93e6-d3b6c0ed511d" name="Changes" comment="add map, and moving entries">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/robotgame/GameController/GameVisualizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/robotgame/GameController/GameVisualizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/robotgame/GameController/Minimap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/robotgame/GameController/Minimap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/robotgame/gui/LocalizationManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/robotgame/gui/LocalizationManager.class" afterDir="false" />
+    <list default="true" id="aa8d1d09-12b1-4491-93e6-d3b6c0ed511d" name="Changes" comment="add test">
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/robotgame/gui/GameControll/CameraMapTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,36 +43,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.GameVisualizerTest.BlockedMove.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.GameVisualizerTest.TestMove.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.GameVisualizerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.GameVisualizerTest.testMoveRobot.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.GameVisualizerTest.testSetTargetPosition.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LocalizationManagerTest.TestChangeLanguage.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LocalizationManagerTest.TestGetString2.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LocalizationManagerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LogWindowSourceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LogWindowSourceTest.testAppend.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LogWindowSourceTest.testRegisterListener.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LogWindowSourceTest.testSize.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LogWindowSourceTest.testUnregisterListener.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.LogWindowSourceTest.testValidDeque.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;task2&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/andrey/IdeaProjects/Robots&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.infernus.idea.checkstyle.CheckStyleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.CameraMapTest.executor": "Run",
+    "JUnit.GameVisualizerTest.BlockedMove.executor": "Run",
+    "JUnit.GameVisualizerTest.TestMove.executor": "Run",
+    "JUnit.GameVisualizerTest.executor": "Run",
+    "JUnit.GameVisualizerTest.testMoveRobot.executor": "Run",
+    "JUnit.GameVisualizerTest.testSetTargetPosition.executor": "Run",
+    "JUnit.LocalizationManagerTest.TestChangeLanguage.executor": "Run",
+    "JUnit.LocalizationManagerTest.TestGetString2.executor": "Run",
+    "JUnit.LocalizationManagerTest.executor": "Run",
+    "JUnit.LogWindowSourceTest.executor": "Run",
+    "JUnit.LogWindowSourceTest.testAppend.executor": "Run",
+    "JUnit.LogWindowSourceTest.testRegisterListener.executor": "Run",
+    "JUnit.LogWindowSourceTest.testSize.executor": "Run",
+    "JUnit.LogWindowSourceTest.testUnregisterListener.executor": "Run",
+    "JUnit.LogWindowSourceTest.testValidDeque.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "task2",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/andrey/IdeaProjects/Robots/src/test/java/org/robotgame/gui",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "org.infernus.idea.checkstyle.CheckStyleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/java/org/robotgame/gui" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/map" />
       <recent name="$PROJECT_DIR$/src" />
@@ -86,7 +87,7 @@
       <recent name="org.robotgame.gui" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LocalizationManagerTest">
+  <component name="RunManager" selected="JUnit.MinimapTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.robotgame.Main" />
       <module name="test" />
@@ -100,17 +101,32 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GameVisualizerTest.testSetTargetPosition" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CameraMapTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.robotgame.gui.buldingInteralFrame.*" />
+          <option name="PATTERN" value="org.robotgame.gui.GameControll.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.robotgame.gui.buldingInteralFrame" />
-      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.buldingInteralFrame.GameVisualizerTest" />
-      <option name="METHOD_NAME" value="testSetTargetPosition" />
+      <option name="PACKAGE_NAME" value="org.robotgame.gui.GameControll" />
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.GameControll.CameraMapTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CameraMapTest.testUpdateCameraMapPosition" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.robotgame.gui.GameControll.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.robotgame.gui.GameControll" />
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.GameControll.CameraMapTest" />
+      <option name="METHOD_NAME" value="testUpdateCameraMapPosition" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -131,45 +147,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LocalizationManagerTest.TestChangeLanguage" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MinimapTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.robotgame.gui.*" />
+          <option name="PATTERN" value="org.robotgame.gui.GameControll.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.robotgame.gui" />
-      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.LocalizationManagerTest" />
-      <option name="METHOD_NAME" value="TestChangeLanguage" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LocalizationManagerTest.TestGetString2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.robotgame.gui.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.robotgame.gui" />
-      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.LocalizationManagerTest" />
-      <option name="METHOD_NAME" value="TestGetString2" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="org.robotgame.gui.GameControll" />
+      <option name="MAIN_CLASS_NAME" value="org.robotgame.gui.GameControll.MinimapTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.MinimapTest" />
+        <item itemvalue="JUnit.CameraMapTest" />
+        <item itemvalue="JUnit.CameraMapTest.testUpdateCameraMapPosition" />
         <item itemvalue="JUnit.LocalizationManagerTest" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.GameVisualizerTest.testSetTargetPosition" />
-        <item itemvalue="JUnit.LocalizationManagerTest.TestGetString2" />
-        <item itemvalue="JUnit.LocalizationManagerTest.TestChangeLanguage" />
       </list>
     </recent_temporary>
   </component>
@@ -277,7 +276,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712496677004</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add test">
+      <option name="closed" value="true" />
+      <created>1712599343065</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1712599343065</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -300,9 +307,9 @@
     <MESSAGE value="Begin task2: add closable and AbstractWindow in each internal frame. Add button &quot;Exit&quot; in menubar in main frame" />
     <MESSAGE value="fix bugs with exit" />
     <MESSAGE value="add realtime repaint localization" />
-    <MESSAGE value="add test" />
     <MESSAGE value="fix bugs" />
     <MESSAGE value="add map, and moving entries" />
-    <option name="LAST_COMMIT_MESSAGE" value="add map, and moving entries" />
+    <MESSAGE value="add test" />
+    <option name="LAST_COMMIT_MESSAGE" value="add test" />
   </component>
 </project>

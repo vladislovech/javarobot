@@ -65,4 +65,12 @@ public class CameraMap {
             return max;
         return value;
     }
+
+    public double getScreenWidth() {
+        return screenWidth;
+    }
+
+    public double getScreenHeight() {
+        return screenHeight;
+    }
 }
