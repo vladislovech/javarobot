@@ -20,6 +20,7 @@ public class MainApplicationFrame extends JFrame {
                 screenSize.height - inset * 2);
 
         setContentPane(desktopPane);
+        setDefaultCloseOperation (WindowConstants.EXIT_ON_CLOSE);
 
         ViewModel viewModel = new ViewModel();
 

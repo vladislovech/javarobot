@@ -35,17 +35,12 @@ public class ViewModel extends JPanel {
             @Override
             public void run()
             {
+                // действия_бактерий();
+                updateLogic();
                 onRedrawEvent();
             }
         }, 0, 50);
-        m_timer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                updateLogic();
-            }
-        }, 0, 10);
+
         addMouseListener(new MouseAdapter()
         {
             @Override
