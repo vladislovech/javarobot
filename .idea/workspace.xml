@@ -86,7 +86,7 @@
       <recent name="org.robotgame.gui" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.LocalizationManagerTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.robotgame.Main" />
       <module name="test" />
@@ -165,9 +165,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.LocalizationManagerTest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.GameVisualizerTest.testSetTargetPosition" />
-        <item itemvalue="JUnit.LocalizationManagerTest" />
         <item itemvalue="JUnit.LocalizationManagerTest.TestGetString2" />
         <item itemvalue="JUnit.LocalizationManagerTest.TestChangeLanguage" />
       </list>

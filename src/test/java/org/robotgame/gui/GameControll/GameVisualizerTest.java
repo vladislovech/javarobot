@@ -1,4 +1,4 @@
-package org.robotgame.gui.buldingInteralFrame;
+package org.robotgame.gui.GameControll;
 
 import org.junit.jupiter.api.Test;
 import org.robotgame.GameController.GameVisualizer;
@@ -6,7 +6,6 @@ import org.robotgame.GameController.GameVisualizer;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class GameVisualizerTest {
     GameVisualizer visualizer = new GameVisualizer(500, 500);

@@ -10,7 +10,7 @@ import java.awt.*;
 public class MiniMapWindow extends AbstractWindow{
     private final Minimap m_minimap;
     public MiniMapWindow(AbstractWindow gameWindow) {
-        super(LocalizationManager.getString("minimap.title"), false, true, true, true);
+        super(LocalizationManager.getString("minimap.title"), false, true, false, false);
         m_minimap = new Minimap(gameWindow.get_visualizer());
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_minimap, BorderLayout.CENTER);
