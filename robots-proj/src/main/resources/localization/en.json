@@ -1,6 +1,9 @@
 {
 	"yes": "Yes",
 	"no": "No",
+	"robot pos": {
+		"title": "Robot's state"
+	},
 	"game": {
 		"title": "Gaming plane"
 	},

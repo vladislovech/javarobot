@@ -25,6 +25,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import robots.data.CashWriter;
 import robots.data.DataContainer;
 import robots.data.ReaderFromResouce;
+import robots.gui.game.GameWindow;
+import robots.gui.game.Robot;
+import robots.gui.game.RobotPositionWindow;
 import robots.log.Logger;
 
 /**
@@ -50,7 +53,9 @@ public class MainApplicationFrame extends JFrame {
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setExitAction();
-        addWindow(createGameWindow());
+        Robot robot = new Robot(100, 100);
+        addWindow(createRobotPositionWindow(robot));
+        addWindow(createGameWindow(robot));
         addWindow(createLogWindow());
         restoreOldProperties();
     }
@@ -87,11 +92,18 @@ public class MainApplicationFrame extends JFrame {
         });
     }
 
-    protected GameWindow createGameWindow() {
-        GameWindow gw = new GameWindow();
+    protected GameWindow createGameWindow(Robot robot) {
+        GameWindow gw = new GameWindow(robot);
         gw.setSize(400, 400);
         gw.setLocation(400, 10);
         return gw;
+    }
+
+    protected RobotPositionWindow createRobotPositionWindow(Robot robot) {
+        RobotPositionWindow rpw = new RobotPositionWindow(robot);
+        rpw.setSize(400, 100);
+        rpw.setLocation(400, 450);
+        return rpw;
     }
 
     protected LogWindow createLogWindow() {
@@ -104,13 +116,12 @@ public class MainApplicationFrame extends JFrame {
         return logWindow;
     }
 
-    protected void addWindow(SaveMerge frame) {
-        frames.add(frame);
+    protected void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
         frame.setVisible(true);
     }
 
-    protected void addWindow(SaveMerge frame, int h, int w) {
+    protected void addWindow(JInternalFrame frame, int h, int w) {
         frame.setSize(w, h);
         addWindow(frame);
     }

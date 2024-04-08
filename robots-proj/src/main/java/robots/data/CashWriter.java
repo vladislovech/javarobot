@@ -1,10 +1,11 @@
 package robots.data;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 
 public class CashWriter {
 	private String originalName;
@@ -46,13 +47,13 @@ public class CashWriter {
 		}
 	}
 
-	private PrintWriter createWriter() throws IllegalArgumentException, IOException {
+	private BufferedWriter createWriter(boolean override) throws IllegalArgumentException, IOException {
 		File file = new File(String.format("%s/%s", path, originalName));
-		return new PrintWriter(file);
+		return new BufferedWriter(new FileWriter(file, override));
 	}
 
-	public void write(String massage) throws IOException {
-		PrintWriter pw = createWriter();
+	public void write(String massage, boolean override) throws IOException {
+		BufferedWriter pw = createWriter(override);
 		pw.write(massage);
 		pw.flush();
 		pw.close();
@@ -93,6 +94,11 @@ public class CashWriter {
 			}
 		}
 		folder.delete();
+	}
+
+	static public boolean deleteFile(String name) {
+		File file = new File(String.format("%s/%s", CashReader.getPath(), name));
+		return file.delete();
 	}
 
 	static public void deleteSaveFolder() {

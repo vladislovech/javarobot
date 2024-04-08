@@ -17,7 +17,8 @@ public abstract class SaveMerge extends JInternalFrame implements IWithStates {
 
 	public void save() {
 		try {
-			new CashWriter(title).writeObject(this.getState());
+			new CashWriter(String.format("%s.save", title)).writeObject(this.getState());
+			new CashWriter("saves.txt").write(String.format("%s\n", title), true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

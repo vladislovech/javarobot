@@ -18,7 +18,7 @@ public class CashIOTest {
 	@Order(1)
 	public void canWrite() throws Exception {
 		CashWriter cw = new CashWriter(filename);
-		cw.write(massage);
+		cw.write(massage, false);
 	}
 
 	@Test

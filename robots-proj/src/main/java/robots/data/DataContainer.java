@@ -23,7 +23,7 @@ public final class DataContainer {
 		} catch (IOException e) {
 			currentLocale = "en";
 			try {
-				saveLocale();
+				saveLocale(false);
 			} catch (IOException ee) {
 				ee.printStackTrace();
 			}
@@ -90,8 +90,10 @@ public final class DataContainer {
 		}
 	}
 
-	private void saveLocale() throws IOException {
-		new CashWriter(CURRENT_LOCALE_FILEPATH).write(currentLocale);
+	private void saveLocale(boolean override) throws IOException {
+		boolean deleted = CashWriter.deleteFile(CURRENT_LOCALE_FILEPATH);
+		System.out.println(deleted);
+		new CashWriter(CURRENT_LOCALE_FILEPATH).write(currentLocale, override);
 	}
 
 	public void rememberLocale(String locale) throws IllegalArgumentException {
@@ -105,9 +107,9 @@ public final class DataContainer {
 
 	public void saveTheRememberedLocale() throws IOException {
 		if (null == rememberedLocale) {
-			saveLocale();
+			saveLocale(false);
 		} else {
-			new CashWriter(CURRENT_LOCALE_FILEPATH).write(rememberedLocale);
+			new CashWriter(CURRENT_LOCALE_FILEPATH).write(rememberedLocale, false);
 		}
 	}
 }
