@@ -1,12 +1,10 @@
 package robots.gui;
 
 import java.awt.BorderLayout;
-
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import robots.data.DataContainer;
 
-public class GameWindow extends JInternalFrame {
+public class GameWindow extends SaveMerge {
     private final GameVisualizer m_visualizer;
     static private final DataContainer DC = DataContainer.getInstance();
 

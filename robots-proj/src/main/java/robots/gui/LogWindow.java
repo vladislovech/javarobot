@@ -3,15 +3,13 @@ package robots.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.TextArea;
-
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import robots.data.DataContainer;
 import robots.log.LogChangeListener;
 import robots.log.LogEntry;
 import robots.log.LogWindowSource;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener {
+public class LogWindow extends SaveMerge implements LogChangeListener {
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
     static private final DataContainer DC = DataContainer.getInstance();
@@ -29,7 +27,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener {
         panel.add(m_logContent, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
-        updateLogContent();
+        updateLogContent();	
     }
 
     private void updateLogContent() {

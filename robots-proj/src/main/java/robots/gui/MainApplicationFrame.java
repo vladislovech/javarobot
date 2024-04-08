@@ -7,7 +7,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -20,6 +22,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import robots.data.CashWriter;
 import robots.data.DataContainer;
 import robots.data.ReaderFromResouce;
 import robots.log.Logger;
@@ -35,23 +38,44 @@ public class MainApplicationFrame extends JFrame {
     private final String[] options =
             {DC.getContentNoException("yes"), DC.getContentNoException("no")};
 
+    static public ArrayList<SaveMerge> frames = new ArrayList<SaveMerge>();
+
     public MainApplicationFrame() {
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
-
         setContentPane(desktopPane);
-
-
-        addWindow(createLogWindow());
-
-        addWindow(new GameWindow(), 400, 400);
-
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setExitAction();
+        addWindow(createGameWindow());
+        addWindow(createLogWindow());
+        restoreOldProperties();
+    }
+
+    private void saveStates() {
+        CashWriter.deleteSaveFolder();
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            if (frame instanceof SaveMerge) {
+                ((SaveMerge) frame).save();
+            }
+        }
+    }
+
+    private void restoreOldProperties() {
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            if (frame instanceof SaveMerge) {
+                try {
+                    ((SaveMerge) frame).load();
+                } catch (FileNotFoundException e) {
+                    System.out.println(String.format("\u001B[33mNo saves found for %s\u001b[0m", frame.getTitle()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void setExitAction() {
@@ -61,6 +85,13 @@ public class MainApplicationFrame extends JFrame {
                 exitConfirm();
             }
         });
+    }
+
+    protected GameWindow createGameWindow() {
+        GameWindow gw = new GameWindow();
+        gw.setSize(400, 400);
+        gw.setLocation(400, 10);
+        return gw;
     }
 
     protected LogWindow createLogWindow() {
@@ -73,12 +104,13 @@ public class MainApplicationFrame extends JFrame {
         return logWindow;
     }
 
-    protected void addWindow(JInternalFrame frame) {
+    protected void addWindow(SaveMerge frame) {
+        frames.add(frame);
         desktopPane.add(frame);
         frame.setVisible(true);
     }
 
-    protected void addWindow(JInternalFrame frame, int h, int w) {
+    protected void addWindow(SaveMerge frame, int h, int w) {
         frame.setSize(w, h);
         addWindow(frame);
     }
@@ -127,7 +159,6 @@ public class MainApplicationFrame extends JFrame {
 
     private JMenu createActionsMenu() {
         JMenu actionsMenu = new JMenu(DC.getContentNoException("menu/action/title")); // "Действия"
-        // addCloseOption(actionsMenu);
         actionsMenu.add(createProperties( //
                 DC.getContentNoException("menu/action/exit/name"), // "Выйти"
                 KeyEvent.VK_Q, //
@@ -223,6 +254,7 @@ public class MainApplicationFrame extends JFrame {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            saveStates();
             setDefaultCloseOperation(EXIT_ON_CLOSE);
             WindowEvent closeEvent = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
             Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeEvent);
