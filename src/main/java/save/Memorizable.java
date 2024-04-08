@@ -1,13 +1,16 @@
 package save;
 
+/**
+ * An object that can save and recover itself from local data
+ */
 public interface Memorizable {
     /**
-     * Method to store class data locally
+     * Store class state data locally
      */
     void memorize();
 
     /**
-     * Method to extract stored data and recreate the class
+     * Extract stored data and recover the class state with it
      *
      * @throws WindowInitException - exception occurred during window initialization
      */

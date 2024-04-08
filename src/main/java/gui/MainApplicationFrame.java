@@ -1,7 +1,6 @@
 package gui;
 
 import log.Logger;
-import save.DataSaver;
 import save.Memorizable;
 import save.StateManager;
 import save.WindowInitException;
@@ -22,8 +21,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
 {
     private final String attribute = "mainframe";
     private final JDesktopPane desktopPane = new JDesktopPane();
-    private final DataSaver saver = new DataSaver();
-    private final StateManager stateManager = saver.restore();
+    private final StateManager stateManager = new StateManager();
 
     public MainApplicationFrame() {
         //Make the big window be indented 50 pixels from each edge
@@ -76,7 +74,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
                 null, options, null);
         if (option == JOptionPane.YES_OPTION){
             memorize();
-            saver.store(stateManager);
+            stateManager.save();
             setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
     }
@@ -158,15 +156,17 @@ public class MainApplicationFrame extends JFrame implements Memorizable
     @Override
     public void memorize() {
         for (Component component : desktopPane.getComponents()) {
-            if (component instanceof Memorizable memorizable) memorizable.memorize();
+            if (component instanceof Memorizable memorizable)
+                memorizable.memorize();
             else if (component instanceof JInternalFrame.JDesktopIcon icon)
-                if (icon.getInternalFrame() instanceof Memorizable memorizable) memorizable.memorize();
+                if (icon.getInternalFrame() instanceof Memorizable memorizable)
+                    memorizable.memorize();
         }
-        stateManager.storeFrame(attribute, this);
+        stateManager.saveFrame(attribute, this);
     }
 
     @Override
     public void dememorize() throws WindowInitException {
-        stateManager.recoverFrame(attribute, this);
+        stateManager.configureFrame(attribute, this);
     }
 }

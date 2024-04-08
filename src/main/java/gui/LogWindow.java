@@ -64,11 +64,11 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Memo
 
     @Override
     public void memorize() {
-        stateManager.storeFrame(attribute, this);
+        stateManager.saveFrame(attribute, this);
     }
 
     @Override
     public void dememorize() throws WindowInitException {
-        stateManager.recoverFrame(attribute, this);
+        stateManager.configureFrame(attribute, this);
     }
 }

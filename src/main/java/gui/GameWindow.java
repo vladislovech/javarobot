@@ -33,11 +33,11 @@ public class GameWindow extends JInternalFrame implements Memorizable
 
     @Override
     public void memorize() {
-        stateManager.storeFrame(attribute, this);
+        stateManager.saveFrame(attribute, this);
     }
 
     @Override
     public void dememorize() throws WindowInitException {
-        stateManager.recoverFrame(attribute, this);
+        stateManager.configureFrame(attribute, this);
     }
 }
