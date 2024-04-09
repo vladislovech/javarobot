@@ -19,7 +19,6 @@ import java.awt.event.WindowEvent;
  */
 public class MainApplicationFrame extends JFrame implements Memorizable
 {
-    private final String attribute = "mainframe";
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final StateManager stateManager = new StateManager();
 
@@ -28,7 +27,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
         //of the screen.
         int inset = 50;
         try {
-            dememorize();
+            stateManager.configureFrame(getClassname(), this);
         } catch (WindowInitException e) {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             setBounds(inset, inset,
@@ -73,8 +72,14 @@ public class MainApplicationFrame extends JFrame implements Memorizable
                 "Выход", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, null);
         if (option == JOptionPane.YES_OPTION){
-            memorize();
-            stateManager.save();
+            for (Component component : desktopPane.getComponents()) {
+                if (component instanceof Memorizable memorizable)
+                    stateManager.saveFrame(memorizable.getClassname(), component);
+                else if (component instanceof JInternalFrame.JDesktopIcon icon)
+                    if (icon.getInternalFrame() instanceof Memorizable memorizable)
+                        stateManager.saveFrame(memorizable.getClassname(), component);
+            }
+            stateManager.saveState();
             setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
     }
@@ -154,19 +159,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
     }
 
     @Override
-    public void memorize() {
-        for (Component component : desktopPane.getComponents()) {
-            if (component instanceof Memorizable memorizable)
-                memorizable.memorize();
-            else if (component instanceof JInternalFrame.JDesktopIcon icon)
-                if (icon.getInternalFrame() instanceof Memorizable memorizable)
-                    memorizable.memorize();
-        }
-        stateManager.saveFrame(attribute, this);
-    }
-
-    @Override
-    public void dememorize() throws WindowInitException {
-        stateManager.configureFrame(attribute, this);
+    public String getClassname() {
+        return "mainframe";
     }
 }

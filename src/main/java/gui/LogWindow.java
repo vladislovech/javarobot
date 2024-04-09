@@ -15,7 +15,6 @@ import save.WindowInitException;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener, Memorizable
 {
-    private final String attribute = "logWindow";
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
     private final StateManager stateManager;
@@ -35,7 +34,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Memo
         pack();
         updateLogContent();
         try{
-            dememorize();
+            stateManager.configureFrame(getClassname(), this);
         } catch (WindowInitException e) {
             setLocation(10,10);
             setSize(300, 800);
@@ -63,12 +62,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Memo
     }
 
     @Override
-    public void memorize() {
-        stateManager.saveFrame(attribute, this);
-    }
-
-    @Override
-    public void dememorize() throws WindowInitException {
-        stateManager.configureFrame(attribute, this);
+    public String getClassname() {
+        return "logWindow";
     }
 }

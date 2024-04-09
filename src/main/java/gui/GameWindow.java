@@ -10,21 +10,18 @@ import java.awt.*;
 
 public class GameWindow extends JInternalFrame implements Memorizable
 {
-    private final String attribute = "gameWindow";
     private final GameVisualizer m_visualizer;
-    private final StateManager stateManager;
 
     public GameWindow(StateManager stateManager)
     {
         super("Игровое поле", true, true, true, true);
         m_visualizer = new GameVisualizer();
-        this.stateManager = stateManager;
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
         try {
-            dememorize();
+            stateManager.configureFrame(getClassname(), this);
         } catch (WindowInitException e) {
             setSize(400, 400);
             Logger.debug(e.getMessage());
@@ -32,12 +29,7 @@ public class GameWindow extends JInternalFrame implements Memorizable
     }
 
     @Override
-    public void memorize() {
-        stateManager.saveFrame(attribute, this);
-    }
-
-    @Override
-    public void dememorize() throws WindowInitException {
-        stateManager.configureFrame(attribute, this);
+    public String getClassname() {
+        return "gameWindow";
     }
 }

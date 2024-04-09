@@ -23,13 +23,10 @@ public class StateManager {
     /**
      * Map with all variables and their values
      */
-    private final Map<String, String> stateMap = new HashMap<>();
-    /**
-     * Path to the config file
-     */
-    private final String filename = System.getProperty("user.home") + "/RobotData.txt";
+    private final Map<String, String> stateMap;
+    private final StateSaver saver = new StateSaver();
     public StateManager(){
-        load();
+        stateMap = saver.load();
     }
 
     /**
@@ -77,37 +74,7 @@ public class StateManager {
         }
     }
 
-    /**
-     * Store saved data locally
-     */
-    public void save() {
-        Logger.debug("Store trigger");
-        try {
-            Path file = Path.of(filename);
-            List<String> data = new ArrayList<>();
-            for (String key : stateMap.keySet()) {
-                data.add(key + "=" + stateMap.get(key));
-            }
-            Files.write(file, data);
-        } catch (IOException e) {
-            Logger.debug("Failed to store data due to IO exception with message: \n" + e.getMessage());
-        }
-    }
-
-    /**
-     * Restore locally saved data
-     */
-    public void load() {
-        Logger.debug("Restore trigger");
-        try {
-            List<String> data = Files.readAllLines(Path.of(filename), StandardCharsets.UTF_8);
-            String[] parsedLine;
-            for (String line : data) {
-                parsedLine = line.split("=");
-                stateMap.put(parsedLine[0], parsedLine[1]);
-            }
-        } catch (IOException e) {
-            Logger.debug("Failed to restore data due to IO exception with message: \n" + e.getMessage());
-        }
+    public void saveState(){
+        saver.save(stateMap);
     }
 }
