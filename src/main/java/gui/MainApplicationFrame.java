@@ -8,6 +8,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+import gui.game.GameController;
+import gui.game.GameModel;
+import gui.game.GameVisualizer;
+import gui.game.GameWindow;
 import log.Logger;
 
 /**
@@ -38,7 +42,12 @@ public class MainApplicationFrame extends JFrame
         CoordinateWindow coordinateWindow = new CoordinateWindow();
         addWindow(coordinateWindow);
 
-        GameWindow gameWindow = new GameWindow(coordinateWindow);
+        GameModel model = new GameModel();
+        GameController controller = new GameController(model);
+        GameVisualizer visualizer = new GameVisualizer(controller);
+        GameWindow gameWindow = new GameWindow(visualizer);
+        model.addNewListener(coordinateWindow);
+        model.addNewListener(visualizer);
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 

@@ -1,4 +1,4 @@
-package gui;
+package gui.game;
 
 import java.awt.*;
 import java.beans.PropertyChangeListener;
@@ -8,7 +8,7 @@ import java.beans.PropertyChangeSupport;
  * Robot movement class.
  * Calculates all robot movements and coordinates
  */
-public class GameEngine{
+public class GameModel {
     private volatile double m_robotPositionX = 100;
     private volatile double m_robotPositionY = 100;
     private volatile double m_robotDirection = 0;
@@ -18,10 +18,8 @@ public class GameEngine{
 
     private static final double maxVelocity = 0.1;
     private static final double maxAngularVelocity = 0.001;
-    private final PropertyChangeSupport support;
-
-    public GameEngine(PropertyChangeListener listener){
-        support = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    public void addNewListener(PropertyChangeListener listener){
         support.addPropertyChangeListener(listener);
     }
 
@@ -49,30 +47,22 @@ public class GameEngine{
         }
         double velocity = maxVelocity;
         double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
-        double angularVelocity = 0;
-        if (angleToTarget > m_robotDirection)
-        {
-            angularVelocity = maxAngularVelocity;
-        }
-        if (angleToTarget < m_robotDirection)
-        {
-            angularVelocity = -maxAngularVelocity;
-        }
-        int duration = 10;
+        double angleDifference = asNormalizedRadians(angleToTarget - m_robotDirection);
+        double angularVelocity = (angleDifference < Math.PI) ? maxAngularVelocity : -maxAngularVelocity;
         velocity = applyLimits(velocity, 0, maxVelocity);
         angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
+        int duration = 10;
         double newX = m_robotPositionX + velocity / angularVelocity *
-                (Math.sin(m_robotDirection  + angularVelocity * duration) -
-                        Math.sin(m_robotDirection));
-        if (!Double.isFinite(newX))
-        {
+                (Math.sin(m_robotDirection + angularVelocity * duration) - Math.sin(m_robotDirection));
+
+        if (!Double.isFinite(newX)) {
             newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
         }
+
         double newY = m_robotPositionY - velocity / angularVelocity *
-                (Math.cos(m_robotDirection  + angularVelocity * duration) -
-                        Math.cos(m_robotDirection));
-        if (!Double.isFinite(newY))
-        {
+                (Math.cos(m_robotDirection + angularVelocity * duration) - Math.cos(m_robotDirection));
+
+        if (!Double.isFinite(newY)) {
             newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
         }
         double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
@@ -86,8 +76,8 @@ public class GameEngine{
 
     /**
      * Convert angle into normalized radian
-     * @param angle
-     * @return
+     * @param angle - angle
+     * @return - normalized radian value
      */
     private static double asNormalizedRadians(double angle)
     {

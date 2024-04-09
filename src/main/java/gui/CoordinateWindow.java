@@ -1,11 +1,11 @@
 package gui;
 
+import gui.game.GameModel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Window that displays robot coordinates
@@ -22,12 +22,12 @@ public class CoordinateWindow extends JInternalFrame implements PropertyChangeLi
     }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        GameEngine source = (GameEngine) evt.getSource();
-        String newLabelText = "targetPositionX = " + source.getTargetPositionX()+ "\n" +
-                "targetPositionY = " + source.getTargetPositionY() + "\n" +
-                "robotPositionX = " + source.getRobotPositionX() + "\n" +
-                "robotPositionY = " + source.getRobotPositionY() + "\n" +
-                "robotDirection = " + source.getRobotDirection();
+        GameModel model = (GameModel) evt.getSource();
+        String newLabelText = "targetPositionX = " + model.getTargetPositionX()+ "\n" +
+                "targetPositionY = " + model.getTargetPositionY() + "\n" +
+                "robotPositionX = " + model.getRobotPositionX() + "\n" +
+                "robotPositionY = " + model.getRobotPositionY() + "\n" +
+                "robotDirection = " + model.getRobotDirection();
         text.setText(newLabelText);
     }
 }

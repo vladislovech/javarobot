@@ -1,68 +1,36 @@
-package gui;
+package gui.game;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
-public class GameVisualizer extends JPanel
+public class GameVisualizer extends JPanel implements PropertyChangeListener
 {
-    private final Timer m_timer = initTimer();
-    private final GameEngine engine;
-    
-    private static Timer initTimer() 
+    private double robotX = 100;
+    private double robotY= 100;
+    private double robotDir = 0;
+    private int targetX = 150;
+    private int targetY = 100;
+
+    private final GameController m_controller;
+    public GameVisualizer(GameController controller)
     {
-        Timer timer = new Timer("events generator", true);
-        return timer;
-    }
-    
-    public GameVisualizer(PropertyChangeListener listener)
-    {
-        engine = new GameEngine(listener);
-        m_timer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                onRedrawEvent();
-            }
-        }, 0, 50);
-        m_timer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                onModelUpdateEvent();
-            }
-        }, 0, 10);
+        m_controller = controller;
         addMouseListener(new MouseAdapter()
         {
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                engine.setTargetPosition(e.getPoint());
+                m_controller.setTargetPosition(e.getPoint());
                 repaint();
             }
         });
         setDoubleBuffered(true);
-    }
-    
-    protected void onRedrawEvent()
-    {
-        EventQueue.invokeLater(this::repaint);
-    }
-    
-    protected void onModelUpdateEvent()
-    {
-        engine.updateRobot();
     }
 
     private static int round(double value)
@@ -74,13 +42,13 @@ public class GameVisualizer extends JPanel
     public void paint(Graphics g)
     {
         super.paint(g);
-        Graphics2D g2d = (Graphics2D)g; 
-        drawRobot(g2d, round(engine.getRobotPositionX()),
-                round(engine.getRobotPositionY()),
-                engine.getRobotDirection());
-        drawTarget(g2d, engine.getTargetPositionX(), engine.getTargetPositionY());
+        Graphics2D g2d = (Graphics2D)g;
+        drawRobot(g2d, round(robotX),
+                round(robotY),
+                robotDir);
+        drawTarget(g2d, targetX, targetY);
     }
-    
+
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2)
     {
         g.fillOval(centerX - diam1 / 2, centerY - diam2 / 2, diam1, diam2);
@@ -91,10 +59,8 @@ public class GameVisualizer extends JPanel
         g.drawOval(centerX - diam1 / 2, centerY - diam2 / 2, diam1, diam2);
     }
     
-    private void drawRobot(Graphics2D g, int x, int y, double direction)
+    private void drawRobot(Graphics2D g, int robotCenterX, int robotCenterY, double direction)
     {
-        int robotCenterX = round(engine.getRobotPositionX());
-        int robotCenterY = round(engine.getRobotPositionY());
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY); 
         g.setTransform(t);
         g.setColor(Color.MAGENTA);
@@ -115,5 +81,16 @@ public class GameVisualizer extends JPanel
         fillOval(g, x, y, 5, 5);
         g.setColor(Color.BLACK);
         drawOval(g, x, y, 5, 5);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        GameModel model = (GameModel) evt.getSource();
+        robotX = model.getRobotPositionX();
+        robotY = model.getRobotPositionY();
+        robotDir = model.getRobotDirection();
+        targetX = model.getTargetPositionX();
+        targetY = model.getTargetPositionY();
+        EventQueue.invokeLater(this::repaint);
     }
 }
