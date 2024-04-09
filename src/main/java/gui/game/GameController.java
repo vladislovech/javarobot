@@ -5,6 +5,10 @@ import java.beans.PropertyChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Controller class.
+ * Regularly updates model.
+ */
 public class GameController {
     private final GameModel m_model;
     private final Timer m_timer = new Timer("events generator", true);
