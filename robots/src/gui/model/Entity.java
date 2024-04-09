@@ -1,5 +1,8 @@
 package gui.model;
 
 public interface Entity {
-    void update();
+    void update(ModelContext context);
+
+    int getX();
+    int getY();
 }
