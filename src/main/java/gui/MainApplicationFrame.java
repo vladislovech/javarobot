@@ -35,7 +35,10 @@ public class MainApplicationFrame extends JFrame
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
+        CoordinateWindow coordinateWindow = new CoordinateWindow();
+        addWindow(coordinateWindow);
+
+        GameWindow gameWindow = new GameWindow(coordinateWindow);
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 
