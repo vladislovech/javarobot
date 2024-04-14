@@ -1,10 +1,19 @@
 package gui.model;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
+
 public abstract class CellEntity implements Entity {
     /**
      * Описывает универсальную клетку
      */
-    private CellType type;
-    public CellEntity(CellType type) {this.type = type;}
-    public CellType getType() {return type;}
+    private Point coords;
+    public CellEntity(Point p) {
+        this.coords = p;
+    }
+
+    @Override
+    public Point getCoords() {
+        return coords;
+    }
 }

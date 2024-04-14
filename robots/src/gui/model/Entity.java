@@ -1,8 +1,9 @@
 package gui.model;
 
-public interface Entity {
-    void update(ModelContext context);
+import java.awt.*;
+import java.awt.geom.Point2D;
 
-    int getX();
-    int getY();
+public interface Entity {
+    void update(WorldContext context);
+    Point getCoords();
 }

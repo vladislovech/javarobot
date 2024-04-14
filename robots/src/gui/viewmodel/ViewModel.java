@@ -1,7 +1,7 @@
 package gui.viewmodel;
 
 import gui.model.Entity;
-import gui.model.Model;
+import gui.model.World;
 import gui.model.RobotEntity;
 import gui.view.*;
 
@@ -15,8 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ViewModel extends JPanel {
-    private final Model model;
-    RobotEntity robot = new RobotEntity();
+    private final World world;
     private Map<Class<?>, EntityRenderer<?>> renderes = Map.of(
             RobotEntity.class, new RobotRenderer()
     );
@@ -28,7 +27,7 @@ public class ViewModel extends JPanel {
     private final Timer m_timer = initTimer();
 
     public ViewModel() {
-        model = new Model(robot);
+        world = new World(8, 8);
 
         m_timer.schedule(new TimerTask()
         {
@@ -41,14 +40,6 @@ public class ViewModel extends JPanel {
             }
         }, 0, 50);
 
-        addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                robot.setTargetPosition(e.getPoint());
-            }
-        });
         setDoubleBuffered(true);
     }
     protected void onRedrawEvent()
@@ -57,13 +48,13 @@ public class ViewModel extends JPanel {
     }
 
     public void updateLogic() {
-        model.updateModel();
+        world.updateModel();
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        List<Entity> entities = model.getEntities();
+        List<Entity> entities = world.getEntities();
         for (Entity entity : entities) {
             EntityRenderer<Entity> entityRenderer = (EntityRenderer<Entity>)renderes.get(entity.getClass());
             entityRenderer.render(entity, g);
