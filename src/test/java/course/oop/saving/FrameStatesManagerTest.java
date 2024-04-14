@@ -8,10 +8,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -27,6 +30,19 @@ import course.oop.model.GameModel;
 public class FrameStatesManagerTest {
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    /**
+     * Подготавливает контекст для тестирования класса
+     */
+    @Before
+    public void prepareTesting() {
+        System.setErr(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int arg0) throws IOException {
+                        // Чтобы не забивать stdout
+                }
+        }));
+    }
 
     /**
      * Проверяет, что корректно сохраняется внутренний map JFrame

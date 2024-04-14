@@ -9,7 +9,8 @@ import javax.vecmath.Vector2d;
 import course.oop.model.GameModel;
 
 /**
- * Контроллер GameWindow. Обновляет модель по таймеру и ...
+ * Контроллер GameWindow. Переводит модель в новое состояние по таймеру,
+ * меняет положение цели в модели.
  */
 public class GameController {
     /**

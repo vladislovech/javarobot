@@ -9,20 +9,31 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.vecmath.Vector2d;
 
 import course.oop.controller.GameController;
 import course.oop.model.GameModel;
-import course.oop.model.GameModelParams;
+import course.oop.model.GameModelEvents;
 
 public class GameVisualizer extends JPanel implements PropertyChangeListener {
     /**
-     * координаты робота и цели
+     * координата X робота
      */
-    private int robot_x, robot_y, target_x, target_y;
+    private int robotX;
+    /**
+     * координата Y робота
+     */
+    private int robotY;
+    /**
+     * координата X цели
+     */
+    private int targetX;
+    /**
+     * координата Y цели
+     */
+    private int targetY;
 
     /**
      * Направление робота через угол относительно оси ox в радианах.
@@ -54,8 +65,8 @@ public class GameVisualizer extends JPanel implements PropertyChangeListener {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        drawRobot(g2d, robot_x, robot_y, direction);
-        drawTarget(g2d, target_x, target_y);
+        drawRobot(g2d, robotX, robotY, direction);
+        drawTarget(g2d, targetX, targetY);
     }
 
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2) {
@@ -91,31 +102,31 @@ public class GameVisualizer extends JPanel implements PropertyChangeListener {
     /**
      * Возвращает угол между осью ox и переданным вектором.
      */
-    private double atan_ox_and(Vector2d vector) {
+    private double atanOxAnd(Vector2d vector) {
         return Math.atan2(vector.y, vector.x);
     }
 
     /**
      * Обновляет поля класса на основе переданного состояния игры
      */
-    private void updateViewFields(Map<GameModelParams, Vector2d> gameState) {
-        Vector2d vector = gameState.get(GameModelParams.ROBOT);
-        robot_x = round(vector.x);
-        robot_y = round(vector.y);
+    private void updateModelView(GameModel gameModel) {
+        Vector2d vector = gameModel.getRobot();
+        robotX = round(vector.x);
+        robotY = round(vector.y);
 
-        vector = gameState.get(GameModelParams.TARGET);
-        target_x = round(vector.x);
-        target_y = round(vector.y);
+        vector = gameModel.getTarget();
+        targetX = round(vector.x);
+        targetY = round(vector.y);
 
-        vector = gameState.get(GameModelParams.DIRECTION);
-        direction = atan_ox_and(vector);
+        vector = gameModel.getDirection();
+        direction = atanOxAnd(vector);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        if (event.getPropertyName().equals("model_update")) {
-            Map<GameModelParams, Vector2d> gameState = (Map<GameModelParams, Vector2d>) event.getNewValue();
-            updateViewFields(gameState);
+        if (event.getPropertyName().equals(GameModelEvents.UPDATE.toString())) {
+            GameModel gameModel = (GameModel) event.getNewValue();
+            updateModelView(gameModel);
             onRedrawEvent();
         }
     }

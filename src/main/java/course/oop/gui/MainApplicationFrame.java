@@ -56,9 +56,9 @@ public class MainApplicationFrame extends JFrame implements Saveable {
 
         GameModel gameModel = new GameModel();
         GameController gameController = new GameController(gameModel);
-        addWindow(createLogWindow());
-        addWindow(createGameWindow(gameController, gameModel));
-        addWindow(createRobotLocationWindow(gameModel));
+        addWindow(new LogWindow(Logger.getDefaultLogSource()));
+        addWindow(new GameWindow(gameController, gameModel));
+        addWindow(new RobotLocationWindow(gameModel));
 
         loadWindowStates();
 
@@ -133,37 +133,6 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     }
 
     /**
-     * Создает окно лога
-     */
-    private LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-        logWindow.setLocation(0, 0);
-        logWindow.setSize(300, 500);
-        Logger.debug("Протокол работает");
-        return logWindow;
-    }
-
-    /**
-     * Создает игровое окно
-     */
-    private GameWindow createGameWindow(GameController gameController, GameModel gameModel) {
-        GameWindow gameWindow = new GameWindow(gameController, gameModel);
-        gameWindow.setLocation(300, 0);
-        gameWindow.setSize(500, 500);
-        return gameWindow;
-    }
-
-    /**
-     * Создает окно, отображающее координаты робота
-     */
-    private RobotLocationWindow createRobotLocationWindow(GameModel gameModel) {
-        RobotLocationWindow robotLocationWindow = new RobotLocationWindow(gameModel);
-        robotLocationWindow.setLocation(800, 0);
-        robotLocationWindow.setSize(200, 100);
-        return robotLocationWindow;
-    }
-
-    /**
      * Сохраняет состояния дочерних окон и главного окна.
      */
     private void saveWindowStates() {
@@ -176,7 +145,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         try {
             frameSaver.save();
         } catch (SaveException e) {
-            System.err.println("Не удалось сохранить окна:");
+            System.err.println("Не удалось сохранить окна в файл конфигурации");
             e.printStackTrace();
         }
     }
@@ -190,7 +159,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         try {
             frameLoader.loadStates();
         } catch (LoadException e) {
-            System.err.println("Не удалось загрузить состояния окон:");
+            System.err.println("Не удалось загрузить состояния окон из файла конфигурации");
             e.printStackTrace();
             return;
         }
@@ -199,7 +168,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
             frameLoader.loadFrame(this);
         } catch (LoadException e) {
             System.err.println("Не удалось загрузить состояние для "
-                    + getFrameId() + ":");
+                    + getFrameId());
             e.printStackTrace();
         }
 
@@ -209,7 +178,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
                     frameLoader.loadFrame(saveable);
                 } catch (LoadException e) {
                     System.err.println("Не удалось загрузить состояние для "
-                            + saveable.getFrameId() + ":");
+                            + saveable.getFrameId());
                     e.printStackTrace();
                 }
             }

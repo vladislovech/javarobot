@@ -2,8 +2,6 @@ package course.oop.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.vecmath.Vector2d;
 
@@ -28,7 +26,7 @@ public class GameModel {
      * При угле между направлением робота и вектором разности робота и цели
      * меньшем, чем это число, считаем, что угол между
      * направлением робота и вектором разности робота и цели равен 0
-     */
+     */ 
     private final double angularEpsilon = 0.001;
     /**
      * <b>расстояние</b>, которое робот может пройти за такт
@@ -191,20 +189,9 @@ public class GameModel {
     }
 
     /**
-     * Возвращает актуальное состояние модели для отправки обозревателям
-     */
-    private Map<GameModelParams, Vector2d> getModelState() {
-        Map<GameModelParams, Vector2d> modelState = new HashMap<>();
-        modelState.put(GameModelParams.ROBOT, getRobot());
-        modelState.put(GameModelParams.TARGET, getTarget());
-        modelState.put(GameModelParams.DIRECTION, getDirection());
-        return modelState;
-    }
-
-    /**
-     * Уведомляет слушателей об изменении состояния модели.
+     * Уведомляет слушателей об изменении состояния модели
      */
     private void notifyListeners() {
-        pcs.firePropertyChange("model_update", null, getModelState());
+        pcs.firePropertyChange(GameModelEvents.UPDATE.toString(), null, this);
     }
 }
