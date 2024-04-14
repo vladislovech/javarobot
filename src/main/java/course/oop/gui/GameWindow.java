@@ -4,18 +4,22 @@ import java.awt.BorderLayout;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+
+import course.oop.controller.GameController;
+import course.oop.model.GameModel;
 import course.oop.saving.Saveable;
 
 public class GameWindow extends JInternalFrame implements Saveable {
     private final GameVisualizer m_visualizer;
 
-    public GameWindow() {
+    public GameWindow(GameController gameController, GameModel gameModel) {
         super("Игровое поле", true, true, true, true);
-        m_visualizer = new GameVisualizer();
+        setLocation(300, 0);
+        setSize(500, 500);
+        m_visualizer = new GameVisualizer(gameController, gameModel);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
-        pack();
     }
 
     /**

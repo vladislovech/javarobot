@@ -16,7 +16,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import course.oop.controller.GameController;
 import course.oop.log.Logger;
+import course.oop.model.GameModel;
 import course.oop.saving.Saveable;
 import course.oop.saving.FrameStatesManager;
 import course.oop.saving.LoadException;
@@ -38,6 +40,9 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      */
     public MainApplicationFrame() {
         childs = new ArrayList<>();
+        /**
+         * Модель игры
+         */
 
         // Make the big window be indented 50 pixels from each edge
         // of the screen.
@@ -49,8 +54,11 @@ public class MainApplicationFrame extends JFrame implements Saveable {
 
         setContentPane(new JDesktopPane());
 
-        addWindow(createLogWindow());
-        addWindow(createGameWindow());
+        GameModel gameModel = new GameModel();
+        GameController gameController = new GameController(gameModel);
+        addWindow(new LogWindow(Logger.getDefaultLogSource()));
+        addWindow(new GameWindow(gameController, gameModel));
+        addWindow(new RobotLocationWindow(gameModel));
 
         loadWindowStates();
 
@@ -61,6 +69,8 @@ public class MainApplicationFrame extends JFrame implements Saveable {
                 startExitDialog();
             }
         });
+
+        gameController.start();
     }
 
     /**
@@ -123,40 +133,19 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     }
 
     /**
-     * Создает окно лога
-     */
-    private LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-        logWindow.setLocation(0, 0);
-        logWindow.setSize(300, 500);
-        Logger.debug("Протокол работает");
-        return logWindow;
-    }
-
-    /**
-     * Создает игровое окно
-     */
-    private GameWindow createGameWindow() {
-        GameWindow gameWindow = new GameWindow();
-        gameWindow.setLocation(300, 0);
-        gameWindow.setSize(500, 500);
-        return gameWindow;
-    }
-
-    /**
      * Сохраняет состояния дочерних окон и главного окна.
      */
     private void saveWindowStates() {
         FrameStatesManager frameSaver = new FrameStatesManager();
         frameSaver.addSaveableFrame(this);
         for (Component component : childs)
-            if (component instanceof Saveable)
-                frameSaver.addSaveableFrame((Saveable) component);
+            if (component instanceof Saveable saveable)
+                frameSaver.addSaveableFrame(saveable);
 
         try {
             frameSaver.save();
         } catch (SaveException e) {
-            System.err.println("Не удалось сохранить окна");
+            System.err.println("Не удалось сохранить окна в файл конфигурации");
             e.printStackTrace();
         }
     }
@@ -170,6 +159,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         try {
             frameLoader.loadStates();
         } catch (LoadException e) {
+            System.err.println("Не удалось загрузить состояния окон из файла конфигурации");
             e.printStackTrace();
             return;
         }
@@ -177,14 +167,18 @@ public class MainApplicationFrame extends JFrame implements Saveable {
         try {
             frameLoader.loadFrame(this);
         } catch (LoadException e) {
+            System.err.println("Не удалось загрузить состояние для "
+                    + getFrameId());
             e.printStackTrace();
         }
 
         for (Component component : childs) {
-            if (component instanceof Saveable) {
+            if (component instanceof Saveable saveable) {
                 try {
-                    frameLoader.loadFrame((Saveable) component);
+                    frameLoader.loadFrame(saveable);
                 } catch (LoadException e) {
+                    System.err.println("Не удалось загрузить состояние для "
+                            + saveable.getFrameId());
                     e.printStackTrace();
                 }
             }

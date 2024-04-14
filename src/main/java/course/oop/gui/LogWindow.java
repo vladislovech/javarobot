@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import course.oop.log.LogChangeListener;
 import course.oop.log.LogEntry;
 import course.oop.log.LogWindowSource;
+import course.oop.log.Logger;
 import course.oop.saving.Saveable;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener, Saveable {
@@ -18,6 +19,9 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Save
 
     public LogWindow(LogWindowSource logSource) {
         super("Протокол работы", true, true, true, true);
+        setLocation(0, 0);
+        setSize(300, 500);
+        Logger.debug("Протокол работает.");
         m_logSource = logSource;
         m_logSource.registerListener(this);
         m_logContent = new TextArea("");
@@ -26,7 +30,6 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Save
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_logContent, BorderLayout.CENTER);
         getContentPane().add(panel);
-        pack();
         updateLogContent();
     }
 

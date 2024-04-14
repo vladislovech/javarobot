@@ -8,16 +8,21 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import course.oop.controller.GameController;
 import course.oop.gui.GameWindow;
 import course.oop.gui.MainApplicationFrame;
+import course.oop.model.GameModel;
 
 /**
  * Тестирует класс course.oop.saving.FrameStatesManager
@@ -25,6 +30,19 @@ import course.oop.gui.MainApplicationFrame;
 public class FrameStatesManagerTest {
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    /**
+     * Подготавливает контекст для тестирования класса
+     */
+    @Before
+    public void prepareTesting() {
+        System.setErr(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int arg0) throws IOException {
+                        // Чтобы не забивать stdout
+                }
+        }));
+    }
 
     /**
      * Проверяет, что корректно сохраняется внутренний map JFrame
@@ -39,7 +57,9 @@ public class FrameStatesManagerTest {
         mainApplicationFrame.setSize(new Dimension(1, 2));
         mainApplicationFrame.setLocation(new Point(3, 4));
 
-        GameWindow gameWindow = new GameWindow();
+        GameModel gameModel = new GameModel();
+        GameController gameController = new GameController(gameModel);
+        GameWindow gameWindow = new GameWindow(gameController, gameModel);
         gameWindow.setSize(new Dimension(5, 6));
         gameWindow.setLocation(new Point(7, 8));
         gameWindow.setIcon(true);
@@ -81,7 +101,9 @@ public class FrameStatesManagerTest {
         mainApplicationFrame.setSize(new Dimension(1, 2));
         mainApplicationFrame.setLocation(new Point(3, 4));
 
-        GameWindow gameWindow = new GameWindow();
+        GameModel gameModel = new GameModel();
+        GameController gameController = new GameController(gameModel);
+        GameWindow gameWindow = new GameWindow(gameController, gameModel);
         gameWindow.setSize(new Dimension(5, 6));
         gameWindow.setLocation(new Point(7, 8));
         gameWindow.setIcon(true);
@@ -95,7 +117,7 @@ public class FrameStatesManagerTest {
         frameStatesManager.setSaveLocation(oldLocation);
 
         MainApplicationFrame mainApplicationFrameLoaded = new MainApplicationFrame();
-        GameWindow gameWindowLoaded = new GameWindow();
+        GameWindow gameWindowLoaded = new GameWindow(gameController, gameModel);
 
         frameStatesManager.loadStates();
 
