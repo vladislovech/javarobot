@@ -22,13 +22,20 @@ public class MainApplicationFrame extends JFrame {
         setContentPane(desktopPane);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        ViewModel viewModel = new ViewModel();
+        int gw_width = 400; // размеры окна игры
+        int gw_height = 400;
+
+        ViewModel viewModel = new ViewModel(gw_width, gw_height);
 
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
         GameWindow gameWindow = new GameWindow(viewModel);
-        gameWindow.setSize(400,  400);
+        gameWindow.setSize(gw_width, gw_height);
+        //gameWindow.setMinimumSize(new Dimension(gw_width, gw_height));
+        //gameWindow.setMaximumSize(new Dimension(gw_width, gw_height));
+        //gameWindow.setPreferredSize(new Dimension(gw_width, gw_height));
+        gameWindow.setResizable(false);
         addWindow(gameWindow);
     }
     protected LogWindow createLogWindow()

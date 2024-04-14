@@ -5,15 +5,18 @@ import java.awt.geom.Point2D;
 
 public abstract class CellEntity implements Entity {
     /**
-     * Описывает универсальную клетку
+     * Описывает шаблонную клетку
      */
+    private Color color;
     private Point coords;
-    public CellEntity(Point p) {
+    public CellEntity(Point p, Color c) {
         this.coords = p;
+        this.color = c;
     }
 
     @Override
     public Point getCoords() {
         return coords;
     }
+    public Color getColor() {return color;}
 }

@@ -1,14 +1,10 @@
 package gui.viewmodel;
 
-import gui.model.Entity;
-import gui.model.World;
-import gui.model.RobotEntity;
+import gui.model.*;
 import gui.view.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -16,8 +12,12 @@ import java.util.TimerTask;
 
 public class ViewModel extends JPanel {
     private final World world;
+    private final GameGrid grid;
+    private final int gameWindowWidth;
+    private final int gameWindowHeight;
     private Map<Class<?>, EntityRenderer<?>> renderes = Map.of(
-            RobotEntity.class, new RobotRenderer()
+            BacteriaCellEntity.class, new BacteriaCellRenderer(),
+            FoodCellEntity.class, new FoodCellRenderer()
     );
     private static Timer initTimer()
     {
@@ -26,19 +26,22 @@ public class ViewModel extends JPanel {
     }
     private final Timer m_timer = initTimer();
 
-    public ViewModel() {
-        world = new World(8, 8);
+    public ViewModel(int gw_width, int gw_height) {
+        this.gameWindowWidth = gw_width;
+        this.gameWindowHeight = gw_height;
+
+        world = new World(8, 8, gameWindowWidth, gameWindowHeight);
+        grid = new GameGrid(world);
 
         m_timer.schedule(new TimerTask()
         {
             @Override
             public void run()
             {
-                // действия_бактерий();
                 updateLogic();
                 onRedrawEvent();
             }
-        }, 0, 50);
+        }, 0, 100);
 
         setDoubleBuffered(true);
     }
@@ -54,8 +57,9 @@ public class ViewModel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        grid.drawGrid(g); // отрисовка игровой сетки
         List<Entity> entities = world.getEntities();
-        for (Entity entity : entities) {
+        for (Entity entity : entities) { // отрисовка активных клеток
             EntityRenderer<Entity> entityRenderer = (EntityRenderer<Entity>)renderes.get(entity.getClass());
             entityRenderer.render(entity, g);
         }

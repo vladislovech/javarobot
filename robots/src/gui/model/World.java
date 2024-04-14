@@ -1,20 +1,29 @@
 package gui.model;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    private final int width; // кол-во клеток в ширину
-    private final int height; // кол-во клеток в высоту
-    private int cellSize = 40;
+    private final int cellCountWidth; // кол-во клеток в ширину
+    private final int cellCountHeight; // кол-во клеток в высоту
+    private final int gameWindowWidth; // ширина игрового поля в пикселях
+    private final int gameWindowHeight; // высота игрового поля в пикселях
+    private int cellSize;
     CellEntity[][] matrix;
     private final List<Entity> entities = new ArrayList<>();
     private final WorldContext context;
-    public World(int width, int height) {
+    public World(int cellCountWidth, int cellCountHeight, int gw_width, int gw_height) {
         context = new WorldContext(this);
-        this.width = width;
-        this.height = height;
-        this.matrix = new CellEntity[width][height];
+
+        this.cellCountWidth = cellCountWidth;
+        this.cellCountHeight = cellCountHeight;
+        this.gameWindowWidth = gw_width;
+        this.gameWindowHeight = gw_height;
+        cellSize = gw_width / cellCountWidth;
+
+        this.matrix = new CellEntity[cellCountWidth][cellCountHeight];
+        spawnEntities();
         fillMatrix();
     }
 
@@ -28,27 +37,40 @@ public class World {
         return entities;
     }
 
-    public Entity getEntityOnCoords(int x, int y) {
+    public Entity getEntityOnCoords(Point p) {
         for (Entity entity : entities) {
-            if (entity.getX() == x && entity.getY() == y) {
+            if (entity instanceof CellEntity && entity.getCoords() == p) {
                 return entity;
             }
         }
         return null;
     }
 
-    public void fillMatrix() {
-
+    public void spawnEntities() {
+        entities.add(new BacteriaCellEntity(new Point(1, 0)));
+        entities.add(new BacteriaCellEntity(new Point(3, 3)));
+        entities.add(new FoodCellEntity(new Point(4, 3)));
     }
-    public int getWidth() {return width;}
-    public int getHeight() {return height;}
+    public void fillMatrix() {
+        matrix = new CellEntity[cellCountWidth][cellCountHeight];
+        for (Entity entity: entities) {
+            if (entity instanceof CellEntity) {
+                Point coords = entity.getCoords();
+                matrix[coords.x][coords.y] = (CellEntity)entity;
+            }
+        }
+    }
+    public int getCellCountWidth() {return cellCountWidth;}
+    public int getCellCountHeight() {return cellCountHeight;}
+    public int getWidth() {return gameWindowWidth;}
+    public int getHeight() {return gameWindowHeight;}
     public int getCellSize() {return cellSize;}
     public void setCellSize(int size) {cellSize = size;}
-    public void printMatrix() {
+    /*public void printMatrix() {
         for (int w = 0; w < width; w++) {
             for (int h = 0; h < height; h++) {
                 System.out.println(matrix[w][h]);
             }
         }
-    }
+    }*/
 }
