@@ -2,19 +2,11 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
 import log.Logger;
-
-/**
- * Что требуется сделать:
- * 1. Метод создания меню перегружен функционалом и трудно читается.
- * Следует разделить его на серию более простых методов (или вообще выделить отдельный класс).
- *
- */
 public class MainApplicationFrame extends JFrame
 {
     private final JDesktopPane desktopPane = new JDesktopPane();
@@ -37,9 +29,10 @@ public class MainApplicationFrame extends JFrame
         GameWindow gameWindow = new GameWindow();
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
-
+        addWindow(gameWindow.m_visualizer.robotCoordinatesWindow);
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        WindowStateManager.loadWindowStateFromFile(desktopPane);
     }
 
     protected LogWindow createLogWindow()
@@ -52,46 +45,10 @@ public class MainApplicationFrame extends JFrame
         Logger.debug("Протокол работает");
         return logWindow;
     }
-
     protected void addWindow(JInternalFrame frame)
     {
         desktopPane.add(frame);
         frame.setVisible(true);
-    }
-
-    protected JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-
-        JMenu menu = new JMenu("File");
-        menuBar.add(menu);
-
-        JMenuItem menuItem = new JMenuItem("New", KeyEvent.VK_N);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Open", KeyEvent.VK_O);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Save", KeyEvent.VK_S);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Exit", KeyEvent.VK_Q);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-        menu.add(menuItem);
-
-        JMenuItem exitItem = new JMenuItem("Exit", KeyEvent.VK_E);
-        exitItem.addActionListener((event) -> {
-            int result = JOptionPane.showConfirmDialog(this, "Вы уверены, что хотите выйти из приложения?", "Выход",
-                    JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
-        });
-        menu.add(exitItem);
-
-        return menuBar;
     }
 
     private JMenuBar generateMenuBar()
@@ -135,9 +92,10 @@ public class MainApplicationFrame extends JFrame
         }
         JMenuItem exitItem =  new JMenuItem("Выход", KeyEvent.VK_E);
         exitItem.addActionListener((event) -> {
+            WindowStateManager.saveWindowStateToFile(desktopPane);
             UIManager.put("OptionPane.yesButtonText", "Да");;
             UIManager.put("OptionPane.noButtonText", "Нет");
-            UIManager.put("OptionPane.cancelButtonText", "Отмена");
+            UIManager.put("OptionPane.cancelButtonText", "Извиняюсь!");
             int result = JOptionPane.showConfirmDialog(this, "Вы уверены, что хотите выйти из приложения?", "Выход",
                     JOptionPane.YES_NO_CANCEL_OPTION);
 
@@ -167,3 +125,4 @@ public class MainApplicationFrame extends JFrame
         }
     }
 }
+
