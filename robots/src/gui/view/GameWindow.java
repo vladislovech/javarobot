@@ -11,6 +11,7 @@ public class GameWindow extends JInternalFrame
     {
         super("Игровое поле", true, true, true, true);
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setPreferredSize(new Dimension(viewModel.getGameWindowWidth(), viewModel.getGameWindowHeight()));
         panel.add(viewModel, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();

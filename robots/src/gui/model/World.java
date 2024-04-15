@@ -20,7 +20,7 @@ public class World {
         this.cellCountHeight = cellCountHeight;
         this.gameWindowWidth = gw_width;
         this.gameWindowHeight = gw_height;
-        cellSize = gw_width / cellCountWidth;
+        cellSize = gw_width / cellCountWidth - 2;
 
         this.matrix = new CellEntity[cellCountWidth][cellCountHeight];
         spawnEntities();
@@ -47,9 +47,9 @@ public class World {
     }
 
     public void spawnEntities() {
-        entities.add(new BacteriaCellEntity(new Point(1, 0)));
-        entities.add(new BacteriaCellEntity(new Point(3, 3)));
-        entities.add(new FoodCellEntity(new Point(4, 3)));
+        entities.add(new BacteriaCellEntity(new Point(1, 0), cellSize));
+        entities.add(new BacteriaCellEntity(new Point(3, 3), cellSize));
+        entities.add(new FoodCellEntity(new Point(4, 3), cellSize));
     }
     public void fillMatrix() {
         matrix = new CellEntity[cellCountWidth][cellCountHeight];

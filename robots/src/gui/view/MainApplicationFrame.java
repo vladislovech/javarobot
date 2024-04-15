@@ -25,15 +25,16 @@ public class MainApplicationFrame extends JFrame {
         int gw_width = 400; // размеры окна игры
         int gw_height = 400;
 
-        ViewModel viewModel = new ViewModel(gw_width, gw_height);
+        ViewModel viewModel = new ViewModel(gw_width-2, gw_height-2);
 
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
         GameWindow gameWindow = new GameWindow(viewModel);
-        gameWindow.setSize(gw_width, gw_height);
-        //gameWindow.setMinimumSize(new Dimension(gw_width, gw_height));
-        //gameWindow.setMaximumSize(new Dimension(gw_width, gw_height));
+        System.out.println(gameWindow.getBounds());
+        gameWindow.setLocation((screenSize.width-gameWindow.getWidth())/2,(screenSize.height-gameWindow.getHeight())/2);
+        //gameWindow.setSize(gw_width, gw_height);
+        gameWindow.setMinimumSize(new Dimension(gw_width, gw_height));
         //gameWindow.setPreferredSize(new Dimension(gw_width, gw_height));
         gameWindow.setResizable(false);
         addWindow(gameWindow);
@@ -50,7 +51,7 @@ public class MainApplicationFrame extends JFrame {
     }
     public void addWindow(JInternalFrame frame)
     {
-        desktopPane.add(frame);
+        desktopPane.add(frame, BorderLayout.CENTER);
         frame.setVisible(true);
     }
     private void setLookAndFeel(String className)

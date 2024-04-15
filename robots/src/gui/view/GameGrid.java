@@ -24,10 +24,10 @@ public class GameGrid {
     }
     public void drawGrid(Graphics g) {
         g.setColor(Color.BLACK);
-        for (int i = 0; i <= cellCountWidth; i++) {
+        for (int i = 0; i <= cellCountWidth; i++) { // вертикальные линии
             g.drawLine(cellSize * i + i, 0, cellSize * i + i, cellSize * cellCountHeight + cellCountHeight);
         }
-        for (int i = 0; i <= cellCountHeight; i++) {
+        for (int i = 0; i <= cellCountHeight; i++) { // горизонтальные линии
             g.drawLine(0, cellSize * i + i, cellSize * cellCountWidth + cellCountWidth, cellSize * i + i);
         }
     }

@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.model.BacteriaCellEntity;
 import gui.model.CellEntity;
 import gui.model.FoodCellEntity;
 
@@ -15,6 +16,8 @@ public class FoodCellRenderer implements EntityRenderer<FoodCellEntity> {
 
     private void drawCell(Graphics2D g, FoodCellEntity entity) {
         g.setColor(entity.getColor());
-        // g.fillRect();
+        Point coords = entity.getCoords();
+        int cellSize = entity.getCellSize();
+        g.fillRect(cellSize * coords.x + coords.x + 1, cellSize * coords.y + coords.y + 1, cellSize, cellSize);
     }
 }

@@ -6,8 +6,8 @@ public class FoodCellEntity extends CellEntity{
     /**
      * Описывает еду
      */
-    public FoodCellEntity(Point p) {
-        super(p, Color.ORANGE);
+    public FoodCellEntity(Point p, int cellSize) {
+        super(p, Color.ORANGE, cellSize);
     }
 
     @Override

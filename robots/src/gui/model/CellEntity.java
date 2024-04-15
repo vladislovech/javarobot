@@ -9,9 +9,11 @@ public abstract class CellEntity implements Entity {
      */
     private Color color;
     private Point coords;
-    public CellEntity(Point p, Color c) {
+    private int cellSize;
+    public CellEntity(Point p, Color c, int cs) {
         this.coords = p;
         this.color = c;
+        this.cellSize = cs;
     }
 
     @Override
@@ -19,4 +21,5 @@ public abstract class CellEntity implements Entity {
         return coords;
     }
     public Color getColor() {return color;}
+    public int getCellSize() {return cellSize;}
 }

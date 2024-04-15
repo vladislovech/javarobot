@@ -8,8 +8,8 @@ public class BacteriaCellEntity extends CellEntity {
      */
     private final int BRAIN_SIZE = 64;
     int[] brain;
-    public BacteriaCellEntity(Point p) {
-        super(p, Color.BLUE);
+    public BacteriaCellEntity(Point p, int cellSize) {
+        super(p, Color.BLUE, cellSize);
         brain = new int[BRAIN_SIZE];
         fillBrain();
     }

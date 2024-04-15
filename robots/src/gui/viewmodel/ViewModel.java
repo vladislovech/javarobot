@@ -64,4 +64,6 @@ public class ViewModel extends JPanel {
             entityRenderer.render(entity, g);
         }
     }
+    public int getGameWindowWidth() {return gameWindowWidth;}
+    public int getGameWindowHeight() {return gameWindowHeight;}
 }
