@@ -23,6 +23,7 @@ public class GameGrid {
         System.out.println(cellSize);
     }
     public void drawGrid(Graphics g) {
+        // очистить поле белым цветом?
         g.setColor(Color.BLACK);
         for (int i = 0; i <= cellCountWidth; i++) { // вертикальные линии
             g.drawLine(cellSize * i + i, 0, cellSize * i + i, cellSize * cellCountHeight + cellCountHeight);

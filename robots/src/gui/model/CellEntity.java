@@ -8,7 +8,7 @@ public abstract class CellEntity implements Entity {
      * Описывает шаблонную клетку
      */
     private Color color;
-    private Point coords;
+    protected Point coords;
     private int cellSize;
     public CellEntity(Point p, Color c, int cs) {
         this.coords = p;
@@ -19,6 +19,12 @@ public abstract class CellEntity implements Entity {
     @Override
     public Point getCoords() {
         return coords;
+    }
+    public void moveTo(Point p) {
+        coords.translate(p.x, p.y);
+    }
+    public Point getNeighbourCoords(Point p) {
+        return new Point(coords.x + p.x, coords.y + p.y);
     }
     public Color getColor() {return color;}
     public int getCellSize() {return cellSize;}

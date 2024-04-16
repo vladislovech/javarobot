@@ -11,4 +11,7 @@ public class WorldContext {
     public Entity getEntityOnCoords(Point p) {
         return world.getEntityOnCoords(p);
     }
+    public void updateWorld() {world.updateContext();}
+    public int getCellCountWidth() {return world.getCellCountWidth();}
+    public int getCellCountHeight() {return world.getCellCountHeight();}
 }

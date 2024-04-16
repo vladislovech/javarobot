@@ -17,7 +17,9 @@ public class ViewModel extends JPanel {
     private final int gameWindowHeight;
     private Map<Class<?>, EntityRenderer<?>> renderes = Map.of(
             BacteriaCellEntity.class, new BacteriaCellRenderer(),
-            FoodCellEntity.class, new FoodCellRenderer()
+            FoodCellEntity.class, new FoodCellRenderer(),
+            PoisonCellEntity.class, new PoisonCellRenderer(),
+            WallCellEntity.class, new WallCellRenderer()
     );
     private static Timer initTimer()
     {
@@ -41,17 +43,17 @@ public class ViewModel extends JPanel {
                 updateLogic();
                 onRedrawEvent();
             }
-        }, 0, 100);
+        }, 0, 1000);
 
         setDoubleBuffered(true);
-    }
-    protected void onRedrawEvent()
-    {
-        EventQueue.invokeLater(this::repaint);
     }
 
     public void updateLogic() {
         world.updateModel();
+    }
+    protected void onRedrawEvent()
+    {
+        EventQueue.invokeLater(this::repaint);
     }
 
     @Override

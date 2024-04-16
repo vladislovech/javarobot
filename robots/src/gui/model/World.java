@@ -12,7 +12,7 @@ public class World {
     private int cellSize;
     CellEntity[][] matrix;
     private final List<Entity> entities = new ArrayList<>();
-    private final WorldContext context;
+    private WorldContext context;
     public World(int cellCountWidth, int cellCountHeight, int gw_width, int gw_height) {
         context = new WorldContext(this);
 
@@ -32,7 +32,9 @@ public class World {
             entity.update(context);
         }
     }
-
+    public void updateContext() {
+        context = new WorldContext(this);
+    }
     public List<Entity> getEntities() {
         return entities;
     }
@@ -47,9 +49,16 @@ public class World {
     }
 
     public void spawnEntities() {
+        entities.add(new BacteriaCellEntity(new Point(0, 0), cellSize));
         entities.add(new BacteriaCellEntity(new Point(1, 0), cellSize));
+        entities.add(new WallCellEntity(new Point(2, 0), cellSize));
+        entities.add(new WallCellEntity(new Point(0, 1), cellSize));
+        entities.add(new WallCellEntity(new Point(1, 1), cellSize));
+        entities.add(new WallCellEntity(new Point(2, 1), cellSize));
         entities.add(new BacteriaCellEntity(new Point(3, 3), cellSize));
         entities.add(new FoodCellEntity(new Point(4, 3), cellSize));
+        entities.add(new WallCellEntity(new Point(1, 5), cellSize));
+        entities.add(new PoisonCellEntity(new Point(2, 6), cellSize));
     }
     public void fillMatrix() {
         matrix = new CellEntity[cellCountWidth][cellCountHeight];
@@ -66,11 +75,4 @@ public class World {
     public int getHeight() {return gameWindowHeight;}
     public int getCellSize() {return cellSize;}
     public void setCellSize(int size) {cellSize = size;}
-    /*public void printMatrix() {
-        for (int w = 0; w < width; w++) {
-            for (int h = 0; h < height; h++) {
-                System.out.println(matrix[w][h]);
-            }
-        }
-    }*/
 }
