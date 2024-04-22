@@ -1,7 +1,12 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import log.Logger;
+import save.Memorizable;
+import save.StateManager;
+import save.WindowInitException;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -20,23 +25,29 @@ import log.Logger;
  * Следует разделить его на серию более простых методов (или вообще выделить отдельный класс).
  *
  */
-public class MainApplicationFrame extends JFrame
+public class MainApplicationFrame extends JFrame implements Memorizable
 {
     private final JDesktopPane desktopPane = new JDesktopPane();
+    private final StateManager stateManager = new StateManager();
 
     public MainApplicationFrame() {
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
-        int inset = 50;        
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(inset, inset,
-            screenSize.width  - inset*2,
-            screenSize.height - inset*2);
+        int inset = 50;
+        try {
+            stateManager.configureFrame(getClassname(), this);
+        } catch (WindowInitException e) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            setBounds(inset, inset,
+                    screenSize.width - inset * 2,
+                    screenSize.height - inset * 2);
+            Logger.debug(e.getMessage());
+        }
 
         setContentPane(desktopPane);
-        
-        
-        LogWindow logWindow = createLogWindow();
+
+
+        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), stateManager);
         addWindow(logWindow);
 
         CoordinateWindow coordinateWindow = new CoordinateWindow();
@@ -45,7 +56,7 @@ public class MainApplicationFrame extends JFrame
         GameModel model = new GameModel();
         GameController controller = new GameController(model);
         GameVisualizer visualizer = new GameVisualizer(controller);
-        GameWindow gameWindow = new GameWindow(visualizer);
+        GameWindow gameWindow = new GameWindow(stateManager, visualizer);
         model.addNewListener(coordinateWindow);
         model.addNewListener(visualizer);
         gameWindow.setSize(400,  400);
