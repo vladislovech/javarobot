@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.model.World;
 import gui.viewmodel.ViewModel;
 import log.Logger;
 
@@ -13,11 +14,11 @@ public class MainApplicationFrame extends JFrame {
     public MainApplicationFrame() {
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
-        int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        /*int inset = 50;
         setBounds(inset, inset,
                 screenSize.width - inset * 2,
-                screenSize.height - inset * 2);
+                screenSize.height - inset * 2);*/
 
         setContentPane(desktopPane);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -25,18 +26,21 @@ public class MainApplicationFrame extends JFrame {
         int gw_width = 400; // размеры окна игры
         int gw_height = 400;
 
-        ViewModel viewModel = new ViewModel(gw_width-2, gw_height-2);
+        World world = new World(8, 8, gw_width, gw_height);
+        ViewModel viewModel = new ViewModel(gw_width, gw_height, world);
+        View view = new View(world);
 
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow(viewModel);
+        GameWindow gameWindow = new GameWindow(view, viewModel, screenSize);
         System.out.println(gameWindow.getBounds());
-        gameWindow.setLocation((screenSize.width-gameWindow.getWidth())/2,(screenSize.height-gameWindow.getHeight())/2);
-        //gameWindow.setSize(gw_width, gw_height);
-        gameWindow.setMinimumSize(new Dimension(gw_width, gw_height));
-        //gameWindow.setPreferredSize(new Dimension(gw_width, gw_height));
-        gameWindow.setResizable(false);
+//        gameWindow.setLocation((screenSize.width-gameWindow.getWidth())/2,(screenSize.height-gameWindow.getHeight())/2);
+//        //gameWindow.setSize(gw_width, gw_height);
+//        //gameWindow.setMinimumSize(new Dimension(gw_width, gw_height));
+//        gameWindow.setPreferredSize(new Dimension(gw_width, gw_height));
+//        gameWindow.setResizable(false);
+//        gameWindow.pack();
         addWindow(gameWindow);
     }
     protected LogWindow createLogWindow()

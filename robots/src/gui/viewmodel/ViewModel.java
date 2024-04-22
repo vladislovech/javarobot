@@ -12,15 +12,10 @@ import java.util.TimerTask;
 
 public class ViewModel extends JPanel {
     private final World world;
-    private final GameGrid grid;
+    private final View view;
     private final int gameWindowWidth;
     private final int gameWindowHeight;
-    private Map<Class<?>, EntityRenderer<?>> renderes = Map.of(
-            BacteriaCellEntity.class, new BacteriaCellRenderer(),
-            FoodCellEntity.class, new FoodCellRenderer(),
-            PoisonCellEntity.class, new PoisonCellRenderer(),
-            WallCellEntity.class, new WallCellRenderer()
-    );
+
     private static Timer initTimer()
     {
         Timer timer = new Timer("events generator", true);
@@ -28,12 +23,12 @@ public class ViewModel extends JPanel {
     }
     private final Timer m_timer = initTimer();
 
-    public ViewModel(int gw_width, int gw_height) {
+    public ViewModel(int gw_width, int gw_height, World world) {
         this.gameWindowWidth = gw_width;
         this.gameWindowHeight = gw_height;
 
-        world = new World(8, 8, gameWindowWidth, gameWindowHeight);
-        grid = new GameGrid(world);
+        this.world = world;
+        view = new View(world);
 
         m_timer.schedule(new TimerTask()
         {
@@ -44,8 +39,6 @@ public class ViewModel extends JPanel {
                 onRedrawEvent();
             }
         }, 0, 1000);
-
-        setDoubleBuffered(true);
     }
 
     public void updateLogic() {
@@ -53,19 +46,9 @@ public class ViewModel extends JPanel {
     }
     protected void onRedrawEvent()
     {
-        EventQueue.invokeLater(this::repaint);
+        EventQueue.invokeLater(view::repaint);
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        grid.drawGrid(g); // отрисовка игровой сетки
-        List<Entity> entities = world.getEntities();
-        for (Entity entity : entities) { // отрисовка активных клеток
-            EntityRenderer<Entity> entityRenderer = (EntityRenderer<Entity>)renderes.get(entity.getClass());
-            entityRenderer.render(entity, g);
-        }
-    }
     public int getGameWindowWidth() {return gameWindowWidth;}
     public int getGameWindowHeight() {return gameWindowHeight;}
 }

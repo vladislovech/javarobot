@@ -22,6 +22,7 @@ public class BacteriaCellEntity extends CellEntity {
         steps.put(6, new Point(-1, 1));
         steps.put(7, new Point(-1, 0));
     }
+
     public BacteriaCellEntity(Point p, int cellSize) {
         super(p, Color.BLUE, cellSize);
         brain = new int[BRAIN_SIZE];
@@ -37,6 +38,7 @@ public class BacteriaCellEntity extends CellEntity {
     }
     @Override
     public void update(WorldContext context) {
+        context.updateWorld();
         switch (brain[nextOperation]) {
             case 0:
             case 1:
