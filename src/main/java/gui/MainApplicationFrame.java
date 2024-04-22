@@ -46,19 +46,15 @@ public class MainApplicationFrame extends JFrame implements Memorizable
 
         setContentPane(desktopPane);
 
+        GameModel model = new GameModel();
 
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), stateManager);
         addWindow(logWindow);
 
-        CoordinateWindow coordinateWindow = new CoordinateWindow(stateManager);
+        CoordinateWindow coordinateWindow = new CoordinateWindow(stateManager, model);
         addWindow(coordinateWindow);
 
-        GameModel model = new GameModel();
-        GameController controller = new GameController(model);
-        GameVisualizer visualizer = new GameVisualizer(controller);
-        GameWindow gameWindow = new GameWindow(stateManager, visualizer);
-        model.addNewListener(coordinateWindow);
-        model.addNewListener(visualizer);
+        GameWindow gameWindow = new GameWindow(stateManager, model);
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 

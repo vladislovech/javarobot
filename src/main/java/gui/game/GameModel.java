@@ -10,15 +10,22 @@ import java.beans.PropertyChangeSupport;
  */
 public class GameModel {
     private volatile double m_robotPositionX = 100;
+
     private volatile double m_robotPositionY = 100;
+
     private volatile double m_robotDirection = 0;
 
+
     private volatile int m_targetPositionX = 150;
+
     private volatile int m_targetPositionY = 100;
 
     private static final double maxVelocity = 0.1;
+
     private static final double maxAngularVelocity = 0.001;
+
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+
     public void addNewListener(PropertyChangeListener listener){
         support.addPropertyChangeListener(listener);
     }
@@ -29,9 +36,8 @@ public class GameModel {
      */
     public void setTargetPosition(Point p)
     {
-        support.firePropertyChange("targetPositionX", m_targetPositionX, p.x);
+        support.firePropertyChange("targetPositionX", new Point(m_targetPositionX, m_targetPositionY), p);
         m_targetPositionX = p.x;
-        support.firePropertyChange("targetPositionY", m_targetPositionY, p.y);
         m_targetPositionY = p.y;
     }
 

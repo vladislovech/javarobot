@@ -15,10 +15,10 @@ public class GameWindow extends JInternalFrame implements Memorizable
 {
     private final GameVisualizer m_visualizer;
 
-    public GameWindow(StateManager stateManager, GameVisualizer visualizer)
+    public GameWindow(StateManager stateManager, GameModel model)
     {
         super("Игровое поле", true, true, true, true);
-        m_visualizer = visualizer;
+        m_visualizer = new GameVisualizer(model);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);

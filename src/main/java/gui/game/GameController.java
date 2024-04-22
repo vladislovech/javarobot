@@ -20,16 +20,16 @@ public class GameController {
             @Override
             public void run()
             {
-                onModelUpdateEvent();
+                m_model.updateRobot();
             }
         }, 0, 10);
     }
 
-    protected void onModelUpdateEvent()
-    {
-        m_model.updateRobot();
-    }
-
+    /**
+     * Method to send new point to the model
+     * Allows view to affect the model
+     * @param point - new point
+     */
     public void setTargetPosition(Point point){
         m_model.setTargetPosition(point);
     }

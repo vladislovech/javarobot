@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
  */
 public class CoordinateWindow extends JInternalFrame implements PropertyChangeListener, Memorizable {
     private final TextArea text = new TextArea();
-    public CoordinateWindow(StateManager stateManager){
+    public CoordinateWindow(StateManager stateManager, GameModel model){
         super("Координаты", true, true, true, true);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(text, BorderLayout.CENTER);
@@ -28,6 +28,7 @@ public class CoordinateWindow extends JInternalFrame implements PropertyChangeLi
             setSize(200, 400);
             Logger.debug(e.getMessage());
         }
+        model.addNewListener(this);
     }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

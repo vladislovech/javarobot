@@ -18,19 +18,19 @@ public class GameVisualizer extends JPanel implements PropertyChangeListener
     private int targetY = 100;
 
     private final GameController m_controller;
-    public GameVisualizer(GameController controller)
+    public GameVisualizer(GameModel model)
     {
-        m_controller = controller;
+        m_controller = new GameController(model);
         addMouseListener(new MouseAdapter()
         {
             @Override
             public void mouseClicked(MouseEvent e)
             {
                 m_controller.setTargetPosition(e.getPoint());
-                repaint();
             }
         });
         setDoubleBuffered(true);
+        model.addNewListener(this);
     }
 
     private static int round(double value)
