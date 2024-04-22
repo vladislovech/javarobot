@@ -11,18 +11,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * State saver class
+ * Handles writing and reading state date on disk
+ */
 class StateSaver {
     /**
      * Path to the config file
      */
-    private final static String FILENAME = System.getProperty("user.home") + "/RobotData.txt";
+    private final static Path FILEPATH = Path.of(System.getProperty("user.home") + "/RobotData.txt");
     /**
      * Store saved data locally
      */
     public void save(Map<String, String> stateMap) {
         Logger.debug("Store trigger");
         try {
-            Path file = Path.of(FILENAME);
+            Path file = FILEPATH;
             List<String> data = new ArrayList<>();
             for (String key : stateMap.keySet()) {
                 data.add(key + "=" + stateMap.get(key));
@@ -40,7 +44,7 @@ class StateSaver {
         Logger.debug("Restore trigger");
         Map<String, String> stateMap = new HashMap<>();
         try {
-            List<String> data = Files.readAllLines(Path.of(FILENAME), StandardCharsets.UTF_8);
+            List<String> data = Files.readAllLines(FILEPATH, StandardCharsets.UTF_8);
             String[] parsedLine;
             for (String line : data) {
                 parsedLine = line.split("=");

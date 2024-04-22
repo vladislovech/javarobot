@@ -1,10 +1,5 @@
 package gui;
 
-import java.awt.*;
-
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
@@ -12,6 +7,9 @@ import log.Logger;
 import save.Memorizable;
 import save.StateManager;
 import save.WindowInitException;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener, Memorizable
 {
