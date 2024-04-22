@@ -1,6 +1,10 @@
 package gui;
 
 import gui.game.GameModel;
+import log.Logger;
+import save.Memorizable;
+import save.StateManager;
+import save.WindowInitException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,15 +14,20 @@ import java.beans.PropertyChangeListener;
 /**
  * Window that displays robot coordinates
  */
-public class CoordinateWindow extends JInternalFrame implements PropertyChangeListener {
+public class CoordinateWindow extends JInternalFrame implements PropertyChangeListener, Memorizable {
     private final TextArea text = new TextArea();
-    public CoordinateWindow(){
+    public CoordinateWindow(StateManager stateManager){
         super("Координаты", true, true, true, true);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(text, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
-        setSize(200, 400);
+        try {
+            stateManager.configureFrame(getClassname(), this);
+        } catch (WindowInitException e) {
+            setSize(200, 400);
+            Logger.debug(e.getMessage());
+        }
     }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -29,5 +38,10 @@ public class CoordinateWindow extends JInternalFrame implements PropertyChangeLi
                 "robotPositionY = " + model.getRobotPositionY() + "\n" +
                 "robotDirection = " + model.getRobotDirection();
         text.setText(newLabelText);
+    }
+
+    @Override
+    public String getClassname() {
+        return "coordinateWindow";
     }
 }

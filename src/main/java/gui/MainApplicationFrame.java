@@ -50,7 +50,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), stateManager);
         addWindow(logWindow);
 
-        CoordinateWindow coordinateWindow = new CoordinateWindow();
+        CoordinateWindow coordinateWindow = new CoordinateWindow(stateManager);
         addWindow(coordinateWindow);
 
         GameModel model = new GameModel();
@@ -75,7 +75,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
     
     protected LogWindow createLogWindow()
     {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), stateManager);
         logWindow.setLocation(10,10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
@@ -100,6 +100,14 @@ public class MainApplicationFrame extends JFrame implements Memorizable
                 "Выход", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, null);
         if (option == JOptionPane.YES_OPTION){
+            for (Component component : desktopPane.getComponents()) {
+                if (component instanceof Memorizable memorizable)
+                    stateManager.saveFrame(memorizable.getClassname(), component);
+                else if (component instanceof JInternalFrame.JDesktopIcon icon)
+                    if (icon.getInternalFrame() instanceof Memorizable memorizable)
+                        stateManager.saveFrame(memorizable.getClassname(), component);
+            }
+            stateManager.saveState();
             setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
     }
@@ -205,5 +213,10 @@ public class MainApplicationFrame extends JFrame implements Memorizable
         {
             // just ignore
         }
+    }
+
+    @Override
+    public String getClassname() {
+        return "mainframe";
     }
 }
