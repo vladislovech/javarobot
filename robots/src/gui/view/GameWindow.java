@@ -15,20 +15,14 @@ public class GameWindow extends JInternalFrame {
         this.gameWindowHeight = viewModel.getGameWindowHeight();
         setLocation((screenSize.width-gameWindowWidth)/2,(screenSize.height-gameWindowHeight)/2);
         //gameWindow.setSize(gw_width, gw_height);
-        //gameWindow.setMinimumSize(new Dimension(gw_width, gw_height));
-        setPreferredSize(new Dimension(gameWindowWidth, gameWindowHeight));
+        setMinimumSize(new Dimension(gameWindowWidth, gameWindowHeight));
+        //setPreferredSize(new Dimension(gameWindowWidth, gameWindowHeight));
 
-        JPanel panelView = new JPanel(new BorderLayout());
-        panelView.setPreferredSize(new Dimension(gameWindowWidth, gameWindowHeight));
-        panelView.add(view, BorderLayout.CENTER);
-        panelView.setVisible(true);
-        getContentPane().add(panelView);
-
-        JPanel panelViewModel = new JPanel(new BorderLayout());
-        //panelView.setPreferredSize(new Dimension(gameWindowWidth, gameWindowHeight));
-        panelViewModel.add(viewModel, BorderLayout.EAST);
-        //panelViewModel.setVisible(true);
-        getContentPane().add(panelViewModel);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setPreferredSize(new Dimension(gameWindowWidth, gameWindowHeight));
+        panel.add(viewModel, BorderLayout.CENTER);
+        panel.setVisible(true);
+        getContentPane().add(panel);
 
         pack();
     }

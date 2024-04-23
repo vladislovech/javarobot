@@ -23,12 +23,12 @@ public class ViewModel extends JPanel {
     }
     private final Timer m_timer = initTimer();
 
-    public ViewModel(int gw_width, int gw_height, World world) {
+    public ViewModel(int gw_width, int gw_height, World world, View view) {
         this.gameWindowWidth = gw_width;
         this.gameWindowHeight = gw_height;
 
         this.world = world;
-        view = new View(world);
+        this.view = view;
 
         m_timer.schedule(new TimerTask()
         {
@@ -38,7 +38,9 @@ public class ViewModel extends JPanel {
                 updateLogic();
                 onRedrawEvent();
             }
-        }, 0, 1000);
+        }, 0, 500);
+
+        setDoubleBuffered(true);
     }
 
     public void updateLogic() {
@@ -46,7 +48,13 @@ public class ViewModel extends JPanel {
     }
     protected void onRedrawEvent()
     {
-        EventQueue.invokeLater(view::repaint);
+        EventQueue.invokeLater(this::repaint);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        view.paint(g);
     }
 
     public int getGameWindowWidth() {return gameWindowWidth;}

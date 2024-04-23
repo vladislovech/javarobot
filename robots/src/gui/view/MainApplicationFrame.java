@@ -23,24 +23,18 @@ public class MainApplicationFrame extends JFrame {
         setContentPane(desktopPane);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        int gw_width = 400; // размеры окна игры
-        int gw_height = 400;
+        int gw_width = 410; // размеры окна игры
+        int gw_height = 416;
 
-        World world = new World(8, 8, gw_width, gw_height);
-        ViewModel viewModel = new ViewModel(gw_width, gw_height, world);
+        World world = new World(gw_width, gw_height, 8, 8, 2);
         View view = new View(world);
+        ViewModel viewModel = new ViewModel(gw_width, gw_height, world, view);
 
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
         GameWindow gameWindow = new GameWindow(view, viewModel, screenSize);
         System.out.println(gameWindow.getBounds());
-//        gameWindow.setLocation((screenSize.width-gameWindow.getWidth())/2,(screenSize.height-gameWindow.getHeight())/2);
-//        //gameWindow.setSize(gw_width, gw_height);
-//        //gameWindow.setMinimumSize(new Dimension(gw_width, gw_height));
-//        gameWindow.setPreferredSize(new Dimension(gw_width, gw_height));
-//        gameWindow.setResizable(false);
-//        gameWindow.pack();
         addWindow(gameWindow);
     }
     protected LogWindow createLogWindow()

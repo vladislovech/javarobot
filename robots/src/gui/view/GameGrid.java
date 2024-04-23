@@ -10,26 +10,40 @@ public class GameGrid {
     private final int gw_width;
     private final int gw_height;
     private final int cellSize;
+    private final int gridStroke;
     public GameGrid(World world) {
         this.cellCountWidth = world.getCellCountWidth();
         this.cellCountHeight = world.getCellCountHeight();
-        this.gw_width = world.getWidth();
-        this.gw_height = world.getHeight();
+        this.gw_width = world.getGameWindowWidth();
+        this.gw_height = world.getGameWindowHeight();
         this.cellSize = world.getCellSize();
+        this.gridStroke = world.getGridStroke();
+
         System.out.println(cellCountWidth);
         System.out.println(cellCountHeight);
         System.out.println(gw_width);
         System.out.println(gw_height);
         System.out.println(cellSize);
+        System.out.println(world.getGridStroke());
     }
     public void drawGrid(Graphics g) {
         // очистить поле белым цветом?
-        g.setColor(Color.BLACK);
-        for (int i = 0; i <= cellCountWidth; i++) { // вертикальные линии
+        // Graphics2D g2 = (Graphics2D) g;
+        // g2.setStroke(new BasicStroke(gridStroke));
+        g.setColor(Color.GRAY);
+
+        /*for (int i = 0; i <= cellCountWidth; i++) { // вертикальные линии
             g.drawLine(cellSize * i + i, 0, cellSize * i + i, cellSize * cellCountHeight + cellCountHeight);
         }
         for (int i = 0; i <= cellCountHeight; i++) { // горизонтальные линии
             g.drawLine(0, cellSize * i + i, cellSize * cellCountWidth + cellCountWidth, cellSize * i + i);
+        }*/
+
+        for (int i = 0; i <= cellCountWidth; i++) { // вертикальные линии
+            g.fillRect(cellSize * i + i * gridStroke, 0, gridStroke, gw_height);
+        }
+        for (int i = 0; i <= cellCountHeight; i++) { // горизонтальные линии
+            g.fillRect(0, cellSize * i + i * gridStroke, gw_width, gridStroke);
         }
     }
 }

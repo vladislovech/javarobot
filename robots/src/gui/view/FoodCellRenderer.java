@@ -18,6 +18,7 @@ public class FoodCellRenderer implements EntityRenderer<FoodCellEntity> {
         g.setColor(entity.getColor());
         Point coords = entity.getCoords();
         int cellSize = entity.getCellSize();
-        g.fillRect(cellSize * coords.x + coords.x + 1, cellSize * coords.y + coords.y + 1, cellSize, cellSize);
+        int gridStroke = entity.getGridStroke();
+        g.fillRect(cellSize * coords.x + (coords.x + 1) * gridStroke, cellSize * coords.y + (coords.y + 1) * gridStroke, cellSize, cellSize);
     }
 }

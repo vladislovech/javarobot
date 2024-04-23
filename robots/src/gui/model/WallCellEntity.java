@@ -6,8 +6,8 @@ public class WallCellEntity extends CellEntity {
     /**
      * Описывает стену
      */
-    public WallCellEntity(Point p, int cellSize) {
-        super(p, Color.DARK_GRAY, cellSize);
+    public WallCellEntity(Point p, int cellSize, int gridStroke) {
+        super(p, Color.DARK_GRAY, cellSize, gridStroke);
     }
 
     @Override

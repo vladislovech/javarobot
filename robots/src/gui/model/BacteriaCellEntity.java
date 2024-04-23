@@ -23,8 +23,8 @@ public class BacteriaCellEntity extends CellEntity {
         steps.put(7, new Point(-1, 0));
     }
 
-    public BacteriaCellEntity(Point p, int cellSize) {
-        super(p, Color.BLUE, cellSize);
+    public BacteriaCellEntity(Point p, int cellSize, int gridStroke) {
+        super(p, Color.BLUE, cellSize, gridStroke);
         brain = new int[BRAIN_SIZE];
         fillBrain();
     }

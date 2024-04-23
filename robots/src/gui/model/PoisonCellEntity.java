@@ -6,8 +6,8 @@ public class PoisonCellEntity extends CellEntity {
     /**
      * Описывает яд
      */
-    public PoisonCellEntity(Point p, int cellSize) {
-        super(p, Color.RED, cellSize);
+    public PoisonCellEntity(Point p, int cellSize, int gridStroke) {
+        super(p, Color.RED, cellSize, gridStroke);
     }
 
     @Override
