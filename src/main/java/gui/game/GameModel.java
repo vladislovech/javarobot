@@ -10,33 +10,29 @@ import java.beans.PropertyChangeSupport;
  */
 public class GameModel {
     private volatile double m_robotPositionX = 100;
-
     private volatile double m_robotPositionY = 100;
-
     private volatile double m_robotDirection = 0;
 
 
     private volatile int m_targetPositionX = 150;
-
     private volatile int m_targetPositionY = 100;
 
     private static final double maxVelocity = 0.1;
-
     private static final double maxAngularVelocity = 0.001;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    public void addNewListener(PropertyChangeListener listener){
+    public void addNewListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
     /**
      * Update target position
+     *
      * @param p - new position
      */
-    public void setTargetPosition(Point p)
-    {
-        support.firePropertyChange("targetPositionX", new Point(m_targetPositionX, m_targetPositionY), p);
+    public void setTargetPosition(Point p) {
+        support.firePropertyChange("targetPosition", new Point(m_targetPositionX, m_targetPositionY), p);
         m_targetPositionX = p.x;
         m_targetPositionY = p.y;
     }
@@ -44,11 +40,10 @@ public class GameModel {
     /**
      * Calculate next coordinates and change robot position
      */
-    public void updateRobot(){
+    public void updateRobot() {
         double distance = distance(m_targetPositionX, m_targetPositionY,
                 m_robotPositionX, m_robotPositionY);
-        if (distance < 0.5)
-        {
+        if (distance < 0.5) {
             return;
         }
         double velocity = maxVelocity;
@@ -82,31 +77,29 @@ public class GameModel {
 
     /**
      * Convert angle into normalized radian
+     *
      * @param angle - angle
      * @return - normalized radian value
      */
-    private static double asNormalizedRadians(double angle)
-    {
-        while (angle < 0)
-        {
-            angle += 2*Math.PI;
+    private static double asNormalizedRadians(double angle) {
+        while (angle < 0) {
+            angle += 2 * Math.PI;
         }
-        while (angle >= 2*Math.PI)
-        {
-            angle -= 2*Math.PI;
+        while (angle >= 2 * Math.PI) {
+            angle -= 2 * Math.PI;
         }
         return angle;
     }
 
     /**
      * Apply given limits on given value
+     *
      * @param value - value to be limited
-     * @param min - minimal limit
-     * @param max - maximum limit
+     * @param min   - minimal limit
+     * @param max   - maximum limit
      * @return limited value
      */
-    private static double applyLimits(double value, double min, double max)
-    {
+    private static double applyLimits(double value, double min, double max) {
         if (value < min)
             return min;
         if (value > max)
@@ -116,14 +109,14 @@ public class GameModel {
 
     /**
      * Calculate distance from first point to second
+     *
      * @param x1 - first point x
      * @param y1 - first point y
      * @param x2 - second point x
      * @param y2 - second point y
-     * @return
+     * @return distance from first point to second
      */
-    private static double distance(double x1, double y1, double x2, double y2)
-    {
+    private static double distance(double x1, double y1, double x2, double y2) {
         double diffX = x1 - x2;
         double diffY = y1 - y2;
         return Math.sqrt(diffX * diffX + diffY * diffY);
@@ -131,14 +124,14 @@ public class GameModel {
 
     /**
      * Calculate angle from first point to second
+     *
      * @param fromX - first point x
      * @param fromY - first point y
-     * @param toX - second point x
-     * @param toY - second point y
+     * @param toX   - second point x
+     * @param toY   - second point y
      * @return angle to second point as normalized radians
      */
-    private static double angleTo(double fromX, double fromY, double toX, double toY)
-    {
+    private static double angleTo(double fromX, double fromY, double toX, double toY) {
         double diffX = toX - fromX;
         double diffY = toY - fromY;
 

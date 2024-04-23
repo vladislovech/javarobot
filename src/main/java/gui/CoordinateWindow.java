@@ -16,7 +16,8 @@ import java.beans.PropertyChangeListener;
  */
 public class CoordinateWindow extends JInternalFrame implements PropertyChangeListener, Memorizable {
     private final TextArea text = new TextArea();
-    public CoordinateWindow(StateManager stateManager, GameModel model){
+
+    public CoordinateWindow(StateManager stateManager, GameModel model) {
         super("Координаты", true, true, true, true);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(text, BorderLayout.CENTER);
@@ -26,14 +27,19 @@ public class CoordinateWindow extends JInternalFrame implements PropertyChangeLi
             stateManager.configureFrame(getClassname(), this);
         } catch (WindowInitException e) {
             setSize(200, 400);
-            Logger.debug(e.getMessage());
+            Logger.error(
+                    "Coordinate window initialization failed with message:\n" +
+                            e.getMessage() +
+                            "\nConfiguring by default"
+            );
         }
         model.addNewListener(this);
     }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         GameModel model = (GameModel) evt.getSource();
-        String newLabelText = "targetPositionX = " + model.getTargetPositionX()+ "\n" +
+        String newLabelText = "targetPositionX = " + model.getTargetPositionX() + "\n" +
                 "targetPositionY = " + model.getTargetPositionY() + "\n" +
                 "robotPositionX = " + model.getRobotPositionX() + "\n" +
                 "robotPositionY = " + model.getRobotPositionY() + "\n" +
