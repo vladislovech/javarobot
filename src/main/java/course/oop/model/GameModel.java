@@ -5,6 +5,8 @@ import java.beans.PropertyChangeSupport;
 
 import javax.vecmath.Vector2d;
 
+import course.oop.log.Logger;
+
 /**
  * Класс, хранящий состояние игры,
  * предоставляющий интерфейс для изменения ее состояния.
@@ -114,6 +116,7 @@ public class GameModel {
 
     public void setTarget(Vector2d target) {
         this.target = new Vector2d(target.x, target.y);
+        Logger.debug("model: target updated");
     }
 
     /**

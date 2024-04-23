@@ -1,5 +1,9 @@
 package course.oop.log;
 
+/**
+ * Класс-сущность, представляющий запись в логе
+ * # TODO добавить время лога
+ */
 public class LogEntry
 {
     private LogLevel m_logLevel;

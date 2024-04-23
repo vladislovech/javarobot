@@ -71,7 +71,7 @@ public class FrameStatesManagerTest {
         Map<String, FrameConfig> actual;
         try (InputStream is = new FileInputStream(frameStatesManager.getSaveLocation());
                 ObjectInputStream ois = new ObjectInputStream(is)) {
-            actual = (HashMap<String, FrameConfig>) ois.readObject();
+            actual = (HashMap) ois.readObject();
         }
         Assert.assertEquals(
                 new FrameConfig(
