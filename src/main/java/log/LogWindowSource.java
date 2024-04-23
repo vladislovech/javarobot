@@ -15,13 +15,13 @@ import java.util.Collections;
 public class LogWindowSource {
     private int m_iQueueLength;
 
-    private ConcurrentLinkedList m_messages;
+    private ConcurrentCircularArray m_messages;
     private final ArrayList<LogChangeListener> m_listeners;
     private volatile LogChangeListener[] m_activeListeners;
 
     public LogWindowSource(int iQueueLength) {
         m_iQueueLength = iQueueLength;
-        m_messages = new ConcurrentLinkedList(iQueueLength);
+        m_messages = new ConcurrentCircularArray(iQueueLength);
         m_listeners = new ArrayList<LogChangeListener>();
     }
 
@@ -69,6 +69,6 @@ public class LogWindowSource {
     }
 
     public Iterable<LogEntry> all() {
-        return m_messages;
+        return m_messages.all();
     }
 }
