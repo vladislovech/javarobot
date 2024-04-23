@@ -1,5 +1,7 @@
 package gui;
 
+import gui.game.GameModel;
+import gui.game.GameWindow;
 import log.Logger;
 import save.Memorizable;
 import save.StateManager;
@@ -11,22 +13,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.*;
-
-import gui.game.GameController;
-import gui.game.GameModel;
-import gui.game.GameVisualizer;
-import gui.game.GameWindow;
-import log.Logger;
-
 /**
  * Что требуется сделать:
- * 1. Метод создания меню перегружен функционалом и трудно читается. 
+ * 1. Метод создания меню перегружен функционалом и трудно читается.
  * Следует разделить его на серию более простых методов (или вообще выделить отдельный класс).
- *
  */
-public class MainApplicationFrame extends JFrame implements Memorizable
-{
+public class MainApplicationFrame extends JFrame implements Memorizable {
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final StateManager stateManager = new StateManager();
 
@@ -41,7 +33,11 @@ public class MainApplicationFrame extends JFrame implements Memorizable
             setBounds(inset, inset,
                     screenSize.width - inset * 2,
                     screenSize.height - inset * 2);
-            Logger.debug(e.getMessage());
+            Logger.debug(
+                    "Mainframe initialization failed with message:\n" +
+                            e.getMessage() +
+                            "\nConfiguring by default"
+            );
         }
 
         setContentPane(desktopPane);
@@ -55,7 +51,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
         addWindow(coordinateWindow);
 
         GameWindow gameWindow = new GameWindow(stateManager, model);
-        gameWindow.setSize(400,  400);
+        gameWindow.setSize(400, 400);
         addWindow(gameWindow);
 
         setJMenuBar(generateMenuBar());
@@ -68,9 +64,8 @@ public class MainApplicationFrame extends JFrame implements Memorizable
         };
         addWindowListener(listener);
     }
-    
-    protected void addWindow(JInternalFrame frame)
-    {
+
+    protected void addWindow(JInternalFrame frame) {
         desktopPane.add(frame);
         frame.setVisible(true);
     }
@@ -79,12 +74,12 @@ public class MainApplicationFrame extends JFrame implements Memorizable
      * Exit operation handler
      * Asks user if he really wants to quit the application
      */
-    private void exitOperation(){
+    private void exitOperation() {
         String[] options = {"Да", "Нет"};
         int option = JOptionPane.showOptionDialog(this, "Вы действительно хотите выйти?",
                 "Выход", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, null);
-        if (option == JOptionPane.YES_OPTION){
+        if (option == JOptionPane.YES_OPTION) {
             for (Component component : desktopPane.getComponents()) {
                 if (component instanceof Memorizable memorizable)
                     stateManager.saveFrame(memorizable.getClassname(), component);
@@ -96,7 +91,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
             setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
     }
-    
+
 //    protected JMenuBar createMenuBar() {
 //        JMenuBar menuBar = new JMenuBar();
 // 
@@ -125,16 +120,15 @@ public class MainApplicationFrame extends JFrame implements Memorizable
 // 
 //        return menuBar;
 //    }
-    
-    private JMenuBar generateMenuBar()
-    {
+
+    private JMenuBar generateMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        
+
         JMenu lookAndFeelMenu = new JMenu("Режим отображения");
         lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
         lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(
                 "Управление режимом отображения приложения");
-        
+
         {
             JMenuItem systemLookAndFeel = new JMenuItem("Системная схема", KeyEvent.VK_S);
             systemLookAndFeel.addActionListener((event) -> {
@@ -157,7 +151,7 @@ public class MainApplicationFrame extends JFrame implements Memorizable
         testMenu.setMnemonic(KeyEvent.VK_T);
         testMenu.getAccessibleContext().setAccessibleDescription(
                 "Тестовые команды");
-        
+
         {
             JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_S);
             addLogMessageItem.addActionListener((event) -> {
@@ -185,17 +179,13 @@ public class MainApplicationFrame extends JFrame implements Memorizable
         menuBar.add(appMenu);
         return menuBar;
     }
-    
-    private void setLookAndFeel(String className)
-    {
-        try
-        {
+
+    private void setLookAndFeel(String className) {
+        try {
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(this);
-        }
-        catch (ClassNotFoundException | InstantiationException
-            | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
+        } catch (ClassNotFoundException | InstantiationException
+                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
             // just ignore
         }
     }
