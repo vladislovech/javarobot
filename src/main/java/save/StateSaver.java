@@ -20,18 +20,18 @@ class StateSaver {
      * Path to the config file
      */
     private final static Path FILEPATH = Path.of(System.getProperty("user.home") + "/RobotData.txt");
+
     /**
      * Store saved data locally
      */
     public void save(Map<String, String> stateMap) {
         Logger.debug("Store trigger");
         try {
-            Path file = FILEPATH;
             List<String> data = new ArrayList<>();
             for (String key : stateMap.keySet()) {
                 data.add(key + "=" + stateMap.get(key));
             }
-            Files.write(file, data);
+            Files.write(FILEPATH, data);
         } catch (IOException e) {
             Logger.debug("Failed to store data due to IO exception with message: \n" + e.getMessage());
         }
