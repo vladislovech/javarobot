@@ -8,7 +8,7 @@ public abstract class CellEntity implements Entity {
      * Описывает шаблонную клетку
      */
     private Color color;
-    protected Point coords;
+    private Point coords;
     private int cellSize;
     private int gridStroke;
     public CellEntity(Point p, Color c, int cs, int gs) {

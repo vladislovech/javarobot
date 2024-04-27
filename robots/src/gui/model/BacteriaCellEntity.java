@@ -11,7 +11,7 @@ public class BacteriaCellEntity extends CellEntity {
     private int[] brain;
     private int nextOperation = 0;
     private int health = 10;
-    private HashMap<Integer, Point> steps = new HashMap<>();
+    /*private HashMap<Integer, Point> steps = new HashMap<>();
     {
         steps.put(0, new Point(-1, -1));
         steps.put(1, new Point(0, -1));
@@ -21,7 +21,7 @@ public class BacteriaCellEntity extends CellEntity {
         steps.put(5, new Point(0, 1));
         steps.put(6, new Point(-1, 1));
         steps.put(7, new Point(-1, 0));
-    }
+    }*/
 
     public BacteriaCellEntity(Point p, int cellSize, int gridStroke) {
         super(p, Color.BLUE, cellSize, gridStroke);
@@ -38,7 +38,6 @@ public class BacteriaCellEntity extends CellEntity {
     }
     @Override
     public void update(WorldContext context) {
-        context.updateWorld();
         switch (brain[nextOperation]) {
             case 0:
             case 1:
@@ -48,17 +47,21 @@ public class BacteriaCellEntity extends CellEntity {
             case 5:
             case 6:
             case 7:
-                Point neighbour_coords = this.getNeighbourCoords(steps.get(brain[nextOperation])); //this.getNeighbourCoords?
+                /*Point neighbour_coords = getNeighbourCoords(steps.get(brain[nextOperation]));
                 CellEntity neighbour = (CellEntity) context.getEntityOnCoords(neighbour_coords);
                 if (neighbour == null) {
                     if (neighbour_coords.x > -1 && neighbour_coords.x < context.getCellCountWidth() &&
                             neighbour_coords.y > -1 && neighbour_coords.y < context.getCellCountHeight()) {
-                        this.moveTo(steps.get(brain[nextOperation])); //this.moveTo ?
-                        //context.updateWorld();
+                        this.moveTo(steps.get(brain[nextOperation]));
                     }
-                }
+                }*/
+                context.moveCell(this, brain[nextOperation]);
                 nextOperation = (nextOperation + 1) % BRAIN_SIZE;
                 break;
         }
+    }
+
+    public int getHealth() {
+        return health;
     }
 }

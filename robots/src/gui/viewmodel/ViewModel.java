@@ -44,7 +44,7 @@ public class ViewModel extends JPanel {
     }
 
     public void updateLogic() {
-        world.updateModel();
+        world.updateWorld();
     }
     protected void onRedrawEvent()
     {

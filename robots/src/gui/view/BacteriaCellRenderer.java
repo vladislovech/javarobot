@@ -5,18 +5,29 @@ import gui.model.CellEntity;
 
 import java.awt.*;
 
-public class BacteriaCellRenderer implements EntityRenderer<BacteriaCellEntity> {
-    public void render(BacteriaCellEntity entity, Graphics graphics) {
+public class BacteriaCellRenderer extends BasicCellRenderer {
+    @Override
+    public void render(CellEntity entity, Graphics graphics) {
         Graphics2D g = (Graphics2D)graphics;
 
-        drawCell(g, entity);
+        drawCell(g, (BacteriaCellEntity) entity);
     }
-
     private void drawCell(Graphics2D g, BacteriaCellEntity entity) {
-        g.setColor(entity.getColor());
         Point coords = entity.getCoords();
         int cellSize = entity.getCellSize();
         int gridStroke = entity.getGridStroke();
-        g.fillRect(cellSize * coords.x + (coords.x + 1) * gridStroke, cellSize * coords.y + (coords.y + 1) * gridStroke, cellSize, cellSize);
+        String health = String.valueOf(entity.getHealth());
+
+        int cell_x = cellSize * coords.x + (coords.x + 1) * gridStroke;
+        int cell_y = cellSize * coords.y + (coords.y + 1) * gridStroke;
+
+        Font font = new Font("Arial", Font.BOLD, 16);
+        g.setFont(font);
+        FontMetrics fontMetrics = g.getFontMetrics();
+
+        g.setColor(entity.getColor());
+        g.fillRect(cell_x, cell_y, cellSize, cellSize);
+        g.setColor(Color.BLACK);
+        g.drawString(health, cell_x + (cellSize - fontMetrics.stringWidth(health)) / 2, cell_y + (cellSize - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent());
     }
 }
