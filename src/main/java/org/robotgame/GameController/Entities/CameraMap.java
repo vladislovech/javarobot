@@ -1,4 +1,4 @@
-package org.robotgame.GameController;
+package org.robotgame.GameController.Entities;
 
 public class CameraMap {
     private double x;

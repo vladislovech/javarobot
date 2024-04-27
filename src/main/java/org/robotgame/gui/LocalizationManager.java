@@ -22,8 +22,8 @@ public class LocalizationManager {
     private static void loadResourceBundle() {
         Properties props = new Properties();
         try {
-            InputStream in = LocalizationManager.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE_PATH);
             synchronized (lock) {
+                InputStream in = LocalizationManager.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE_PATH);
                 props.load(in);
                 in.close();
             }

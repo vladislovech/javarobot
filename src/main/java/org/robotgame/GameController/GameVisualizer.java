@@ -1,13 +1,13 @@
 package org.robotgame.GameController;
 
 import org.robotgame.GameController.Entities.Base;
+import org.robotgame.GameController.Entities.CameraMap;
 import org.robotgame.GameController.Entities.Robot;
 import org.robotgame.GameController.Entities.Target;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
-import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
