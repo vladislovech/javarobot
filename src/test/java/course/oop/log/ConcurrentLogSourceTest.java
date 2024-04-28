@@ -16,7 +16,7 @@ public class ConcurrentLogSourceTest {
      */
     @Test
     public void testConcurrentContainer() {
-        ConcurrentLogSource cls = new ConcurrentLogSource(3);
+        ConcurrentCircularArray cls = new ConcurrentCircularArray(3);
         Assert.assertEquals(0, 0);
         List<LogEntry> le = new ArrayList<>();
         le.add(new LogEntry(LogLevel.Debug, "1"));
@@ -27,15 +27,15 @@ public class ConcurrentLogSourceTest {
         le.add(new LogEntry(LogLevel.Debug, "6"));
         le.add(new LogEntry(LogLevel.Debug, "7"));
 
-        cls.append(le.get(0));
+        cls.push(le.get(0));
         Assert.assertEquals(0, cls.range(0, 0).size());
         Assert.assertEquals(le.get(0), cls.range(0, 1).get(0));
 
-        cls.append(le.get(1));
+        cls.push(le.get(1));
         Assert.assertEquals(le.get(0), cls.range(0, 2).get(0));
         Assert.assertEquals(le.get(1), cls.range(0, 2).get(1));
 
-        cls.append(le.get(2));
+        cls.push(le.get(2));
         Assert.assertEquals(le.get(0), cls.range(0, 3).get(0));
         Assert.assertEquals(le.get(1), cls.range(0, 3).get(1));
         Assert.assertEquals(le.get(2), cls.range(0, 3).get(2));
@@ -44,7 +44,7 @@ public class ConcurrentLogSourceTest {
         Assert.assertEquals(le.get(2), cls.range(1, 2).get(1));
         Assert.assertEquals(le.get(2), cls.range(2, 1).get(0));
 
-        cls.append(le.get(3));
+        cls.push(le.get(3));
         Assert.assertEquals(le.get(1), cls.range(0, 3).get(0));
         Assert.assertEquals(le.get(2), cls.range(0, 3).get(1));
         Assert.assertEquals(le.get(3), cls.range(0, 3).get(2));
@@ -53,7 +53,7 @@ public class ConcurrentLogSourceTest {
         Assert.assertEquals(le.get(3), cls.range(1, 2).get(1));
         Assert.assertEquals(le.get(3), cls.range(2, 1).get(0));
 
-        cls.append(le.get(4));
+        cls.push(le.get(4));
         Assert.assertEquals(le.get(2), cls.range(0, 3).get(0));
         Assert.assertEquals(le.get(3), cls.range(0, 3).get(1));
         Assert.assertEquals(le.get(4), cls.range(0, 3).get(2));
@@ -62,7 +62,7 @@ public class ConcurrentLogSourceTest {
         Assert.assertEquals(le.get(4), cls.range(1, 2).get(1));
         Assert.assertEquals(le.get(4), cls.range(2, 1).get(0));
 
-        cls.append(le.get(5));
+        cls.push(le.get(5));
         Assert.assertEquals(le.get(3), cls.range(0, 3).get(0));
         Assert.assertEquals(le.get(4), cls.range(0, 3).get(1));
         Assert.assertEquals(le.get(5), cls.range(0, 3).get(2));
@@ -71,7 +71,7 @@ public class ConcurrentLogSourceTest {
         Assert.assertEquals(le.get(5), cls.range(1, 2).get(1));
         Assert.assertEquals(le.get(5), cls.range(2, 1).get(0));
 
-        cls.append(le.get(6));
+        cls.push(le.get(6));
         Assert.assertEquals(le.get(4), cls.range(0, 3).get(0));
         Assert.assertEquals(le.get(5), cls.range(0, 3).get(1));
         Assert.assertEquals(le.get(6), cls.range(0, 3).get(2));

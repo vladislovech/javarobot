@@ -9,9 +9,9 @@ public final class Logger
     /**
      * Модель хранения логов
      */
-    private static final ConcurrentLogSource defaultLogSource;
+    private static final LogJournal defaultLogSource;
     static {
-        defaultLogSource = new ConcurrentLogSource(10);
+        defaultLogSource = new LogJournal(10);
     }
     
     private Logger()
@@ -35,9 +35,9 @@ public final class Logger
     }
 
     /**
-     * Возвращает "модель" логирования (контейнер)
+     * Возвращает журнал лога
      */
-    public static ConcurrentLogSource getDefaultLogSource()
+    public static LogJournal getDefaultLogSource()
     {
         return defaultLogSource;
     }
