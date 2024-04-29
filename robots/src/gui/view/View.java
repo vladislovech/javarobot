@@ -1,8 +1,15 @@
 package gui.view;
 
 import gui.model.*;
+import gui.model.Cells.BacteriaCellEntity;
+import gui.model.Cells.FoodCellEntity;
+import gui.model.Cells.PoisonCellEntity;
+import gui.model.Cells.WallCellEntity;
+import gui.view.Cells.BacteriaCellRenderer;
+import gui.view.Cells.FoodCellRenderer;
+import gui.view.Cells.PoisonCellRenderer;
+import gui.view.Cells.WallCellRenderer;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;

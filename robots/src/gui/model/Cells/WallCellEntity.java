@@ -1,4 +1,6 @@
-package gui.model;
+package gui.model.Cells;
+
+import gui.model.WorldContext;
 
 import java.awt.*;
 

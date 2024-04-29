@@ -1,7 +1,7 @@
-package gui.view;
+package gui.view.Cells;
 
-import gui.model.BacteriaCellEntity;
-import gui.model.CellEntity;
+import gui.model.Cells.BacteriaCellEntity;
+import gui.model.Cells.CellEntity;
 
 import java.awt.*;
 

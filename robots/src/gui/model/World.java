@@ -1,5 +1,11 @@
 package gui.model;
 
+import gui.model.Cells.BacteriaCellEntity;
+import gui.model.Cells.CellEntity;
+import gui.model.Cells.FoodCellEntity;
+import gui.model.Cells.WallCellEntity;
+import gui.model.Cells.PoisonCellEntity;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +18,16 @@ public class World {
     private final int gameWindowHeight; // высота игрового поля в пикселях
     private int cellSize;
     private int gridStroke;
-    private CellEntity[][] matrix;
+    //private CellEntity[][] matrix;
+
+    private final int smallFood = 5;
+    private final int mediumFood = 10;
+    private final int bigFood = 15;
+
     private final List<Entity> entities = new ArrayList<>();
-    private HashMap<Point, Entity> entityMap = new HashMap<>();
+    private final List<CellEntity> deadCells = new ArrayList<>();
+    private final List<CellEntity> newCells = new ArrayList<>();
+    private HashMap<Point, CellEntity> entityMap = new HashMap<>();
     private WorldContext context;
     public World(int gw_width, int gw_height, int cellCountWidth, int cellCountHeight, int gridStroke) {
         context = new WorldContext(this);
@@ -36,12 +49,14 @@ public class World {
         for (Entity entity : entities) {
             entity.update(context);
         }
+        deleteCells();
+        createCells();
     }
     public List<Entity> getEntities() {
         return entities;
     }
 
-    public Entity getEntityOnCoords(Point p) {
+    public CellEntity getEntityOnCoords(Point p) {
         /*for (Entity entity : entities) {
             if ((entity instanceof CellEntity) && (entity.getCoords().equals(p))) {
                 return entity;
@@ -62,12 +77,15 @@ public class World {
         entities.add(new WallCellEntity(new Point(1, 2), cellSize, gridStroke));
         entities.add(new WallCellEntity(new Point(2, 1), cellSize, gridStroke));
         entities.add(new WallCellEntity(new Point(2, 2), cellSize, gridStroke));
-        entities.add(new WallCellEntity(new Point(3, 1), cellSize, gridStroke));
+        //entities.add(new WallCellEntity(new Point(3, 1), cellSize, gridStroke));
         entities.add(new BacteriaCellEntity(new Point(3, 3), cellSize, gridStroke));
         entities.add(new BacteriaCellEntity(new Point(3, 4), cellSize, gridStroke));
         entities.add(new BacteriaCellEntity(new Point(4, 4), cellSize, gridStroke));
-        entities.add(new FoodCellEntity(new Point(4, 3), cellSize, gridStroke));
+        //entities.add(new FoodCellEntity(new Point(1, 1), cellSize, gridStroke, mediumFood));
+        entities.add(new FoodCellEntity(new Point(4, 3), cellSize, gridStroke, mediumFood));
+        entities.add(new FoodCellEntity(new Point(6, 4), cellSize, gridStroke, mediumFood));
         entities.add(new WallCellEntity(new Point(1, 5), cellSize, gridStroke));
+        entities.add(new PoisonCellEntity(new Point(1, 1), cellSize, gridStroke));
         entities.add(new PoisonCellEntity(new Point(2, 6), cellSize, gridStroke));
     }
     public void fillMatrix() {
@@ -81,13 +99,39 @@ public class World {
         for (Entity entity: entities) {
             if (entity instanceof CellEntity) {
                 Point coords = entity.getCoords();
-                entityMap.put(coords, entity);
+                entityMap.put(coords, (CellEntity) entity);
             }
         }
     }
-    public void updateEntityCoords(Point oldCoords, Point newCoords) {
+    public void moveBacteriaToCoords(Point oldCoords, Point newCoords) {
         entityMap.put(newCoords, entityMap.get(oldCoords));
         entityMap.remove(oldCoords);
+    }
+    public int eatFood(FoodCellEntity food) {
+        int healingAmount = food.getHealingAmount();
+        killCell(food);
+        //food.kill();
+        return healingAmount;
+    }
+    public void eatPoison(BacteriaCellEntity cell) {
+        PoisonCellEntity newPoison = new PoisonCellEntity(cell.getCoords(), cellSize, gridStroke);
+        killCell(cell);
+        entityMap.put(cell.getCoords(), newPoison);
+        newCells.add(newPoison);
+    }
+    public void killCell(CellEntity cell) { // удаляет клетку из хэшмапа и добавляет в список мертвых клеток
+        deadCells.add(cell);
+        entityMap.remove(cell.getCoords());
+    }
+    public void deleteCells() { // чистит списки от мертвых клеток
+        for (CellEntity cell : deadCells) {
+            entities.remove(cell);
+        }
+        deadCells.clear();
+    }
+    public void createCells() { // добавляет в список entities все новые клетки
+        entities.addAll(newCells);
+        newCells.clear();
     }
     public int getCellCountWidth() {return cellCountWidth;}
     public int getCellCountHeight() {return cellCountHeight;}

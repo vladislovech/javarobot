@@ -1,11 +1,11 @@
-package gui.view;
+package gui.view.Cells;
 
-import gui.model.CellEntity;
-import gui.model.FoodCellEntity;
+import gui.model.Cells.CellEntity;
+import gui.view.EntityRenderer;
 
 import java.awt.*;
 
-public class BasicCellRenderer implements EntityRenderer<CellEntity>{
+public class BasicCellRenderer implements EntityRenderer<CellEntity> {
     @Override
     public void render(CellEntity entity, Graphics graphics) {
         Graphics2D g = (Graphics2D)graphics;

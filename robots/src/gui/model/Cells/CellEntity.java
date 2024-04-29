@@ -1,4 +1,6 @@
-package gui.model;
+package gui.model.Cells;
+
+import gui.model.Entity;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
