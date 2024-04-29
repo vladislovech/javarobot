@@ -85,48 +85,38 @@ public class RobotModel extends Observable{
         return value;
     }
 
-    private void moveRobot(double velocity, double angularVelocity, double duration)
-    {
-        velocity = applyLimits(velocity, 0, maxVelocity);
-        angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-        double newX = m_robotPositionX + velocity / angularVelocity *
-                (Math.sin(m_robotDirection  + angularVelocity * duration) -
-                        Math.sin(m_robotDirection));
+    private void moveRobot(double velocity, double angularVelocity, double duration) {
+    velocity = applyLimits(velocity, 0, maxVelocity);
+    angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
+    double newX = m_robotPositionX + velocity / angularVelocity *
+            (Math.sin(m_robotDirection + angularVelocity * duration) -
+                    Math.sin(m_robotDirection));
 
-        if (!Double.isFinite(newX))
-        {
-            newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
-        }
-        double newY = m_robotPositionY - velocity / angularVelocity *
-                (Math.cos(m_robotDirection  + angularVelocity * duration) -
-                        Math.cos(m_robotDirection));
-        if (!Double.isFinite(newY))
-        {
-            newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
-        }
-        if((abs(angleTo(m_robotPositionX,m_robotPositionY,m_targetPositionX,m_targetPositionY))<=Math.PI/6)&&(angleTo(m_robotPositionX,m_robotPositionY,m_targetPositionX,m_targetPositionY)>0)&&(distance(m_robotPositionX,m_robotPositionY,m_targetPositionX,m_targetPositionY)<60)){
-            newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
-            newY = m_robotPositionY + velocity * duration * -Math.sin(m_robotDirection);
-            m_robotDirection=asNormalizedRadians(m_robotDirection + angularVelocity * duration);;
-            m_robotPositionX = newX;
-            m_robotPositionY = newY;
-        }
-        else {
-            if (((m_robotPositionX<=0&&m_robotPositionX>-2.5) || (m_robotPositionY<=0&&m_robotPositionY>-2.5))){
-                m_robotPositionX = m_robotPositionX + velocity * duration * -Math.cos(m_robotDirection);
-                m_robotPositionY = m_robotPositionY + velocity * duration * -Math.sin(m_robotDirection);
-                double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
-                m_robotDirection = newDirection;
-            }
-            else {
-                m_robotPositionX = newX;
-                m_robotPositionY = newY;
-                double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
-                m_robotDirection = newDirection;
-            }
-        }
-
+    if (!Double.isFinite(newX)) {
+        newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
     }
+    double newY = m_robotPositionY - velocity / angularVelocity *
+            (Math.cos(m_robotDirection + angularVelocity * duration) -
+                    Math.cos(m_robotDirection));
+    if (!Double.isFinite(newY)) {
+        newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
+    }
+
+    
+    if (newX < 0) {
+        newX = 0; 
+        m_robotDirection = Math.PI - m_robotDirection; 
+    }
+    if (newY < 0) {
+        newY = 0; 
+        m_robotDirection = -m_robotDirection; 
+    }
+
+
+    m_robotPositionX = newX;
+    m_robotPositionY = newY;
+    m_robotDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
+}
 
     private static double asNormalizedRadians(double angle)
     {
