@@ -1,7 +1,7 @@
 package course.oop.log;
 
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Класс журнала логов. Хранит логи, уведомляет слушателей об изменении логов
@@ -11,25 +11,26 @@ public class LogJournal {
      * Контейнер с записями лога
      */
     private final ConcurrentCircularArray logs;
+
     /**
-     * Потокобезопасный set
+     * Map, хранящий слабые ссылки на слушателей
      */
-    private final Set<LogChangeListener> listeners;
+    private final Map<LogChangeListener, String> listeners;
 
     public LogJournal(int containerSize) {
         logs = new ConcurrentCircularArray(containerSize);
-        listeners = new CopyOnWriteArraySet<LogChangeListener>();
+        listeners = new WeakHashMap<LogChangeListener, String>();
     }
 
     /**
-     * Добавляет слушателя журнала
+     * Добавляет слушателя журнала логов
      */
     public void registerListener(LogChangeListener listener) {
-        listeners.add(listener);
+        listeners.put(listener, "listener");
     }
 
     /**
-     * Удаляет слушателя журнала
+     * Удаляет слушателя журнала логов
      */
     public void unregisterListener(LogChangeListener listener) {
         listeners.remove(listener);
@@ -40,7 +41,7 @@ public class LogJournal {
      */
     public void append(LogEntry entry) {
         logs.push(entry);
-        for (LogChangeListener listener : listeners)
+        for (LogChangeListener listener : listeners.keySet())
             listener.onLogChanged();
     }
 
@@ -55,7 +56,7 @@ public class LogJournal {
      * Возвращает последнюю запись в журнале логов
      */
     public LogEntry getLastLogEntry() {
-        return logs.range(logs.size() - 1, 1).get(0);
+        return logs.getLastEntry();
     }
 
     /**

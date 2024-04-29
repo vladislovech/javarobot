@@ -7,9 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Тестирует класс - контейнер логов
+ * Тестирует класс циклического массива, хранящий логи
  */
-public class ConcurrentLogSourceTest {
+public class ConcurrentCircularArrayTest {
     /**
      * Проверяет корректность добавления записей в лог
      * (можно проверять по ссылкам) и их чтения

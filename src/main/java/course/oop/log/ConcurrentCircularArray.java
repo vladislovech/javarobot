@@ -73,6 +73,16 @@ class ConcurrentCircularArray {
     }
 
     /**
+     * Возвращает последнюю запись в структуре 
+     */
+    public synchronized LogEntry getLastEntry() {
+        if (endPointer == 0) {
+            return logs[logs.length - 1];
+        }
+        return logs[endPointer - 1];
+    }
+
+    /**
      * Возвращает все записи в журнале
      */
     public List<LogEntry> all() {
