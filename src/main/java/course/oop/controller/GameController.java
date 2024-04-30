@@ -6,7 +6,6 @@ import java.util.TimerTask;
 
 import javax.vecmath.Vector2d;
 
-import course.oop.log.Logger;
 import course.oop.model.GameModel;
 
 /**
