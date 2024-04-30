@@ -67,13 +67,6 @@ public class GameController {
                 gameModel.nextState(updateFrequency);
             }
         };
-        TimerTask loggerPingTask = new TimerTask() {
-            @Override
-            public void run() {
-                Logger.debug("ping logger");
-            }
-        };
         timer.schedule(timerTask, 0, updateFrequency);
-        timer.schedule(loggerPingTask, 0, 1000);
     }
 }

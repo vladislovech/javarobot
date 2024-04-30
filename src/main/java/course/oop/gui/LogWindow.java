@@ -40,8 +40,10 @@ public class LogWindow extends JInternalFrame implements Saveable, LogChangeList
      * Дописывает в окно логов новую (последнюю) запись лога
      */
     private void updateLogContent() {
-        StringBuilder content = new StringBuilder(logContent.getText());        
-        content.append(logSource.getLastLogEntry().getMessage()).append("\n");
+        StringBuilder content = new StringBuilder();
+        for (LogEntry entry : logSource.all()) {
+            content.append(entry.getMessage()).append("\n");
+        }
         logContent.setText(content.toString());
         logContent.invalidate();
     }
