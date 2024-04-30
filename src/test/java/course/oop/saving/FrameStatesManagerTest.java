@@ -32,7 +32,9 @@ public class FrameStatesManagerTest {
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     /**
-     * Подготавливает контекст для тестирования класса
+     * Подготавливает контекст для тестирования класса:
+     *  - перенаправляет стандартный поток вывода ошибок в никуда
+     *  - удаляет файл с сохраненными окнами (новая сборка - новый файл)(если возможно)
      */
     @Before
     public void prepareTesting() {
@@ -42,6 +44,9 @@ public class FrameStatesManagerTest {
                         // Чтобы не забивать stdout
                 }
         }));
+        
+        File conFile = new FrameStatesManager().getSaveLocation();
+        conFile.delete();
     }
 
     /**
