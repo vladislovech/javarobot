@@ -53,13 +53,6 @@ public class LogJournal {
     }
 
     /**
-     * Возвращает последнюю запись в журнале логов
-     */
-    public LogEntry getLastLogEntry() {
-        return logs.getLastEntry();
-    }
-
-    /**
      * Возвращает все записи в журнале
      */
     public Iterable<LogEntry> all() {

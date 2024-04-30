@@ -6,7 +6,6 @@ import java.util.TimerTask;
 
 import javax.vecmath.Vector2d;
 
-import course.oop.log.Logger;
 import course.oop.model.GameModel;
 
 /**
@@ -67,13 +66,6 @@ public class GameController {
                 gameModel.nextState(updateFrequency);
             }
         };
-        TimerTask loggerPingTask = new TimerTask() {
-            @Override
-            public void run() {
-                Logger.debug("ping logger");
-            }
-        };
         timer.schedule(timerTask, 0, updateFrequency);
-        timer.schedule(loggerPingTask, 0, 1000);
     }
 }
