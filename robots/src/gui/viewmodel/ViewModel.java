@@ -38,9 +38,10 @@ public class ViewModel extends JPanel {
                 updateLogic();
                 onRedrawEvent();
             }
-        }, 0, 1000);
+        }, 1000, 1000);
 
         setDoubleBuffered(true);
+        //onRedrawEvent();
     }
 
     public void updateLogic() {

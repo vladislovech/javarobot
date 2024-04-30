@@ -37,4 +37,8 @@ public class View {
             entityRenderer.render(entity, g);
         }
     }
+
+    // метод, устанавливающий источник данных
+    // dataSource интерфейс с набором методов
+    // setSources
 }

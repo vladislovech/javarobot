@@ -12,13 +12,7 @@ public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
 
     public MainApplicationFrame() {
-        //Make the big window be indented 50 pixels from each edge
-        //of the screen.
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        /*int inset = 50;
-        setBounds(inset, inset,
-                screenSize.width - inset * 2,
-                screenSize.height - inset * 2);*/
 
         setContentPane(desktopPane);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -33,10 +27,12 @@ public class MainApplicationFrame extends JFrame {
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow(view, viewModel, screenSize);
+        GameWindow gameWindow = new GameWindow(viewModel, screenSize);
         System.out.println(gameWindow.getBounds());
         addWindow(gameWindow);
     }
+
+    // дальше логи, пока не трогать
     protected LogWindow createLogWindow()
     {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());

@@ -26,18 +26,14 @@ public class GameGrid {
         System.out.println(cellSize);
         System.out.println(world.getGridStroke());
     }
+
+    /** Отрисовывает клеточную сетку
+     * @param g
+     */
     public void drawGrid(Graphics g) {
-        // очистить поле белым цветом?
         // Graphics2D g2 = (Graphics2D) g;
         // g2.setStroke(new BasicStroke(gridStroke));
         g.setColor(Color.GRAY);
-
-        /*for (int i = 0; i <= cellCountWidth; i++) { // вертикальные линии
-            g.drawLine(cellSize * i + i, 0, cellSize * i + i, cellSize * cellCountHeight + cellCountHeight);
-        }
-        for (int i = 0; i <= cellCountHeight; i++) { // горизонтальные линии
-            g.drawLine(0, cellSize * i + i, cellSize * cellCountWidth + cellCountWidth, cellSize * i + i);
-        }*/
 
         for (int i = 0; i <= cellCountWidth; i++) { // вертикальные линии
             g.fillRect(cellSize * i + i * gridStroke, 0, gridStroke, gw_height);

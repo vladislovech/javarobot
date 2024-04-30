@@ -6,9 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameWindow extends JInternalFrame {
-        private final int gameWindowWidth; // размеры окна игры
-        private final int gameWindowHeight;
-    public GameWindow(View view, ViewModel viewModel, Dimension screenSize)
+    private final int gameWindowWidth; // размеры окна игры
+    private final int gameWindowHeight;
+    public GameWindow(ViewModel viewModel, Dimension screenSize)
     {
         super("Игровое поле", false, true, true, true);
         this.gameWindowWidth = viewModel.getGameWindowWidth();
