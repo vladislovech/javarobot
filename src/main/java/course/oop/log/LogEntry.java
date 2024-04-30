@@ -1,5 +1,8 @@
 package course.oop.log;
 
+/**
+ * Класс, представляющий запись в логе
+ */
 public class LogEntry
 {
     private LogLevel m_logLevel;

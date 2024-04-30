@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.vecmath.Vector2d;
 
 import course.oop.controller.GameController;
+import course.oop.log.Logger;
 import course.oop.model.GameModel;
 import course.oop.model.GameModelEvents;
 
@@ -45,6 +46,7 @@ public class GameVisualizer extends JPanel implements PropertyChangeListener {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Logger.debug("controller: target change");
                 gameController.targetUpdate(e.getPoint());
                 repaint();
             }

@@ -117,6 +117,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
                 JOptionPane.YES_NO_OPTION);
         if (userChoice == JOptionPane.YES_OPTION) {
             saveWindowStates();
+            this.dispose();
             setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
     }
