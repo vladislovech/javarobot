@@ -28,16 +28,16 @@ public class World {
     private final List<CellEntity> newCells = new ArrayList<>();
     private HashMap<Point, CellEntity> entityMap = new HashMap<>();
     private WorldContext context;
-    public World(int gw_width, int gw_height, int cellCountWidth, int cellCountHeight, int gridStroke) {
+    public World(int cellCountWidth, int cellCountHeight, int cellSize, int gridStroke) {
         context = new WorldContext(this);
 
-        this.gameWindowWidth = gw_width;
-        this.gameWindowHeight = gw_height;
         this.cellCountWidth = cellCountWidth;
         this.cellCountHeight = cellCountHeight;
         this.gridStroke = gridStroke;
-
-        cellSize = (gw_width - (cellCountWidth + 1) * gridStroke) / cellCountWidth;
+//        this.cellSize = (gw_width - (cellCountWidth + 1) * gridStroke) / cellCountWidth;
+        this.cellSize = cellSize;
+        this.gameWindowWidth = cellCountWidth * cellSize + (cellCountWidth + 1) * gridStroke;
+        this.gameWindowHeight = cellCountHeight * cellSize + (cellCountHeight + 1) * gridStroke;
 
         spawnEntities();
         fillMatrix();
@@ -139,6 +139,6 @@ public class World {
     public int getGameWindowWidth() {return gameWindowWidth;}
     public int getGameWindowHeight() {return gameWindowHeight;}
     public int getCellSize() {return cellSize;}
-    public void setCellSize(int size) {cellSize = size;}
+//    public void setCellSize(int size) {cellSize = size;}
     public int getGridStroke() {return gridStroke;}
 }

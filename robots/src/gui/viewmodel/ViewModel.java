@@ -23,9 +23,9 @@ public class ViewModel extends JPanel {
     }
     private final Timer m_timer = initTimer();
 
-    public ViewModel(int gw_width, int gw_height, World world, View view) {
-        this.gameWindowWidth = gw_width;
-        this.gameWindowHeight = gw_height;
+    public ViewModel(World world, View view) {
+        this.gameWindowWidth = world.getGameWindowWidth();
+        this.gameWindowHeight = world.getGameWindowHeight();
 
         this.world = world;
         this.view = view;
