@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.model.World;
+import gui.viewmodel.WorldSource;
 
 import java.awt.*;
 
@@ -11,7 +12,7 @@ public class GameGrid {
     private final int gw_height;
     private final int cellSize;
     private final int gridStroke;
-    public GameGrid(World world) {
+    public GameGrid(WorldSource world) {
         this.cellCountWidth = world.getCellCountWidth();
         this.cellCountHeight = world.getCellCountHeight();
         this.gw_width = world.getGameWindowWidth();

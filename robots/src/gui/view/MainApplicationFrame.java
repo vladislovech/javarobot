@@ -1,7 +1,9 @@
 package gui.view;
 
 import gui.model.World;
+import gui.viewmodel.DataSource;
 import gui.viewmodel.ViewModel;
+import gui.viewmodel.WorldSource;
 import log.Logger;
 
 import javax.swing.*;
@@ -18,7 +20,8 @@ public class MainApplicationFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         World world = new World(20, 10, 40, 2);
-        View view = new View(world);
+        WorldSource worldSource = new WorldSource(world);
+        View view = new View(worldSource);
         ViewModel viewModel = new ViewModel(world, view);
 
         LogWindow logWindow = createLogWindow();

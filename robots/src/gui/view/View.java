@@ -9,17 +9,22 @@ import gui.view.Cells.BacteriaCellRenderer;
 import gui.view.Cells.FoodCellRenderer;
 import gui.view.Cells.PoisonCellRenderer;
 import gui.view.Cells.WallCellRenderer;
+import gui.viewmodel.WorldSource;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
 public class View {
-    private final World world;
+    private WorldSource world;
     private final GameGrid grid;
-    public View(World world) {
-        this.world = world;
+    public View(WorldSource world) {
+        setSource(world);
         this.grid = new GameGrid(world);
+    }
+
+    public void setSource(WorldSource worldSource) {
+        this.world = worldSource;
     }
 
     private final Map<Class<?>, EntityRenderer<?>> renderes = Map.of(
