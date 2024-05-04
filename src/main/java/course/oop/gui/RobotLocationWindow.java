@@ -13,6 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Vector2d;
 
+import course.oop.locale.UserLocaleManager;
 import course.oop.model.GameModel;
 import course.oop.model.GameModelEvents;
 import course.oop.saving.Saveable;
@@ -35,11 +36,11 @@ public class RobotLocationWindow extends JInternalFrame implements Saveable, Pro
      * Создает окно, подписывается на изменения переданной модели.
      */
     public RobotLocationWindow(GameModel gameModel) {
-        super("Internal Frame", true, true, true, true);
+        super(UserLocaleManager.getCurrentBundle().getString("robot_location_window_name"), true, true, true, true);
         gameModel.addPropertyChangeListener(this);
 
         setLocation(800, 0);
-        setSize(200, 100);
+        setSize(300, 100);
 
         xCoord = new JLabel("x");
         yCoord = new JLabel("y");
@@ -49,7 +50,7 @@ public class RobotLocationWindow extends JInternalFrame implements Saveable, Pro
         panel.add(yCoord);
 
         setLayout(new BorderLayout());
-        add(new JLabel("Robot coordinates", SwingConstants.CENTER), BorderLayout.NORTH);
+        add(new JLabel(UserLocaleManager.getCurrentBundle().getString("robot_location_window_name"), SwingConstants.CENTER), BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
     }
 

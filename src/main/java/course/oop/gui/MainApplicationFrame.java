@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -17,6 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import course.oop.controller.GameController;
+import course.oop.locale.UserLocaleManager;
 import course.oop.log.Logger;
 import course.oop.model.GameModel;
 import course.oop.saving.Saveable;
@@ -110,10 +112,11 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Выполняет процедуру выхода из программы.
      */
     private void startExitDialog() {
+        ResourceBundle bundle = UserLocaleManager.getCurrentBundle();
         int userChoice = JOptionPane.showConfirmDialog(
                 this,
-                "Вы уверены?",
-                "Выйти",
+                bundle.getString("exit_dialog.are_you_sure"),
+                bundle.getString("exit_dialog.exit"),
                 JOptionPane.YES_NO_OPTION);
         if (userChoice == JOptionPane.YES_OPTION) {
             saveWindowStates();

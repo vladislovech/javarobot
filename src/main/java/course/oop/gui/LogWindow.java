@@ -7,6 +7,7 @@ import java.awt.TextArea;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
+import course.oop.locale.UserLocaleManager;
 import course.oop.log.LogChangeListener;
 import course.oop.log.LogEntry;
 import course.oop.log.LogJournal;
@@ -19,12 +20,11 @@ public class LogWindow extends JInternalFrame implements Saveable, LogChangeList
      */
     private LogJournal logSource;
     private TextArea logContent;
-
     public LogWindow(LogJournal logSource) {
-        super("Протокол работы", true, true, true, true);
+        super(UserLocaleManager.getCurrentBundle().getString("log_window_name"), true, true, true, true);
         setLocation(0, 0);
         setSize(300, 500);
-        Logger.debug("Протокол работает.");
+        Logger.debug(UserLocaleManager.getCurrentBundle().getString("log.protocols_works"));
         this.logSource = logSource;
         logSource.registerListener(this);
         logContent = new TextArea("");
