@@ -41,6 +41,14 @@ public class MainApplicationFrame extends JFrame implements Saveable {
      * Создает главное окно программы
      */
     public MainApplicationFrame() {
+        try {
+            UIManager.put("OptionPane.yesButtonText",
+                    UserLocaleManager.getCurrentBundle().getString("option_pane_yes"));
+            UIManager.put("OptionPane.noButtonText", UserLocaleManager.getCurrentBundle().getString("option_pane_no"));
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         childs = new ArrayList<>();
         /**
          * Модель игры
@@ -139,7 +147,7 @@ public class MainApplicationFrame extends JFrame implements Saveable {
     /**
      * Сохраняет состояния дочерних окон и главного окна.
      */
-    private void saveWindowStates() {
+    public void saveWindowStates() {
         FrameStatesManager frameSaver = new FrameStatesManager();
         frameSaver.addSaveableFrame(this);
         for (Component component : childs)

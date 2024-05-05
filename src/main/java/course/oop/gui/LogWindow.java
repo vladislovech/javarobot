@@ -14,12 +14,16 @@ import course.oop.log.LogJournal;
 import course.oop.log.Logger;
 import course.oop.saving.Saveable;
 
-public class LogWindow extends JInternalFrame implements Saveable, LogChangeListener{
+public class LogWindow extends JInternalFrame implements Saveable, LogChangeListener {
     /**
      * Журнал логов (модель)
      */
     private LogJournal logSource;
+    /**
+     * Текст с записями логов
+     */
     private TextArea logContent;
+
     public LogWindow(LogJournal logSource) {
         super(UserLocaleManager.getCurrentBundle().getString("log_window_name"), true, true, true, true);
         setLocation(0, 0);

@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import course.oop.locale.UserLocale;
 import course.oop.locale.UserLocaleManager;
@@ -76,23 +76,40 @@ public class MainMenuBar extends JMenuBar {
         return ret;
     }
 
+    /**
+     * 
+     */
     private JMenu createSettingMenu() {
         JMenu ret = new JMenu(bundle.getString("settings_menu"));
         ret.setMnemonic(KeyEvent.VK_I);
         ret.getAccessibleContext().setAccessibleDescription(
                 bundle.getString("settings_menu.accessible_description"));
+        ret.add(createChangeLanguageItem());
+        return ret;
+    }
+
+    /**
+     * Возвращает пункт меню для смены языка с написанным обработчиком:
+     * Открывает диалог с пользователем на выбор языка. Если пользователь
+     * выбирает язык, сохраняет окно, убивает его и создает новое.
+     * Старое чистится сборщиком мусора и уходит с миром.
+     */
+    private JMenuItem createChangeLanguageItem() {
         JMenuItem changeLanguageItem = new JMenuItem(bundle.getString("settings_menu.change_lang"), KeyEvent.VK_M);
         changeLanguageItem.addActionListener((event) -> {
             SelectLanguageDialog ld = new SelectLanguageDialog(mainFrame);
             UserLocale result = ld.getResult();
             if (result != null) {
                 UserLocaleManager.setUserLocale(result);
-                JOptionPane.showMessageDialog(mainFrame, "ok");
+                mainFrame.saveWindowStates();
+                mainFrame.dispose();
+                SwingUtilities.invokeLater(() -> {
+                    MainApplicationFrame frame = new MainApplicationFrame();
+                    frame.setVisible(true);
+                });
             }
-            mainFrame.repaint();
         });
-        ret.add(changeLanguageItem);
-        return ret;
+        return changeLanguageItem;
     }
 
     /**
