@@ -18,6 +18,7 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
         int cellSize = entity.getCellSize();
         int gridStroke = entity.getGridStroke();
         int eyeSize = entity.getEyeSize();
+        int pupilSize = eyeSize/2;
         String health = String.valueOf(entity.getHealth());
         Directions faceDirection = entity.getCellDirection();
 
@@ -36,7 +37,7 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
                 cell_y + (cellSize - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent()
         );
 
-        Point[] eyesCoords = getEyesCoords(faceDirection, cellSize, eyeSize);
+        Point[] eyesCoords = getEyesCoords(faceDirection, cellSize, eyeSize, pupilSize);
         Point cellCenterCoords = new Point(cell_x+cellSize/2, cell_y+cellSize/2);
         for(int i = 0; i < 2; i++){
             g.setColor(Color.black);
@@ -45,17 +46,18 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
             g.fillOval(cellCenterCoords.x+eyesCoords[i].x, cellCenterCoords.y+eyesCoords[i].y, eyeSize, eyeSize);
 
             g.setColor(Color.black);
-            g.drawOval(cellCenterCoords.x+eyesCoords[i].x, cellCenterCoords.y+eyesCoords[i].y, eyeSize/2, eyeSize/2);
-            g.fillOval(cellCenterCoords.x+eyesCoords[i].x, cellCenterCoords.y+eyesCoords[i].y, eyeSize/2, eyeSize/2);
+            g.drawOval(cellCenterCoords.x+eyesCoords[i+2].x, cellCenterCoords.y+eyesCoords[i+2].y, pupilSize, pupilSize);
+            g.fillOval(cellCenterCoords.x+eyesCoords[i+2].x, cellCenterCoords.y+eyesCoords[i+2].y, pupilSize, pupilSize);
         }
     }
 
     /**
-     * Возвращает левые верхние координаты точек глаз относительно центра клетки.
+     * Возвращает 4 точки: первые две - левые верхние координаты точек глаз относительно центра клетки,
+     * следующие две - левые верхние координаты точек зрачков глаза относительно центра клетки.
      * @return Point[2]
      */
-    public Point[] getEyesCoords(Directions faceDirection, int cellSize, int eyeSize){
-        Point[] eyesCoords = new Point[2];
+    public Point[] getEyesCoords(Directions faceDirection, int cellSize, int eyeSize, int pupilSize){
+        Point[] eyesCoords = new Point[4];
         switch (faceDirection) {
             case NORTH:
             case NORTH_EAST:
@@ -76,6 +78,40 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
             case WEST:
                 eyesCoords[0] = new Point(-cellSize/2, -cellSize/4 - eyeSize/2);
                 eyesCoords[1] = new Point(-cellSize/2, cellSize/4 - eyeSize/2);
+                break;
+        }
+        switch (faceDirection) {
+            case NORTH:
+                eyesCoords[2] = new Point(-cellSize/4-pupilSize/2, -cellSize/2);
+                eyesCoords[3] = new Point(cellSize/4-pupilSize/2, -cellSize/2);
+                break;
+            case NORTH_EAST:
+                eyesCoords[2] = new Point(-cellSize/4, -cellSize/2);
+                eyesCoords[3] = new Point(cellSize/4, -cellSize/2);
+                break;
+            case NORTH_WEST:
+                eyesCoords[2] = new Point(-cellSize/4-eyeSize/2, -cellSize/2);
+                eyesCoords[3] = new Point(cellSize/4-eyeSize/2, -cellSize/2);
+                break;
+            case EAST:
+                eyesCoords[2] = new Point(cellSize/2-pupilSize, -cellSize/4 - eyeSize/2);
+                eyesCoords[3] = new Point(cellSize/2-pupilSize, cellSize/4 - eyeSize/2);
+                break;
+            case SOUTH:
+                eyesCoords[2] = new Point(-cellSize/4-pupilSize/2, cellSize/2-pupilSize);
+                eyesCoords[3] = new Point(cellSize/4-pupilSize/2, cellSize/2-pupilSize);
+                break;
+            case SOUTH_EAST:
+                eyesCoords[2] = new Point(-cellSize/4, cellSize/2-pupilSize);
+                eyesCoords[3] = new Point(cellSize/4, cellSize/2-pupilSize);
+                break;
+            case SOUTH_WEST:
+                eyesCoords[2] = new Point(-cellSize/4-eyeSize/2, cellSize/2-pupilSize);
+                eyesCoords[3] = new Point(cellSize/4-eyeSize/2, cellSize/2-pupilSize);
+                break;
+            case WEST:
+                eyesCoords[2] = new Point(-cellSize/2, -cellSize/4 - eyeSize/2);
+                eyesCoords[3] = new Point(-cellSize/2, cellSize/4 - eyeSize/2);
                 break;
         }
         return eyesCoords;

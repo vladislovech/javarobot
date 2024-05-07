@@ -13,7 +13,7 @@ public enum Directions {
     WEST;
 
     public Directions getStandardDirection(int command){
-        int num = (command+this.ordinal()+7)%8;
+        int num = (command+ordinal()+7)%8;
         return Directions.values()[num];
     }
 

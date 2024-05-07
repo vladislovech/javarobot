@@ -14,7 +14,7 @@ public class BacteriaCellEntity extends CellEntity {
     private final int MAX_COMMAND_COUNT = 10;
     private int[] brain;
     private int nextCommand = 0;
-    private int health = 10;
+    private int health = 20;
     private Directions cellDirection;
     private int eyeSize = 12;
 
@@ -74,12 +74,16 @@ public class BacteriaCellEntity extends CellEntity {
         health -= amount;
     }
 
-    public void setCellDirection(){
+    private void setCellDirection(){
         cellDirection = Directions.values()[new Random().nextInt(Directions.values().length)];
     }
 
     private void setCellDirection(int command) {
         cellDirection = cellDirection.getStandardDirection(command);
+    }
+
+    private void setCellDirection(Directions direction){
+        cellDirection = direction;
     }
 
     private void rotateCell(int command){
