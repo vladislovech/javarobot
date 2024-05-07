@@ -12,106 +12,9 @@ public class WorldContext {
         return world.getEntityOnCoords(p);
     }
 
-    public int moveCell(BacteriaCellEntity cell, int command) {
-        Point oldCoords = cell.getCoords();
-        Directions cellDirection = cell.getCellDirection();
-        Point relativeCoords = cellDirection.getRelativeCoords(command);
-        Point neighbour_coords = cell.getNeighbourCoords(relativeCoords);
-        CellEntity neighbour = getEntityOnCoords(neighbour_coords);
-        if (neighbour == null) {
-            if (neighbour_coords.x > -1 && neighbour_coords.x < getCellCountWidth() &&
-                    neighbour_coords.y > -1 && neighbour_coords.y < getCellCountHeight()) {
-                world.moveBacteriaToCoords(oldCoords, neighbour_coords);
-                cell.moveTo(relativeCoords);
-                return 5; // пустая клетка
-            }
-            else {
-                return 2; // граница мира (стена)
-            }
-        }
-        else if (neighbour instanceof PoisonCellEntity) {
-            world.eatPoison(cell);
-            return 1;
-        }
-        else if (neighbour instanceof WallCellEntity) {
-            return 2;
-        }
-        else if (neighbour instanceof BacteriaCellEntity) {
-            return 3;
-        }
-        else if (neighbour instanceof FoodCellEntity) {
-            int healSize = world.eatFood((FoodCellEntity) neighbour);
-            cell.increaseHealth(healSize);
-            world.moveBacteriaToCoords(oldCoords, neighbour_coords);
-            cell.moveTo(relativeCoords);
-            return 4;
-        }
-        else return 0;
-    }
-
-    public int catchCell(BacteriaCellEntity cell, int command){
-        Directions cellDirection = cell.getCellDirection();
-        Point relativeCoords = cellDirection.getRelativeCoords(command);
-        Point neighbour_coords = cell.getNeighbourCoords(relativeCoords);
-        CellEntity neighbour = getEntityOnCoords(neighbour_coords);
-        if (neighbour == null) {
-            if (neighbour_coords.x > -1 && neighbour_coords.x < getCellCountWidth() &&
-                    neighbour_coords.y > -1 && neighbour_coords.y < getCellCountHeight()) {
-                return 5; // пустая клетка
-            }
-            else {
-                return 2; // граница мира (стена)
-            }
-        }
-        else if (neighbour instanceof PoisonCellEntity) {
-            world.curePoison((PoisonCellEntity) neighbour);
-            return 1;
-        }
-        else if (neighbour instanceof WallCellEntity) {
-            return 2;
-        }
-        else if (neighbour instanceof BacteriaCellEntity) {
-            return 3;
-        }
-        else if (neighbour instanceof FoodCellEntity) {
-            int healSize = world.eatFood((FoodCellEntity) neighbour);
-            cell.increaseHealth(healSize);
-            return 4;
-        }
-        else return 0;
-    }
-    public int look(BacteriaCellEntity cell, int command){
-        Directions cellDirection = cell.getCellDirection();
-        Point relativeCoords = cellDirection.getRelativeCoords(command);
-        Point neighbour_coords = cell.getNeighbourCoords(relativeCoords);
-        CellEntity neighbour = getEntityOnCoords(neighbour_coords);
-        if (neighbour == null) {
-            if (neighbour_coords.x > -1 && neighbour_coords.x < getCellCountWidth() &&
-                    neighbour_coords.y > -1 && neighbour_coords.y < getCellCountHeight()) {
-                return 5; // пустая клетка
-            }
-            else {
-                return 2; // граница мира (стена)
-            }
-        }
-        else if (neighbour instanceof PoisonCellEntity) {
-            return 1;
-        }
-        else if (neighbour instanceof WallCellEntity) {
-            return 2;
-        }
-        else if (neighbour instanceof BacteriaCellEntity) {
-            return 3;
-        }
-        else if (neighbour instanceof FoodCellEntity) {
-            return 4;
-        }
-        else return 0;
-    }
-
     public int completeCommand(BacteriaCellEntity cell, int command){
         Commands commandType = Commands.getType(command);
-        System.out.println(commandType);
+
         Point oldCoords = cell.getCoords();
         Directions cellDirection = cell.getCellDirection();
         Point relativeCoords = cellDirection.getRelativeCoords(command);
@@ -120,8 +23,10 @@ public class WorldContext {
         if (neighbour == null) {
             if (neighbour_coords.x > -1 && neighbour_coords.x < getCellCountWidth() &&
                     neighbour_coords.y > -1 && neighbour_coords.y < getCellCountHeight()) {
-                world.moveBacteriaToCoords(oldCoords, neighbour_coords);
-                cell.moveTo(relativeCoords);
+                if(commandType == Commands.MOVE_CELL) {
+                    world.moveBacteriaToCoords(oldCoords, neighbour_coords);
+                    cell.moveTo(relativeCoords);
+                }
                 return 5; // пустая клетка
             }
             else {
@@ -129,7 +34,8 @@ public class WorldContext {
             }
         }
         else if (neighbour instanceof PoisonCellEntity) {
-            world.eatPoison(cell);
+            if(commandType == Commands.MOVE_CELL) world.eatPoison(cell);
+            if(commandType == Commands.CATCH_CELL) world.curePoison((PoisonCellEntity) neighbour);
             return 1;
         }
         else if (neighbour instanceof WallCellEntity) {
@@ -139,10 +45,16 @@ public class WorldContext {
             return 3;
         }
         else if (neighbour instanceof FoodCellEntity) {
-            int healSize = world.eatFood((FoodCellEntity) neighbour);
-            cell.increaseHealth(healSize);
-            world.moveBacteriaToCoords(oldCoords, neighbour_coords);
-            cell.moveTo(relativeCoords);
+            if(commandType == Commands.MOVE_CELL) {
+                int healSize = world.eatFood((FoodCellEntity) neighbour);
+                cell.increaseHealth(healSize);
+                world.moveBacteriaToCoords(oldCoords, neighbour_coords);
+                cell.moveTo(relativeCoords);
+            }
+            if(commandType == Commands.CATCH_CELL){
+                int healSize = world.eatFood((FoodCellEntity) neighbour);
+                cell.increaseHealth(healSize);
+            }
             return 4;
         }
         else return 0;

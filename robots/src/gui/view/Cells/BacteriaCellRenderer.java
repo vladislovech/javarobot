@@ -77,10 +77,6 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
                 eyesCoords[0] = new Point(-cellSize/2, -cellSize/4 - eyeSize/2);
                 eyesCoords[1] = new Point(-cellSize/2, cellSize/4 - eyeSize/2);
                 break;
-            default:
-                eyesCoords[0] = new Point(0,0);
-                eyesCoords[1] = new Point(0,0);
-                break;
         }
         return eyesCoords;
     }

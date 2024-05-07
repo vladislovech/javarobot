@@ -11,7 +11,7 @@ public class BacteriaCellEntity extends CellEntity {
      * Описывает бактерию
      */
     private final int BRAIN_SIZE = 64;
-    private final int MAX_COMMAND_COUNT = 1;
+    private final int MAX_COMMAND_COUNT = 10;
     private int[] brain;
     private int nextCommand = 0;
     private int health = 10;
@@ -41,17 +41,12 @@ public class BacteriaCellEntity extends CellEntity {
         while (commandCount <= MAX_COMMAND_COUNT) {
             int command = brain[nextCommand];
             setCellDirection(command);
-            if (command < 8) {
-                commandShift = context.moveCell(this, command);
-                //commandShift = context.completeCommand(this, command);
-                commandCount = MAX_COMMAND_COUNT;
-            }
-            else if (command < 16) {
-                commandShift = context.catchCell(this, command);
+            if (command < 16) {
+                commandShift = context.completeCommand(this, command);
                 commandCount = MAX_COMMAND_COUNT;
             }
             else if (command < 24) {
-                commandShift = context.look(this, command);
+                commandShift = context.completeCommand(this, command);
             }
             else if (command < 32) {
                 rotateCell(command);
