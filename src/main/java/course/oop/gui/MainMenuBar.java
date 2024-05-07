@@ -97,9 +97,9 @@ public class MainMenuBar extends JMenuBar {
     private JMenuItem createChangeLanguageItem() {
         JMenuItem changeLanguageItem = new JMenuItem(bundle.getString("settings_menu.change_lang"), KeyEvent.VK_M);
         changeLanguageItem.addActionListener((event) -> {
-            SelectLanguageDialog ld = new SelectLanguageDialog(mainFrame);
-            UserLocale result = ld.getResult();
-            if (result != null) {
+            SelectLanguageDialog userDialog = new SelectLanguageDialog(mainFrame);
+            UserLocale result = userDialog.getChoosedUserLocale();
+            if (result != null && UserLocaleManager.getCurrentLocale() != result) {
                 UserLocaleManager.setUserLocale(result);
                 mainFrame.saveWindowStates();
                 mainFrame.dispose();
@@ -107,6 +107,7 @@ public class MainMenuBar extends JMenuBar {
                     MainApplicationFrame frame = new MainApplicationFrame();
                     frame.setVisible(true);
                 });
+                Logger.debug(UserLocaleManager.getCurrentBundle().getString("log.change_lang"));
             }
         });
         return changeLanguageItem;

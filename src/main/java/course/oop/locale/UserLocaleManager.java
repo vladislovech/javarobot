@@ -14,14 +14,16 @@ import java.util.ResourceBundle;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Утилитарный класс.
- * - хранит ресурсы выбранной локали
- * - загружает локаль пользователя из файла
- * - сохраняет локаль пользователя в файл
+ * Статический класс.
+ * - Хранит текущую локаль пользователя
+ * - Загружает локаль пользователя из файла
+ * - Сохраняет локаль пользователя в файл
+ * - Возвращает ресурсы, связанные с текущей локалью пользователя
+ *      в любом месте в программе
  */
 public class UserLocaleManager {
     /**
-     * Расположение локали пользователя
+     * Расположение локали пользователя по умолчанию
      */
     private static File userLocaleFile = new File(
             System.getProperty("user.home") +
@@ -30,36 +32,54 @@ public class UserLocaleManager {
                     File.separator + "locale.conf");
 
     /**
-     * Хранит ресурсы со связанной локалью
+     * Хранит текущую локаль пользователя
      */
-    private static ResourceBundle currentBundle;
+    private static UserLocale currentUserLocale;
 
+    /**
+     * Загружает локаль пользователя при загрузке класса, следовательно
+     * она всегда известна.
+     */
     static {
         loadUserLocale();
     }
 
+    /**
+     * Класс статический
+     */
     private UserLocaleManager() {
     }
 
     /**
-     * Возвращает текущие ресурсы со связанной локалью
+     * Возвращает текущие ресурсы со связанной текущей локалью пользователя.
+     * ResourceBundle.getBundle() кешируется, так что его вызов не вызывает
+     * частое чтение файла (хотя он еще и потокобезопасный, но я не заметил,
+     * что это влияет на производительность). Если по каким-то причинам
+     * currentUserLocale null, возвращаются ресурсы на английском.
      */
     public static ResourceBundle getCurrentBundle() {
-        return currentBundle;
+        switch (currentUserLocale) {
+            case EN:
+                return ResourceBundle.getBundle("locales/en", new Locale("en"));
+            case RU:
+                return ResourceBundle.getBundle("locales/ru", new Locale("ru"));
+        }
+        return ResourceBundle.getBundle("locales/en", new Locale("en"));
     }
 
     /**
-     * Изменяет текущую локаль, сохраняет ее в файл конфигурации пользователя
+     * Возвращает текущую локаль пользователя.
      */
-    public static void setUserLocale(UserLocale userLocale) {
-        switch (userLocale) {
-            case EN:
-                currentBundle = ResourceBundle.getBundle("locales/en", new Locale("en"));
-                break;
-            case RU:
-                currentBundle = ResourceBundle.getBundle("locales/ru", new Locale("ru"));
-                break;
-            }
+    public static UserLocale getCurrentLocale() {
+        return currentUserLocale;
+    }
+
+    /**
+     * Изменяет текущую локаль пользователя,
+     * сохраняет ее в файл конфигурации пользователя
+     */
+    public static synchronized void setUserLocale(UserLocale userLocale) {
+        currentUserLocale = userLocale;
         saveUserLocale(userLocale);
     }
 
@@ -77,32 +97,23 @@ public class UserLocaleManager {
                 new OutputStreamWriter(new FileOutputStream(userLocaleFile), "UTF-8"))) {
             writer.write(userLocale.toString());
         } catch (IOException e) {
-            System.err.println("can't save user locale" + e.getMessage());
+            System.err.println("can't save user locale");
         }
     }
 
     /**
-     * Заполняет статическое поле currentBundle на основе содержимого
-     * файла с локалью пользователя. Если файл не существует или битый,
-     * устанавливает локаль по умолчанию - английскую, в
-     * currentBundle загружает ресурсы на английском языке
+     * Устанавливает текущую локаль пользователя, читая ее из файла
+     * с локалью пользователя
      */
     private static void loadUserLocale() {
-        switch (getUserLocaleFromLocaleFile()) {
-            case EN:
-                currentBundle = ResourceBundle.getBundle("locales/en", new Locale("en"));
-                break;
-            case RU:
-                currentBundle = ResourceBundle.getBundle("locales/ru", new Locale("ru"));
-                break;
-        }
+        currentUserLocale = getUserLocaleFromLocaleFile();
     }
 
     /**
      * Возвращает строку из первых двух символов файла
      * $HOME/Robots/config/locale.conf (в кодировке UTF-8).
-     * Если файл не существует, или слишком мал, возвращает локаль по умолчанию
-     * - английскую
+     * Если файл не существует, или слишком мал, или его содержимое некорректно,
+     * возвращает локаль по умолчанию - английскую
      */
     private static UserLocale getUserLocaleFromLocaleFile() {
         try (Reader reader = new InputStreamReader(new FileInputStream(userLocaleFile), "UTF-8")) {
@@ -114,11 +125,11 @@ public class UserLocaleManager {
             try {
                 return UserLocale.valueOf(new String(buff));
             } catch (IllegalArgumentException e) {
-                System.err.println("Incorrect locale type" + e.getMessage());
+                System.err.println("Incorrect locale type");
                 return UserLocale.EN;
             }
         } catch (IOException e) {
-            System.err.println("locale file is not exist." + e.getMessage());
+            System.err.println("locale file is not exist.");
             return UserLocale.EN;
         }
     }
