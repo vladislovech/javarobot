@@ -34,7 +34,6 @@ public class World {
         this.cellCountWidth = cellCountWidth;
         this.cellCountHeight = cellCountHeight;
         this.gridStroke = gridStroke;
-//        this.cellSize = (gw_width - (cellCountWidth + 1) * gridStroke) / cellCountWidth;
         this.cellSize = cellSize;
         this.gameWindowWidth = cellCountWidth * cellSize + (cellCountWidth + 1) * gridStroke;
         this.gameWindowHeight = cellCountHeight * cellSize + (cellCountHeight + 1) * gridStroke;
@@ -78,6 +77,7 @@ public class World {
         entities.add(new PoisonCellEntity(new Point(1, 1), cellSize, gridStroke));
         entities.add(new PoisonCellEntity(new Point(2, 6), cellSize, gridStroke));
     }
+
     public void fillMatrix() {
         for (Entity entity: entities) {
             if (entity instanceof CellEntity) {
@@ -86,14 +86,15 @@ public class World {
             }
         }
     }
+
     public void moveBacteriaToCoords(Point oldCoords, Point newCoords) {
         entityMap.put(newCoords, entityMap.get(oldCoords));
         entityMap.remove(oldCoords);
     }
+
     public int eatFood(FoodCellEntity food) {
         int healingAmount = food.getHealingAmount();
         killCell(food);
-        //food.kill();
         return healingAmount;
     }
 
@@ -126,7 +127,12 @@ public class World {
         }
         deadCells.clear();
     }
-
+    public void curePoison(PoisonCellEntity poison){
+        FoodCellEntity newFood = new FoodCellEntity(poison.getCoords(), cellSize, gridStroke, mediumFood);
+        killCell(poison);
+        entityMap.put(newFood.getCoords(), newFood);
+        newCells.add(newFood);
+    }
     /**
      * Добавляет в список entities все новые клетки из очереди newCells
      */
