@@ -12,6 +12,12 @@ public class WorldContext {
         return world.getEntityOnCoords(p);
     }
 
+    /**
+     * Выполняет одно из действий сделать шаг/схватить/посмотреть в зависимости от номера команды
+     * @param cell
+     * @param command
+     * @return сдвиг счётчика команд
+     */
     public int completeCommand(BacteriaCellEntity cell, int command){
         Commands commandType = Commands.getType(command);
 

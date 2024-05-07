@@ -15,21 +15,25 @@ public class BacteriaCellEntity extends CellEntity {
     private int[] brain;
     private int nextCommand = 0;
     private int health = 20;
+    private int eyeSize;
     private Directions cellDirection;
-    private int eyeSize = 12;
 
     public BacteriaCellEntity(Point p, int cellSize, int gridStroke) {
         super(p, Color.BLUE, cellSize, gridStroke);
+        this.eyeSize = (int)Math.round(cellSize * 0.3) + ((int)Math.round(cellSize * 0.3)) % 2;
         brain = new int[BRAIN_SIZE];
         setCellDirection();
         fillBrain();
     }
 
+    /**
+     * Заполняет мозг бактерии случайными командами
+     */
     private void fillBrain() {
         int minValue = 0;
-        int maxValue = 32; // 63
+        int maxValue = 63; // максимум 63
         for (int i = 0; i < BRAIN_SIZE; i++) {
-            brain[i] = minValue + (int) (Math.random() * (maxValue - minValue)); // рандомное значение
+            brain[i] = minValue + (int) (Math.random() * (maxValue - minValue));
         }
     }
 
@@ -38,9 +42,9 @@ public class BacteriaCellEntity extends CellEntity {
         // Сдвиг: яд - 1, стена - 2, бактерия - 3, еда - 4, пусто - 5
         int commandShift;
         int commandCount = 0;
-        while (commandCount <= MAX_COMMAND_COUNT) {
+        while (commandCount < MAX_COMMAND_COUNT) {
             int command = brain[nextCommand];
-            setCellDirection(command);
+            //setCellDirection(command);
             if (command < 16) {
                 commandShift = context.completeCommand(this, command);
                 commandCount = MAX_COMMAND_COUNT;
@@ -52,7 +56,8 @@ public class BacteriaCellEntity extends CellEntity {
                 rotateCell(command);
                 commandShift = 1;
             }
-            else commandShift = command;
+            else commandShift = command; // безусловный переход
+
             commandCount++;
 
             nextCommand = (nextCommand + commandShift) % BRAIN_SIZE;
@@ -60,6 +65,7 @@ public class BacteriaCellEntity extends CellEntity {
             decreaseHealth(1);
             if (health == 0) {
                 context.killCell(this);
+                commandCount = MAX_COMMAND_COUNT;
             }
         }
     }
@@ -74,6 +80,13 @@ public class BacteriaCellEntity extends CellEntity {
         health -= amount;
     }
 
+    public int getEyeSize() {
+        return eyeSize;
+    }
+
+    /**
+     * Устанавливает случайное направление взгляда (используется в конструкторе бактерии)
+     */
     private void setCellDirection(){
         cellDirection = Directions.values()[new Random().nextInt(Directions.values().length)];
     }
@@ -82,16 +95,12 @@ public class BacteriaCellEntity extends CellEntity {
         cellDirection = cellDirection.getStandardDirection(command);
     }
 
-    private void setCellDirection(Directions direction){
-        cellDirection = direction;
-    }
-
+    /**
+     * Поворачивает направление взгляда клетки
+     * @param command
+     */
     private void rotateCell(int command){
         cellDirection = cellDirection.getStandardDirection(command-23);
-    }
-
-    public int getEyeSize() {
-        return eyeSize;
     }
 
     public Directions getCellDirection() {

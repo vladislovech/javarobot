@@ -23,6 +23,11 @@ public abstract class CellEntity implements Entity {
     public Point getCoords() {
         return coords;
     }
+
+    /**
+     * Перемещает клетку на указанный сдвиг (перегрузка translate() для координат, заданных как Point)
+     * @param p
+     */
     public void moveTo(Point p) {
         coords.translate(p.x, p.y);
     }

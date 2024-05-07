@@ -23,6 +23,10 @@ public class View {
         this.grid = new GameGrid(world);
     }
 
+    /**
+     * Определяет источник логики (модель)
+     * @param worldSource
+     */
     public void setSource(WorldSource worldSource) {
         this.world = worldSource;
     }
@@ -42,8 +46,4 @@ public class View {
             entityRenderer.render(entity, g);
         }
     }
-
-    // метод, устанавливающий источник данных
-    // dataSource интерфейс с набором методов
-    // setSources
 }

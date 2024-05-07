@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.model.Cells.BacteriaCellEntity;
 import gui.model.World;
 import gui.viewmodel.WorldSource;
 
@@ -18,14 +19,15 @@ public class GameGrid {
         this.gw_width = world.getGameWindowWidth();
         this.gw_height = world.getGameWindowHeight();
         this.cellSize = world.getCellSize();
+
         this.gridStroke = world.getGridStroke();
 
-        System.out.println(cellCountWidth);
-        System.out.println(cellCountHeight);
-        System.out.println(gw_width);
-        System.out.println(gw_height);
-        System.out.println(cellSize);
-        System.out.println(world.getGridStroke());
+        System.out.println("cellCountWidth = " + cellCountWidth);
+        System.out.println("cellCountHeight = " + cellCountHeight);
+        System.out.println("gw_width = " + gw_width);
+        System.out.println("gw_height = " + gw_height);
+        System.out.println("cellSize = " + cellSize);
+        System.out.println("gridStroke = " + world.getGridStroke());
     }
 
     /** Отрисовывает клеточную сетку

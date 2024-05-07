@@ -29,6 +29,7 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
         g.setFont(font);
         FontMetrics fontMetrics = g.getFontMetrics();
 
+        // отрисовка тела клетки и health
         g.setColor(entity.getColor());
         g.fillRect(cell_x, cell_y, cellSize, cellSize);
         g.setColor(Color.BLACK);
@@ -37,6 +38,7 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
                 cell_y + (cellSize - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent()
         );
 
+        // отрисовка глаз и зрачков (направление взгляда клетки)
         Point[] eyesCoords = getEyesCoords(faceDirection, cellSize, eyeSize, pupilSize);
         Point cellCenterCoords = new Point(cell_x+cellSize/2, cell_y+cellSize/2);
         for(int i = 0; i < 2; i++){
@@ -56,9 +58,9 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
      * следующие две - левые верхние координаты точек зрачков глаза относительно центра клетки.
      * @return Point[2]
      */
-    public Point[] getEyesCoords(Directions faceDirection, int cellSize, int eyeSize, int pupilSize){
+    public Point[] getEyesCoords(Directions direction, int cellSize, int eyeSize, int pupilSize){
         Point[] eyesCoords = new Point[4];
-        switch (faceDirection) {
+        switch (direction) { // глаза
             case NORTH:
             case NORTH_EAST:
             case NORTH_WEST:
@@ -80,7 +82,7 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
                 eyesCoords[1] = new Point(-cellSize/2, cellSize/4 - eyeSize/2);
                 break;
         }
-        switch (faceDirection) {
+        switch (direction) { // зрачки
             case NORTH:
                 eyesCoords[2] = new Point(-cellSize/4-pupilSize/2, -cellSize/2);
                 eyesCoords[3] = new Point(cellSize/4-pupilSize/2, -cellSize/2);

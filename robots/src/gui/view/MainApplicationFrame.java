@@ -19,7 +19,7 @@ public class MainApplicationFrame extends JFrame {
         setContentPane(desktopPane);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        World world = new World(20, 10, 40, 2);
+        World world = new World(20, 10, 50, 2);
         WorldSource worldSource = new WorldSource(world);
         View view = new View(worldSource);
         ViewModel viewModel = new ViewModel(world, view);
