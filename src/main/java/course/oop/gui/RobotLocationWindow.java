@@ -39,7 +39,7 @@ public class RobotLocationWindow extends JInternalFrame implements Saveable, Pro
         super(UserLocaleManager.getCurrentBundle().getString("robot_location_window_name"), true, true, true, true);
         gameModel.addPropertyChangeListener(this);
 
-        setLocation(800, 0);
+        setLocation(1000, 0);
         setSize(300, 100);
 
         xCoord = new JLabel("x");

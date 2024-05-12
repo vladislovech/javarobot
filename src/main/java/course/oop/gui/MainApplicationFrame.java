@@ -172,7 +172,6 @@ public class MainApplicationFrame extends JFrame implements Saveable {
             frameLoader.loadStates();
         } catch (LoadException e) {
             System.err.println("Не удалось загрузить состояния окон из файла конфигурации");
-            e.printStackTrace();
             return;
         }
 

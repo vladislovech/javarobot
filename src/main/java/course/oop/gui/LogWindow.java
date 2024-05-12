@@ -3,6 +3,8 @@ package course.oop.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.TextArea;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -24,16 +26,27 @@ public class LogWindow extends JInternalFrame implements Saveable, LogChangeList
      */
     private TextArea logContent;
 
+    /**
+     * Шаблон строки вывода записи лога
+     */
+    private MessageFormat logEntryFormatter;
+
+    /**
+     * Шаблон вывода даты лога (ISO-8601)
+     */
+    private SimpleDateFormat logDateFormat;
+
     public LogWindow(LogJournal logSource) {
         super(UserLocaleManager.getCurrentBundle().getString("log_window_name"), true, true, true, true);
         setLocation(0, 0);
-        setSize(300, 500);
+        setSize(500, 500);
         Logger.debug(UserLocaleManager.getCurrentBundle().getString("log.protocols_works"));
         this.logSource = logSource;
         logSource.registerListener(this);
         logContent = new TextArea("");
         logContent.setSize(200, 500);
-
+        logEntryFormatter = new MessageFormat("{0}:{1}:{2}");
+        logDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(logContent, BorderLayout.CENTER);
         getContentPane().add(panel);
@@ -46,7 +59,12 @@ public class LogWindow extends JInternalFrame implements Saveable, LogChangeList
     private void updateLogContent() {
         StringBuilder content = new StringBuilder();
         for (LogEntry entry : logSource.all()) {
-            content.append(entry.getMessage()).append("\n");
+            String[] args = new String[] {
+                    logDateFormat.format(entry.getDateCreated()),
+                    entry.getLevel().toString(),
+                    entry.getMessage()
+            };
+            content.append(logEntryFormatter.format(args)).append("\n");
         }
         logContent.setText(content.toString());
         logContent.invalidate();
