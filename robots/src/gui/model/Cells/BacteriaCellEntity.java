@@ -1,6 +1,10 @@
 package gui.model.Cells;
 
+import gui.Properties;
+import gui.model.CommandsList.Actions;
+import gui.model.CommandsList.Commands;
 import gui.model.Directions;
+import gui.model.Handler;
 import gui.model.WorldContext;
 
 import java.awt.*;
@@ -10,17 +14,17 @@ public class BacteriaCellEntity extends CellEntity {
     /**
      * Описывает бактерию
      */
-    private final int BRAIN_SIZE = 64;
-    private final int MAX_COMMAND_COUNT = 10;
+    private final int BRAIN_SIZE = Properties.getBRAIN_SIZE();
+    private final int MAX_COMMAND_COUNT = Properties.getMAX_COMMAND_COUNT();
+    private int health = Properties.getBACTERIA_HEALTH();
     private int[] brain;
     private int nextCommand = 0;
-    private int health = 20;
     private int eyeSize;
     private Directions cellDirection;
 
-    public BacteriaCellEntity(Point p, int cellSize, int gridStroke) {
-        super(p, Color.BLUE, cellSize, gridStroke);
-        this.eyeSize = (int)Math.round(cellSize * 0.3) + ((int)Math.round(cellSize * 0.3)) % 2;
+    public BacteriaCellEntity(Point p) {
+        super(p, Color.blue);
+        this.eyeSize = (int)Math.round(Properties.getCELL_SIZE() * 0.3) + ((int)Math.round(Properties.getCELL_SIZE() * 0.3)) % 2;
         brain = new int[BRAIN_SIZE];
         setCellDirection();
         fillBrain();
@@ -31,7 +35,7 @@ public class BacteriaCellEntity extends CellEntity {
      */
     private void fillBrain() {
         int minValue = 0;
-        int maxValue = 63; // максимум 63
+        int maxValue = BRAIN_SIZE - 1;
         for (int i = 0; i < BRAIN_SIZE; i++) {
             brain[i] = minValue + (int) (Math.random() * (maxValue - minValue));
         }
@@ -39,28 +43,24 @@ public class BacteriaCellEntity extends CellEntity {
 
     @Override
     public void update(WorldContext context) {
-        // Сдвиг: яд - 1, стена - 2, бактерия - 3, еда - 4, пусто - 5
         int commandShift;
         int commandCount = 0;
+
+        Handler handler = new Handler();
         while (commandCount < MAX_COMMAND_COUNT) {
             int command = brain[nextCommand];
-            //setCellDirection(command);
-            if (command < 16) {
-                commandShift = context.completeCommand(this, command);
+            //Commands commandType = Commands.getType(command);
+            Actions action = handler.execute(this, command, context);
+            commandShift = action.getShiftValue();
+            if (action.isFullStop()) {
                 commandCount = MAX_COMMAND_COUNT;
             }
-            else if (command < 24) {
-                commandShift = context.completeCommand(this, command);
+            if (action == Actions.BRAIN_JUMP_REACTION) {
+                commandShift = command;
             }
-            else if (command < 32) {
-                rotateCell(command);
-                commandShift = 1;
-            }
-            else commandShift = command; // безусловный переход
-
-            commandCount++;
 
             nextCommand = (nextCommand + commandShift) % BRAIN_SIZE;
+            commandCount++;
 
             decreaseHealth(1);
             if (health == 0) {
@@ -99,11 +99,12 @@ public class BacteriaCellEntity extends CellEntity {
      * Поворачивает направление взгляда клетки
      * @param command
      */
-    private void rotateCell(int command){
+    public void rotateCell(int command){
         cellDirection = cellDirection.getStandardDirection(command-23);
     }
 
     public Directions getCellDirection() {
         return cellDirection;
     }
+    public int getMAX_COMMAND_COUNT() {return MAX_COMMAND_COUNT;}
 }

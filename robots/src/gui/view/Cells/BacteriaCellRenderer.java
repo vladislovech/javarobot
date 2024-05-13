@@ -1,5 +1,6 @@
 package gui.view.Cells;
 
+import gui.Properties;
 import gui.model.Cells.BacteriaCellEntity;
 import gui.model.Cells.CellEntity;
 import gui.model.Directions;
@@ -25,7 +26,8 @@ public class BacteriaCellRenderer extends BasicCellRenderer {
         int cell_x = cellSize * coords.x + (coords.x + 1) * gridStroke;
         int cell_y = cellSize * coords.y + (coords.y + 1) * gridStroke;
 
-        Font font = new Font("Arial", Font.BOLD, 16);
+        int font_size = (int)Math.round(cellSize * 0.3);
+        Font font = new Font("Arial", Font.BOLD, font_size);
         g.setFont(font);
         FontMetrics fontMetrics = g.getFontMetrics();
 

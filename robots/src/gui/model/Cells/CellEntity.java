@@ -1,5 +1,6 @@
 package gui.model.Cells;
 
+import gui.Properties;
 import gui.model.Entity;
 
 import java.awt.*;
@@ -12,11 +13,11 @@ public abstract class CellEntity implements Entity {
     private Point coords;
     private int cellSize;
     private int gridStroke;
-    public CellEntity(Point coords, Color color, int cellSize, int gridStroke) {
+    public CellEntity(Point coords, Color color) {
         this.coords = coords;
         this.color = color;
-        this.cellSize = cellSize;
-        this.gridStroke = gridStroke;
+        this.cellSize = Properties.getCELL_SIZE();
+        this.gridStroke = Properties.getGRID_STROKE();
     }
 
     @Override

@@ -9,8 +9,8 @@ public class FoodCellEntity extends CellEntity {
      * Описывает еду
      */
     private final int healingAmount;
-    public FoodCellEntity(Point p, int cellSize, int gridStroke, int healingAmount) {
-        super(p, Color.GREEN, cellSize, gridStroke);
+    public FoodCellEntity(Point p, int healingAmount) {
+        super(p, Color.GREEN);
         this.healingAmount = healingAmount;
     }
 

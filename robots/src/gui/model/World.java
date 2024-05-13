@@ -1,5 +1,6 @@
 package gui.model;
 
+import gui.Properties;
 import gui.model.Cells.BacteriaCellEntity;
 import gui.model.Cells.CellEntity;
 import gui.model.Cells.FoodCellEntity;
@@ -14,10 +15,11 @@ import java.util.List;
 public class World {
     private final int cellCountWidth; // кол-во клеток в ширину
     private final int cellCountHeight; // кол-во клеток в высоту
-    private final int gameWindowWidth; // ширина игрового поля в пикселях
-    private final int gameWindowHeight; // высота игрового поля в пикселях
-    private int cellSize;
-    private int gridStroke;
+    private int cellSize = Properties.getCELL_SIZE();
+    private int gridStroke = Properties.getGRID_STROKE();
+
+    private int gameWindowWidth; // ширина игрового поля в пикселях
+    private int gameWindowHeight; // высота игрового поля в пикселях
 
     private final int smallFood = 5;
     private final int mediumFood = 10;
@@ -27,14 +29,13 @@ public class World {
     private final List<CellEntity> deadCells = new ArrayList<>();
     private final List<CellEntity> newCells = new ArrayList<>();
     private HashMap<Point, CellEntity> entityMap = new HashMap<>();
-    private WorldContext context;
-    public World(int cellCountWidth, int cellCountHeight, int cellSize, int gridStroke) {
+    private final WorldContext context;
+    public World(int cellCountWidth, int cellCountHeight) {
         context = new WorldContext(this);
 
         this.cellCountWidth = cellCountWidth;
         this.cellCountHeight = cellCountHeight;
-        this.gridStroke = gridStroke;
-        this.cellSize = cellSize;
+
         this.gameWindowWidth = cellCountWidth * cellSize + (cellCountWidth + 1) * gridStroke;
         this.gameWindowHeight = cellCountHeight * cellSize + (cellCountHeight + 1) * gridStroke;
 
@@ -72,21 +73,21 @@ public class World {
      * Создание всех клеток мира
      */
     public void spawnEntities() {
-        entities.add(new BacteriaCellEntity(new Point(0, 0), cellSize, gridStroke));
-        entities.add(new BacteriaCellEntity(new Point(1, 0), cellSize, gridStroke));
-        entities.add(new WallCellEntity(new Point(2, 0), cellSize, gridStroke));
-        entities.add(new WallCellEntity(new Point(0, 2), cellSize, gridStroke));
-        entities.add(new WallCellEntity(new Point(1, 2), cellSize, gridStroke));
-        entities.add(new WallCellEntity(new Point(2, 1), cellSize, gridStroke));
-        entities.add(new WallCellEntity(new Point(2, 2), cellSize, gridStroke));
-        entities.add(new BacteriaCellEntity(new Point(3, 3), cellSize, gridStroke));
-        entities.add(new BacteriaCellEntity(new Point(3, 4), cellSize, gridStroke));
-        entities.add(new BacteriaCellEntity(new Point(4, 4), cellSize, gridStroke));
-        entities.add(new FoodCellEntity(new Point(4, 3), cellSize, gridStroke, mediumFood));
-        entities.add(new FoodCellEntity(new Point(6, 4), cellSize, gridStroke, mediumFood));
-        entities.add(new WallCellEntity(new Point(1, 5), cellSize, gridStroke));
-        entities.add(new PoisonCellEntity(new Point(1, 1), cellSize, gridStroke));
-        entities.add(new PoisonCellEntity(new Point(2, 6), cellSize, gridStroke));
+        entities.add(new BacteriaCellEntity(new Point(0, 0)));
+        entities.add(new BacteriaCellEntity(new Point(1, 0)));
+        entities.add(new WallCellEntity(new Point(2, 0)));
+        entities.add(new WallCellEntity(new Point(0, 2)));
+        entities.add(new WallCellEntity(new Point(1, 2)));
+        entities.add(new WallCellEntity(new Point(2, 1)));
+        entities.add(new WallCellEntity(new Point(2, 2)));
+        entities.add(new BacteriaCellEntity(new Point(3, 3)));
+        entities.add(new BacteriaCellEntity(new Point(3, 4)));
+        entities.add(new BacteriaCellEntity(new Point(4, 4)));
+        entities.add(new FoodCellEntity(new Point(4, 3), mediumFood));
+        entities.add(new FoodCellEntity(new Point(6, 4), mediumFood));
+        entities.add(new WallCellEntity(new Point(1, 5)));
+        entities.add(new PoisonCellEntity(new Point(1, 1)));
+        entities.add(new PoisonCellEntity(new Point(2, 6)));
     }
 
     /**
@@ -127,7 +128,7 @@ public class World {
      * @param cell
      */
     public void eatPoison(BacteriaCellEntity cell) {
-        PoisonCellEntity newPoison = new PoisonCellEntity(cell.getCoords(), cellSize, gridStroke);
+        PoisonCellEntity newPoison = new PoisonCellEntity(cell.getCoords());
         killCell(cell);
         entityMap.put(cell.getCoords(), newPoison);
         newCells.add(newPoison);
@@ -156,8 +157,8 @@ public class World {
      * Превращает клетку яда в еду (удаляет яд, создаёт новую еду на тех же координатах)
      * @param poison
      */
-    public void curePoison(PoisonCellEntity poison){
-        FoodCellEntity newFood = new FoodCellEntity(poison.getCoords(), cellSize, gridStroke, mediumFood);
+    public void curePoison(PoisonCellEntity poison) {
+        FoodCellEntity newFood = new FoodCellEntity(poison.getCoords(), mediumFood);
         killCell(poison);
         entityMap.put(newFood.getCoords(), newFood);
         newCells.add(newFood);

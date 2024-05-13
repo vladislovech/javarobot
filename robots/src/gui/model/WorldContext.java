@@ -1,6 +1,8 @@
 package gui.model;
 
 import gui.model.Cells.*;
+import gui.model.CommandsList.Commands;
+
 import java.awt.*;
 
 public class WorldContext {
@@ -65,6 +67,10 @@ public class WorldContext {
         }
         else return 0;
     }
+    public void moveBacteriaToCoords(Point oldCoords, Point neighbour_coords) {world.moveBacteriaToCoords(oldCoords, neighbour_coords);}
+    public void eatPoison(BacteriaCellEntity cell) {world.eatPoison(cell);}
+    public void curePoison(PoisonCellEntity poison) {world.curePoison(poison);}
+    public int eatFood(FoodCellEntity food) {return world.eatFood(food);}
     public void killCell(CellEntity cell) {
         world.killCell(cell);
     }
