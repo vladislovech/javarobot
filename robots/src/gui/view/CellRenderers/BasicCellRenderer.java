@@ -1,4 +1,4 @@
-package gui.view.Cells;
+package gui.view.CellRenderers;
 
 import gui.model.Cells.CellEntity;
 import gui.view.EntityRenderer;

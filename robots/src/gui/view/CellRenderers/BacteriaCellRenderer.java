@@ -1,9 +1,8 @@
-package gui.view.Cells;
+package gui.view.CellRenderers;
 
-import gui.Properties;
 import gui.model.Cells.BacteriaCellEntity;
 import gui.model.Cells.CellEntity;
-import gui.model.Directions;
+import gui.model.Cells.Directions;
 
 import java.awt.*;
 

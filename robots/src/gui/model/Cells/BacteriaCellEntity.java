@@ -1,9 +1,7 @@
 package gui.model.Cells;
 
 import gui.Properties;
-import gui.model.CommandsList.Actions;
-import gui.model.CommandsList.Commands;
-import gui.model.Directions;
+import gui.model.CommandsList.Reactions;
 import gui.model.Handler;
 import gui.model.WorldContext;
 
@@ -21,6 +19,7 @@ public class BacteriaCellEntity extends CellEntity {
     private int nextCommand = 0;
     private int eyeSize;
     private Directions cellDirection;
+    private final Handler handler = new Handler();
 
     public BacteriaCellEntity(Point p) {
         super(p, Color.blue);
@@ -46,16 +45,14 @@ public class BacteriaCellEntity extends CellEntity {
         int commandShift;
         int commandCount = 0;
 
-        Handler handler = new Handler();
         while (commandCount < MAX_COMMAND_COUNT) {
             int command = brain[nextCommand];
-            //Commands commandType = Commands.getType(command);
-            Actions action = handler.execute(this, command, context);
+            Reactions action = handler.execute(this, command, context);
             commandShift = action.getShiftValue();
             if (action.isFullStop()) {
                 commandCount = MAX_COMMAND_COUNT;
             }
-            if (action == Actions.BRAIN_JUMP_REACTION) {
+            if (action == Reactions.BRAIN_JUMP_REACTION) {
                 commandShift = command;
             }
 
@@ -91,6 +88,10 @@ public class BacteriaCellEntity extends CellEntity {
         cellDirection = Directions.values()[new Random().nextInt(Directions.values().length)];
     }
 
+    /**
+     * Используется, если принято решение менять направление клетки перед каждым действием
+     * @param command
+     */
     private void setCellDirection(int command) {
         cellDirection = cellDirection.getStandardDirection(command);
     }
@@ -106,5 +107,4 @@ public class BacteriaCellEntity extends CellEntity {
     public Directions getCellDirection() {
         return cellDirection;
     }
-    public int getMAX_COMMAND_COUNT() {return MAX_COMMAND_COUNT;}
 }

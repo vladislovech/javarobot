@@ -1,11 +1,6 @@
 package gui.model.CommandsList;
 
-import gui.Properties;
-import gui.model.Cells.BacteriaCellEntity;
-
-import java.awt.*;
-
-public enum Actions {
+public enum Reactions {
     POISON_REACTION(1, false),
     WALL_REACTION(2, false),
     BACTERIA_REACTION(3, false),
@@ -21,7 +16,7 @@ public enum Actions {
 
     private final int shiftValue;
     private final boolean fullStop;
-    Actions(int shiftValue, boolean flag) {
+    Reactions(int shiftValue, boolean flag) {
         this.shiftValue = shiftValue;
         this.fullStop = flag;
     }

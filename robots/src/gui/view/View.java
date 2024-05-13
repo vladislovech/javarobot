@@ -5,10 +5,10 @@ import gui.model.Cells.BacteriaCellEntity;
 import gui.model.Cells.FoodCellEntity;
 import gui.model.Cells.PoisonCellEntity;
 import gui.model.Cells.WallCellEntity;
-import gui.view.Cells.BacteriaCellRenderer;
-import gui.view.Cells.FoodCellRenderer;
-import gui.view.Cells.PoisonCellRenderer;
-import gui.view.Cells.WallCellRenderer;
+import gui.view.CellRenderers.BacteriaCellRenderer;
+import gui.view.CellRenderers.FoodCellRenderer;
+import gui.view.CellRenderers.PoisonCellRenderer;
+import gui.view.CellRenderers.WallCellRenderer;
 import gui.viewmodel.WorldSource;
 
 import java.awt.*;

@@ -1,4 +1,4 @@
-package gui.view.Cells;
+package gui.view.CellRenderers;
 
 public class FoodCellRenderer extends BasicCellRenderer {
 }

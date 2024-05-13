@@ -5,8 +5,8 @@ import gui.model.WorldContext;
 
 public class RotateCellCommand implements Command {
     @Override
-    public Actions execute(BacteriaCellEntity cell, int commandCode, WorldContext context) {
+    public Reactions execute(BacteriaCellEntity cell, int commandCode, WorldContext context) {
         cell.rotateCell(commandCode);
-        return Actions.ROTATE_REACTION;
+        return Reactions.ROTATE_REACTION;
     }
 }

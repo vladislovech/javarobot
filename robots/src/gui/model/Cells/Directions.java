@@ -1,4 +1,4 @@
-package gui.model;
+package gui.model.Cells;
 
 import java.awt.*;
 

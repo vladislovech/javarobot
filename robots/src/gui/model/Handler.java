@@ -4,14 +4,14 @@ import gui.model.Cells.BacteriaCellEntity;
 import gui.model.CommandsList.*;
 
 public class Handler {
-    MoveCellCommand moveCell = new MoveCellCommand();
-    CatchCellCommand catchCell = new CatchCellCommand();
-    LookCommand look = new LookCommand();
-    RotateCellCommand rotateCell = new RotateCellCommand();
-    BrainJumpCommand brainJump = new BrainJumpCommand();
+    private final MoveCellCommand moveCell = new MoveCellCommand();
+    private final CatchCellCommand catchCell = new CatchCellCommand();
+    private final LookCommand look = new LookCommand();
+    private final RotateCellCommand rotateCell = new RotateCellCommand();
+    private final BrainJumpCommand brainJump = new BrainJumpCommand();
 
     public Handler() {}
-    public Actions execute(BacteriaCellEntity cell, int command, WorldContext context) {
+    public Reactions execute(BacteriaCellEntity cell, int command, WorldContext context) {
         Commands commandType = Commands.getType(command);
         switch (commandType) {
             case MOVE_CELL -> {
