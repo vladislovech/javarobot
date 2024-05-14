@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.Properties;
 import gui.model.World;
 import gui.viewmodel.DataSource;
 import gui.viewmodel.ViewModel;
@@ -19,7 +20,7 @@ public class MainApplicationFrame extends JFrame {
         setContentPane(desktopPane);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        World world = new World(20, 10);
+        World world = new World(Properties.getCELL_COUNT_WIDTH(), Properties.getCELL_COUNT_HEIGHT());
         WorldSource worldSource = new WorldSource(world);
         View view = new View(worldSource);
         ViewModel viewModel = new ViewModel(world, view);

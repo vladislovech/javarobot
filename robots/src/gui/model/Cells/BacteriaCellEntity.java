@@ -34,7 +34,7 @@ public class BacteriaCellEntity extends CellEntity {
      */
     private void fillBrain() {
         int minValue = 0;
-        int maxValue = BRAIN_SIZE - 1;
+        int maxValue = BRAIN_SIZE;
         for (int i = 0; i < BRAIN_SIZE; i++) {
             brain[i] = minValue + (int) (Math.random() * (maxValue - minValue));
         }
@@ -47,12 +47,12 @@ public class BacteriaCellEntity extends CellEntity {
 
         while (commandCount < MAX_COMMAND_COUNT) {
             int command = brain[nextCommand];
-            Reactions action = handler.execute(this, command, context);
-            commandShift = action.getShiftValue();
-            if (action.isFullStop()) {
+            Reactions reaction = handler.execute(this, command, context);
+            commandShift = reaction.getShiftValue();
+            if (reaction.isFullStop()) {
                 commandCount = MAX_COMMAND_COUNT;
             }
-            if (action == Reactions.BRAIN_JUMP_REACTION) {
+            if (reaction == Reactions.BRAIN_JUMP_REACTION) {
                 commandShift = command;
             }
 
