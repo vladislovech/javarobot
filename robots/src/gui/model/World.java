@@ -37,7 +37,7 @@ public class World {
         this.cellCountHeight = cellCountHeight;
 
         this.gameWindowWidth = cellCountWidth * cellSize + (cellCountWidth + 1) * gridStroke;
-        this.gameWindowHeight = cellCountHeight * cellSize + (cellCountHeight + 1) * gridStroke;
+        this.gameWindowHeight = cellCountHeight * cellSize + (cellCountHeight + 1) * gridStroke + 6;
 
         spawnEntities();
         fillMatrix();
@@ -80,27 +80,27 @@ public class World {
         entities.add(new WallCellEntity(new Point(1, 2)));
         entities.add(new WallCellEntity(new Point(2, 1)));
         entities.add(new WallCellEntity(new Point(2, 2)));
-        entities.add(new WallCellEntity(new Point(12, 15)));
-        entities.add(new WallCellEntity(new Point(13, 8)));
-        entities.add(new WallCellEntity(new Point(13, 9)));
+        //entities.add(new WallCellEntity(new Point(12, 15)));
+        //entities.add(new WallCellEntity(new Point(13, 8)));
+        //entities.add(new WallCellEntity(new Point(13, 9)));
         entities.add(new BacteriaCellEntity(new Point(3, 3)));
         entities.add(new BacteriaCellEntity(new Point(3, 4)));
-        entities.add(new BacteriaCellEntity(new Point(12, 8)));
+        entities.add(new BacteriaCellEntity(new Point(11, 8)));
         entities.add(new BacteriaCellEntity(new Point(6, 17)));
-        entities.add(new BacteriaCellEntity(new Point(15, 14)));
+        //entities.add(new BacteriaCellEntity(new Point(15, 14)));
         entities.add(new BacteriaCellEntity(new Point(4, 4)));
-        entities.add(new FoodCellEntity(new Point(17, 10), smallFood));
-        entities.add(new FoodCellEntity(new Point(17, 14), smallFood));
+        //entities.add(new FoodCellEntity(new Point(17, 10), smallFood));
+        //entities.add(new FoodCellEntity(new Point(17, 14), smallFood));
         entities.add(new FoodCellEntity(new Point(4, 3), mediumFood));
         entities.add(new FoodCellEntity(new Point(6, 4), mediumFood));
-        entities.add(new FoodCellEntity(new Point(14, 5), mediumFood));
+        //entities.add(new FoodCellEntity(new Point(14, 5), mediumFood));
         entities.add(new FoodCellEntity(new Point(8, 6), mediumFood));
         entities.add(new WallCellEntity(new Point(1, 5)));
         entities.add(new PoisonCellEntity(new Point(1, 1)));
         entities.add(new PoisonCellEntity(new Point(2, 6)));
         entities.add(new PoisonCellEntity(new Point(4, 7)));
         entities.add(new PoisonCellEntity(new Point(9, 9)));
-        entities.add(new PoisonCellEntity(new Point(12, 10)));
+        //entities.add(new PoisonCellEntity(new Point(12, 10)));
         entities.add(new PoisonCellEntity(new Point(5, 14)));
         entities.add(new PoisonCellEntity(new Point(7, 12)));
     }
