@@ -7,7 +7,7 @@ import java.util.Observer;
 public class RobotCoordinatesWindow extends JInternalFrame implements Observer {
     private final JLabel coordinatesLabel;
     public RobotCoordinatesWindow(RobotModel model) {
-        super("Координаты робота");
+        super(MainApplicationFrame.messages.getString("robot.coord.window.title"));
         model.addObserver(this);
         coordinatesLabel = new JLabel("X: " + model.getX() + ", Y: " + model.getY());
         this.add(coordinatesLabel);
@@ -15,11 +15,15 @@ public class RobotCoordinatesWindow extends JInternalFrame implements Observer {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
+    public void updateTitle() {
+        setTitle(MainApplicationFrame.messages.getString("robot.coord.window.title"));
+    }
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof RobotModel) {
             RobotModel model = (RobotModel) o;
             coordinatesLabel.setText("X: " + model.getX() + ", Y: " + model.getY());
+            updateTitle();
         }
     }
 }
