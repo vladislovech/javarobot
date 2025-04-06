@@ -67,7 +67,7 @@ public class MainApplicationFrame extends JFrame
     }
 
     public void confirmAndExit() {
-        Object[] options = {"Да", "Нет"};
+        String[] options = ExitConfirmationOption.getOptions();
 
         int result = JOptionPane.showOptionDialog(
                 this,
