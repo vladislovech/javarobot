@@ -6,12 +6,13 @@ import java.awt.TextArea;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.plaf.nimbus.State;
 
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener
+public class LogWindow extends JInternalFrame implements LogChangeListener, StatefulWindow
 {
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
@@ -29,6 +30,16 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
         getContentPane().add(panel);
         pack();
         updateLogContent();
+    }
+
+    @Override
+    public String getWindowId() {
+        return "log_window";
+    }
+
+    @Override
+    public JInternalFrame getWindow() {
+        return this;
     }
 
     private void updateLogContent()
