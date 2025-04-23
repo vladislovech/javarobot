@@ -24,7 +24,6 @@ public class LocalizationManager {
         this.currentLocale = locale;
         String baseName = "messages";
         try {
-            ResourceBundle.clearCache();
             this.resourceBundle = ResourceBundle.getBundle(baseName, locale);
         } catch (MissingResourceException e) {
             throw new RuntimeException("Resource bundle not found for base: " + baseName +
