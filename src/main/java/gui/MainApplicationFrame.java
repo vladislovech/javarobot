@@ -103,6 +103,7 @@ public class MainApplicationFrame extends JFrame
     }
 
     public void updateAllUI() {
+        setTitle(LocalizationManager.getInstance().getString("window.title"));
         SwingUtilities.updateComponentTreeUI(this);
         for (StatefulWindow window : statefulWindows) {
             SwingUtilities.updateComponentTreeUI(window.getWindow());
