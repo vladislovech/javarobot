@@ -81,7 +81,7 @@ public class MenuBarGenerator {
 
     private JMenu createLanguageMenu() {
         LocalizationManager lm = LocalizationManager.getInstance();
-        JMenu languageMenu = new JMenu(lm.getString("menu.language"));  // Используем локализацию
+        JMenu languageMenu = new JMenu(lm.getString("menu.language"));
         languageMenu.setMnemonic(KeyEvent.VK_L);
 
         JMenuItem russianItem = new JMenuItem(lm.getString("language.russian"));
