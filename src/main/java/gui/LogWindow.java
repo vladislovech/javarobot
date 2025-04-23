@@ -6,7 +6,6 @@ import java.awt.TextArea;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
-import javax.swing.plaf.nimbus.State;
 
 import log.LogChangeListener;
 import log.LogEntry;
@@ -19,7 +18,8 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Stat
 
     public LogWindow(LogWindowSource logSource) 
     {
-        super("Протокол работы", true, true, true, true);
+        super(LocalizationManager.getInstance().getString("log.window.title"),
+                true, true, true, true);
         m_logSource = logSource;
         m_logSource.registerListener(this);
         m_logContent = new TextArea("");
@@ -30,6 +30,10 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Stat
         getContentPane().add(panel);
         pack();
         updateLogContent();
+    }
+
+    public void updateTitle() {
+        setTitle(LocalizationManager.getInstance().getString("log.window.title"));
     }
 
     @Override

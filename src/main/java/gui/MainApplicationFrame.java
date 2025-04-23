@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class MainApplicationFrame extends JFrame
     private final List<StatefulWindow> statefulWindows = new ArrayList<>();
 
     public MainApplicationFrame() {
+        setTitle(LocalizationManager.getInstance().getString("window.title"));
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
         int inset = 50;        
@@ -71,6 +71,9 @@ public class MainApplicationFrame extends JFrame
         {
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(this);
+            for (StatefulWindow window : statefulWindows) {
+                SwingUtilities.updateComponentTreeUI(window.getWindow());
+            }
         }
         catch (ClassNotFoundException | InstantiationException
             | IllegalAccessException | UnsupportedLookAndFeelException e)
@@ -97,6 +100,19 @@ public class MainApplicationFrame extends JFrame
             saveWindowsState();
             System.exit(0);
         }
+    }
+
+    public void updateAllUI() {
+        SwingUtilities.updateComponentTreeUI(this);
+        for (StatefulWindow window : statefulWindows) {
+            SwingUtilities.updateComponentTreeUI(window.getWindow());
+            if (window instanceof GameWindow) {
+                ((GameWindow) window).updateTitle();
+            } else if (window instanceof LogWindow) {
+                ((LogWindow) window).updateTitle();
+            }
+        }
+        setJMenuBar(new MenuBarGenerator(this).createMenuBar());
     }
 
     private void saveWindowsState() {
