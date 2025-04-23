@@ -8,7 +8,6 @@ public class LocalizationManager {
     private static LocalizationManager instance;
     private Locale currentLocale;
     private ResourceBundle resourceBundle;
-    private final Map<String, MessageFormat> messageFormatCache = new HashMap<>();
 
     private LocalizationManager() {
         setLocale(new Locale("ru", "RU"));
@@ -31,7 +30,6 @@ public class LocalizationManager {
             throw new RuntimeException("Resource bundle not found for base: " + baseName +
                     " and locale: " + locale, e);
         }
-        messageFormatCache.clear();
     }
 
     public String getString(String key) {
