@@ -8,9 +8,11 @@ import log.Logger;
 public class MenuBarGenerator {
 
     private final MainApplicationFrame frame;
+    private final LocalizationManager localizationManager;
 
-    public MenuBarGenerator(MainApplicationFrame frame) {
+    public MenuBarGenerator(MainApplicationFrame frame, LocalizationManager localizationManager) {
         this.frame = frame;
+        this.localizationManager = localizationManager;
     }
 
     public JMenuBar createMenuBar() {
@@ -25,20 +27,21 @@ public class MenuBarGenerator {
     }
 
     private JMenu createLookAndFeelMenu() {
-        LocalizationManager lm = LocalizationManager.getInstance();
-        JMenu lookAndFeelMenu = new JMenu(lm.getString("menu.look_and_feel"));
+        JMenu lookAndFeelMenu = new JMenu(localizationManager.getString(LocalizationKeys.MENU_LOOK_AND_FEEL));
         lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
         lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(
-                lm.getString("menu.look_and_feel.description"));
+                localizationManager.getString(LocalizationKeys.MENU_LOOK_AND_FEEL_DESCRIPTION));
 
-        JMenuItem systemLookAndFeel = new JMenuItem(lm.getString("menu.system_theme"), KeyEvent.VK_S);
+        JMenuItem systemLookAndFeel = new JMenuItem(localizationManager.getString(LocalizationKeys.MENU_SYSTEM_THEME),
+                KeyEvent.VK_S);
         systemLookAndFeel.addActionListener((event) -> {
             frame.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             frame.invalidate();
         });
         lookAndFeelMenu.add(systemLookAndFeel);
 
-        JMenuItem crossplatformLookAndFeel = new JMenuItem(lm.getString("menu.crossplatform_theme"), KeyEvent.VK_U);
+        JMenuItem crossplatformLookAndFeel = new JMenuItem(localizationManager.getString(LocalizationKeys.MENU_CROSSPLATFORM_THEME),
+                KeyEvent.VK_U);
         crossplatformLookAndFeel.addActionListener((event) -> {
             frame.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             frame.invalidate();
@@ -49,15 +52,15 @@ public class MenuBarGenerator {
     }
 
     private JMenu createTestMenu() {
-        LocalizationManager lm = LocalizationManager.getInstance();
-        JMenu testMenu = new JMenu(lm.getString("menu.tests"));
+        JMenu testMenu = new JMenu(localizationManager.getString(LocalizationKeys.MENU_TESTS));
         testMenu.setMnemonic(KeyEvent.VK_T);
         testMenu.getAccessibleContext().setAccessibleDescription(
-                lm.getString("menu.tests.description"));
+                localizationManager.getString(LocalizationKeys.MENU_TESTS_DESCRIPTION));
 
-        JMenuItem addLogMessageItem = new JMenuItem(lm.getString("menu.add_log_message"), KeyEvent.VK_S);
+        JMenuItem addLogMessageItem = new JMenuItem(localizationManager.getString(LocalizationKeys.MENU_ADD_LOG_MESSAGE),
+                KeyEvent.VK_S);
         addLogMessageItem.addActionListener((event) -> {
-            Logger.debug(lm.getString("log.new_message"));
+            Logger.debug(localizationManager.getString(LocalizationKeys.LOG_NEW_MESSAGE));
         });
         testMenu.add(addLogMessageItem);
 
@@ -65,11 +68,10 @@ public class MenuBarGenerator {
     }
 
     private JMenu createFileMenu() {
-        LocalizationManager lm = LocalizationManager.getInstance();
-        JMenu fileMenu = new JMenu(lm.getString("menu.file"));
+        JMenu fileMenu = new JMenu(localizationManager.getString(LocalizationKeys.MENU_FILE));
         fileMenu.setMnemonic(KeyEvent.VK_F);
 
-        JMenuItem exitItem = new JMenuItem(lm.getString("menu.exit"), KeyEvent.VK_Q);
+        JMenuItem exitItem = new JMenuItem(localizationManager.getString(LocalizationKeys.MENU_EXIT), KeyEvent.VK_Q);
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
         exitItem.addActionListener((event) -> {
             frame.confirmAndExit();
@@ -80,20 +82,19 @@ public class MenuBarGenerator {
     }
 
     private JMenu createLanguageMenu() {
-        LocalizationManager lm = LocalizationManager.getInstance();
-        JMenu languageMenu = new JMenu(lm.getString("menu.language"));
+        JMenu languageMenu = new JMenu(localizationManager.getString(LocalizationKeys.MENU_LANGUAGE));
         languageMenu.setMnemonic(KeyEvent.VK_L);
 
-        JMenuItem russianItem = new JMenuItem(lm.getString("language.russian"));
+        JMenuItem russianItem = new JMenuItem(localizationManager.getString(LocalizationKeys.LANGUAGE_RUSSIAN));
         russianItem.addActionListener(e -> {
-            LocalizationManager.getInstance().setLocale(new Locale("ru", "RU"));
+            localizationManager.setLocale(new Locale("ru", "RU"));
             updateAllUI();
         });
         languageMenu.add(russianItem);
 
-        JMenuItem englishItem = new JMenuItem(lm.getString("language.english"));
+        JMenuItem englishItem = new JMenuItem(localizationManager.getString(LocalizationKeys.LANGUAGE_ENGLISH));
         englishItem.addActionListener(e -> {
-            LocalizationManager.getInstance().setLocale(Locale.US);
+            localizationManager.setLocale(Locale.US);
             updateAllUI();
         });
         languageMenu.add(englishItem);

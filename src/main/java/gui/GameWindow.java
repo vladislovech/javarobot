@@ -7,11 +7,16 @@ import javax.swing.JPanel;
 
 public class GameWindow extends JInternalFrame implements StatefulWindow
 {
+    private final LocalizationManager localizationManager;
     private final GameVisualizer m_visualizer;
-    public GameWindow() 
-    {
-        super(LocalizationManager.getInstance().getString("game.window.title"),
-                true, true, true, true);
+
+    public GameWindow(LocalizationManager localizationManager) {
+        super(localizationManager.getString(LocalizationKeys.GAME_WINDOW_TITLE),
+                true,
+                true,
+                true,
+                true);
+        this.localizationManager = localizationManager;
         m_visualizer = new GameVisualizer();
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
@@ -20,7 +25,7 @@ public class GameWindow extends JInternalFrame implements StatefulWindow
     }
 
     public void updateTitle() {
-        setTitle(LocalizationManager.getInstance().getString("game.window.title"));
+        setTitle(localizationManager.getString(LocalizationKeys.GAME_WINDOW_TITLE));
     }
 
     @Override

@@ -10,11 +10,11 @@ public enum ExitConfirmationOption {
         this.text = text;
     }
 
-    public static String[] getOptions() {
+    public static String[] getOptions(LocalizationManager localizationManager) {
         ExitConfirmationOption[] values = values();
         String[] options = new String[values.length];
         for(int i = 0; i < values.length; i++){
-            options[i] = LocalizationManager.getInstance().getString("exit.option." + values[i].name().toLowerCase());
+            options[i] = localizationManager.getString(LocalizationKeys.EXIT_OPTION + values[i].name().toLowerCase());
         }
         return options;
     }

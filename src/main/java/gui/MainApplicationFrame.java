@@ -11,12 +11,15 @@ import log.Logger;
 
 public class MainApplicationFrame extends JFrame
 {
+    private final LocalizationManager localizationManager;
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final WindowStateManager stateManager = new WindowStateManager();
     private final List<StatefulWindow> statefulWindows = new ArrayList<>();
 
-    public MainApplicationFrame() {
-        setTitle(LocalizationManager.getInstance().getString("window.title"));
+    public MainApplicationFrame(LocalizationManager localizationManager) {
+        this.localizationManager = localizationManager;
+        setTitle(localizationManager.getString(LocalizationKeys.WINDOW_TITLE));
+
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
         int inset = 50;        
@@ -31,11 +34,11 @@ public class MainApplicationFrame extends JFrame
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
+        GameWindow gameWindow = new GameWindow(localizationManager);
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 
-        setJMenuBar(new MenuBarGenerator(this).createMenuBar());
+        setJMenuBar(new MenuBarGenerator(this, localizationManager).createMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -49,7 +52,7 @@ public class MainApplicationFrame extends JFrame
     
     protected LogWindow createLogWindow()
     {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), localizationManager);
         logWindow.setLocation(10,10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
@@ -83,12 +86,12 @@ public class MainApplicationFrame extends JFrame
     }
 
     public void confirmAndExit() {
-        String[] options = ExitConfirmationOption.getOptions();
+        String[] options = ExitConfirmationOption.getOptions(localizationManager);
 
         int result = JOptionPane.showOptionDialog(
                 this,
-                "Вы уверены, что хотите выйти?",
-                "Подтверждение выхода",
+                localizationManager.getString(LocalizationKeys.EXIT_CONFIRMATION_MESSAGE),
+                localizationManager.getString(LocalizationKeys.EXIT_CONFIRMATION_TITLE),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -103,7 +106,7 @@ public class MainApplicationFrame extends JFrame
     }
 
     public void updateAllUI() {
-        setTitle(LocalizationManager.getInstance().getString("window.title"));
+        setTitle(localizationManager.getString(LocalizationKeys.WINDOW_TITLE));
         SwingUtilities.updateComponentTreeUI(this);
         for (StatefulWindow window : statefulWindows) {
             SwingUtilities.updateComponentTreeUI(window.getWindow());
@@ -113,7 +116,7 @@ public class MainApplicationFrame extends JFrame
                 ((LogWindow) window).updateTitle();
             }
         }
-        setJMenuBar(new MenuBarGenerator(this).createMenuBar());
+        setJMenuBar(new MenuBarGenerator(this, localizationManager).createMenuBar());
     }
 
     private void saveWindowsState() {
