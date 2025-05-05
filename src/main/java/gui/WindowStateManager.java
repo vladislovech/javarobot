@@ -3,8 +3,6 @@ package gui;
 import javax.swing.JInternalFrame;
 import java.awt.Rectangle;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 public class WindowStateManager {
