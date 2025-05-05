@@ -118,7 +118,7 @@ public class MainApplicationFrame extends JFrame
         }
         setJMenuBar(new MenuBarGenerator(this, localizationManager).createMenuBar());
     }
-
+    
     private void saveWindowsState() {
         for (StatefulWindow window : statefulWindows) {
             stateManager.saveWindowState(window.getWindowId(), window.getWindow());

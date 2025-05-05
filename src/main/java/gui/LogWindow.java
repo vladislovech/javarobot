@@ -6,6 +6,7 @@ import java.awt.TextArea;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.plaf.nimbus.State;
 
 import log.LogChangeListener;
 import log.LogEntry;
@@ -39,7 +40,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Stat
     public void updateTitle() {
         setTitle(localizationManager.getString(LocalizationKeys.LOG_WINDOW_TITLE));
     }
-
+    
     @Override
     public String getWindowId() {
         return "log_window";

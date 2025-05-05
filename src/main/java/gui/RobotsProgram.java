@@ -12,7 +12,7 @@ public class RobotsProgram
       LocalizationManager localizationManager = new LocalizationManager(defaultLocale);
 
       try {
-          UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
       } catch (Exception e) {
           e.printStackTrace();
       }

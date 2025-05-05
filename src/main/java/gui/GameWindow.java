@@ -27,7 +27,7 @@ public class GameWindow extends JInternalFrame implements StatefulWindow
     public void updateTitle() {
         setTitle(localizationManager.getString(LocalizationKeys.GAME_WINDOW_TITLE));
     }
-
+    
     @Override
     public String getWindowId() {
         return "game_window";
