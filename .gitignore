@@ -6,3 +6,5 @@ eclipse.bat
 /robots/
 /out/
 *.class
+*.iml
+*.class
