@@ -16,10 +16,15 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Stat
 {
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
+    private final LocalizationManager localizationManager;
 
-    public LogWindow(LogWindowSource logSource) 
-    {
-        super("Протокол работы", true, true, true, true);
+    public LogWindow(LogWindowSource logSource, LocalizationManager localizationManager) {
+        super(localizationManager.getString(LocalizationKeys.LOG_WINDOW_TITLE),
+                true,
+                true,
+                true,
+                true);
+        this.localizationManager = localizationManager;
         m_logSource = logSource;
         m_logSource.registerListener(this);
         m_logContent = new TextArea("");
@@ -32,6 +37,10 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Stat
         updateLogContent();
     }
 
+    public void updateTitle() {
+        setTitle(localizationManager.getString(LocalizationKeys.LOG_WINDOW_TITLE));
+    }
+    
     @Override
     public String getWindowId() {
         return "log_window";
