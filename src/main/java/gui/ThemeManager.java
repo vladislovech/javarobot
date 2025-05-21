@@ -28,109 +28,124 @@ public class ThemeManager {
     }
 
     public void previewTheme(String themeName, Component parent) {
-        if (themeName == null || parent == null) return;
-
-        JDialog previewDialog = new JDialog(
+        JDialog dialog = new JDialog(
                 (Frame) SwingUtilities.getWindowAncestor(parent),
-                localizationManager.getString(LocalizationKeys.THEME_PREVIEW_TITLE),
+                "Просмотр темы: " + getThemeDisplayName(themeName),
                 true
         );
 
-        previewDialog.setLayout(new BorderLayout());
-        JLabel message = new JLabel(localizationManager.getString(LocalizationKeys.THEME_PREVIEW_MESSAGE));
-        previewDialog.add(message, BorderLayout.CENTER);
+        // Настройки цветов
+        ThemeColors colors = getThemeColors(themeName);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setBackground(colors.background);
+
+        addDemoComponent(new JLabel("Пример текста"), panel, colors);
+
+        JButton apply = createActionButton("Применить", colors, e -> {
+            applyTheme(themeName);
+            dialog.dispose();
+        });
+
+        JButton cancel = createActionButton("Отмена", colors, e -> dialog.dispose());
 
         JPanel buttonPanel = new JPanel();
-        JButton applyButton = new JButton(localizationManager.getString(LocalizationKeys.THEME_APPLY));
-        JButton cancelButton = new JButton(localizationManager.getString(LocalizationKeys.THEME_CANCEL));
+        buttonPanel.add(apply);
+        buttonPanel.add(cancel);
+        buttonPanel.setBackground(colors.background);
 
-        applyButton.addActionListener(e -> {
-            applyTheme(themeName);
-            previewDialog.dispose();
-        });
-        cancelButton.addActionListener(e -> previewDialog.dispose());
+        dialog.add(panel, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
 
-        buttonPanel.add(applyButton);
-        buttonPanel.add(cancelButton);
-        previewDialog.add(buttonPanel, BorderLayout.SOUTH);
+        applyThemeToDialog(dialog, colors);
 
-        applyThemeToDialog(themeName, previewDialog);
-        previewDialog.pack();
-        previewDialog.setLocationRelativeTo(parent);
-        previewDialog.setVisible(true);
+        dialog.pack();
+        dialog.setLocationRelativeTo(parent);
+        dialog.setVisible(true);
     }
 
     private void applyThemeSettings(String themeName) {
-        switch (themeName) {
-            case "dark":
-                setDarkThemeSettings();
-                break;
-            case "contrast":
-                setContrastThemeSettings();
-                break;
-            default:
-                setLightThemeSettings();
-        }
+        ThemeColors colors = getThemeColors(themeName);
+
+        UIManager.put("nimbusBase", colors.base);
+        UIManager.put("control", colors.control);
+        UIManager.put("text", colors.foreground);
+        UIManager.put("nimbusSelection", colors.selection);
+        UIManager.put("nimbusSelectionBackground", colors.selection);
+        UIManager.put("nimbusLightBackground", colors.background);
     }
 
-    private void applyThemeToDialog(String themeName, JDialog dialog) {
-        ThemeSettings settings = getThemeSettings(themeName);
-        dialog.getContentPane().setBackground(settings.background);
-        dialog.setBackground(settings.background);
-
+    private void applyThemeToDialog(JDialog dialog, ThemeColors colors) {
+        dialog.getContentPane().setBackground(colors.background);
         for (Component comp : dialog.getContentPane().getComponents()) {
-            if (comp instanceof JLabel) {
-                ((JLabel) comp).setForeground(settings.foreground);
+            comp.setBackground(colors.background);
+            if (comp instanceof JComponent) {
+                ((JComponent) comp).setForeground(colors.foreground);
             }
         }
     }
 
-    private ThemeSettings getThemeSettings(String themeName) {
+    private ThemeColors getThemeColors(String themeName) {
         switch (themeName) {
             case "dark":
-                return new ThemeSettings(
-                        new Color(60, 63, 65),
-                        new Color(187, 187, 187)
+                return new ThemeColors(
+                        new Color(60, 63, 65),  // background
+                        new Color(187, 187, 187), // foreground
+                        new Color(43, 43, 43),    // base
+                        new Color(60, 63, 65),    // control
+                        new Color(65, 113, 156)   // selection
                 );
             case "contrast":
-                return new ThemeSettings(
-                        Color.WHITE,
-                        Color.BLACK
+                return new ThemeColors(
+                        Color.BLACK,              // background
+                        Color.YELLOW,             // foreground
+                        Color.BLACK,              // base
+                        Color.BLACK,              // control
+                        Color.RED                 // selection
                 );
-            default:
-                return new ThemeSettings(
-                        new Color(240, 240, 240),
-                        new Color(50, 50, 50)
+            default: // light
+                return new ThemeColors(
+                        new Color(240, 240, 240), // background
+                        Color.BLACK,              // foreground
+                        new Color(200, 200, 200),  // base
+                        new Color(240, 240, 240),  // control
+                        new Color(57, 105, 138)    // selection
                 );
         }
     }
 
-    private void setLightThemeSettings() {
-        UIManager.put("nimbusBase", new Color(200, 200, 200));
-        UIManager.put("nimbusLightBackground", new Color(240, 240, 240));
-        UIManager.put("control", new Color(240, 240, 240));
-        UIManager.put("text", new Color(50, 50, 50));
-        UIManager.put("nimbusSelection", new Color(57, 105, 138));
-        UIManager.put("nimbusSelectionBackground", new Color(57, 105, 138));
-        UIManager.put("nimbusFocus", new Color(115, 164, 209));
+    private String getThemeDisplayName(String themeName) {
+        switch (themeName) {
+            case "dark": return "Темная";
+            case "contrast": return "Контрастная";
+            default: return "Светлая";
+        }
     }
 
-    private void setDarkThemeSettings() {
-        UIManager.put("control", new Color(60, 63, 65));
-        UIManager.put("nimbusBase", new Color(43, 43, 43));
-        UIManager.put("nimbusLightBackground", new Color(60, 63, 65));
-        UIManager.put("text", new Color(187, 187, 187));
-        UIManager.put("nimbusSelection", new Color(65, 113, 156));
-        UIManager.put("nimbusSelectionBackground", new Color(65, 113, 156));
+    private void addDemoComponent(JComponent comp, JPanel panel, ThemeColors colors) {
+        comp.setForeground(colors.foreground);
+        comp.setBackground(colors.control);
+        comp.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        if (comp instanceof AbstractButton) {
+            ((AbstractButton) comp).setContentAreaFilled(false);
+            ((AbstractButton) comp).setOpaque(true);
+        }
+
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(comp);
     }
 
-    private void setContrastThemeSettings() {
-        UIManager.put("control", Color.WHITE);
-        UIManager.put("nimbusBase", Color.BLACK);
-        UIManager.put("nimbusLightBackground", Color.WHITE);
-        UIManager.put("text", Color.BLACK);
-        UIManager.put("nimbusSelection", Color.CYAN);
-        UIManager.put("nimbusSelectionBackground", Color.CYAN);
+    private JButton createActionButton(String text, ThemeColors colors, java.awt.event.ActionListener action) {
+        JButton button = new JButton(text);
+        button.setForeground(colors.foreground);
+        button.setBackground(colors.selection);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+        button.addActionListener(action);
+        return button;
     }
 
     public String getSavedTheme() {
@@ -143,13 +158,19 @@ public class ThemeManager {
         }
     }
 
-    private static class ThemeSettings {
+    private static class ThemeColors {
         final Color background;
         final Color foreground;
+        final Color base;
+        final Color control;
+        final Color selection;
 
-        ThemeSettings(Color background, Color foreground) {
+        ThemeColors(Color background, Color foreground, Color base, Color control, Color selection) {
             this.background = background;
             this.foreground = foreground;
+            this.base = base;
+            this.control = control;
+            this.selection = selection;
         }
     }
 }
