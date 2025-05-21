@@ -9,21 +9,55 @@ public class MenuBarGenerator {
 
     private final MainApplicationFrame frame;
     private final LocalizationManager localizationManager;
+    private final ThemeManager themeManager;
 
-    public MenuBarGenerator(MainApplicationFrame frame, LocalizationManager localizationManager) {
+    public MenuBarGenerator(MainApplicationFrame frame, LocalizationManager localizationManager,
+                            ThemeManager themeManager) {
         this.frame = frame;
         this.localizationManager = localizationManager;
+        this.themeManager = themeManager;
     }
 
     public JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
         menuBar.add(createLookAndFeelMenu());
+        menuBar.add(createThemeMenu());
         menuBar.add(createTestMenu());
         menuBar.add(createFileMenu());
         menuBar.add(createLanguageMenu());
 
         return menuBar;
+    }
+
+    private JMenu createThemeMenu() {
+        JMenu themeMenu = new JMenu(localizationManager.getString(LocalizationKeys.MENU_THEME));
+        themeMenu.setMnemonic(KeyEvent.VK_T);
+        themeMenu.getAccessibleContext().setAccessibleDescription(
+                localizationManager.getString(LocalizationKeys.MENU_THEME_DESCRIPTION));
+
+        JMenuItem lightTheme = new JMenuItem(localizationManager.getString(LocalizationKeys.THEME_LIGHT));
+        lightTheme.addActionListener(e -> {
+            themeManager.previewTheme("light", frame);
+            frame.updateAllUI();
+        });
+        themeMenu.add(lightTheme);
+
+        JMenuItem darkTheme = new JMenuItem(localizationManager.getString(LocalizationKeys.THEME_DARK));
+        darkTheme.addActionListener(e -> {
+            themeManager.previewTheme("dark", frame);
+            frame.updateAllUI();
+        });
+        themeMenu.add(darkTheme);
+
+        JMenuItem contrastTheme = new JMenuItem(localizationManager.getString(LocalizationKeys.THEME_CONTRAST));
+        contrastTheme.addActionListener(e -> {
+            themeManager.previewTheme("contrast", frame);
+            frame.updateAllUI();
+        });
+        themeMenu.add(contrastTheme);
+
+        return themeMenu;
     }
 
     private JMenu createLookAndFeelMenu() {
@@ -36,7 +70,7 @@ public class MenuBarGenerator {
                 KeyEvent.VK_S);
         systemLookAndFeel.addActionListener((event) -> {
             frame.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            frame.invalidate();
+            frame.updateAllUI();
         });
         lookAndFeelMenu.add(systemLookAndFeel);
 
@@ -44,7 +78,7 @@ public class MenuBarGenerator {
                 KeyEvent.VK_U);
         crossplatformLookAndFeel.addActionListener((event) -> {
             frame.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            frame.invalidate();
+            frame.updateAllUI();
         });
         lookAndFeelMenu.add(crossplatformLookAndFeel);
 

@@ -15,9 +15,14 @@ public class MainApplicationFrame extends JFrame
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final WindowStateManager stateManager = new WindowStateManager();
     private final List<StatefulWindow> statefulWindows = new ArrayList<>();
+    private final ThemeManager themeManager;
 
     public MainApplicationFrame(LocalizationManager localizationManager) {
         this.localizationManager = localizationManager;
+        this.themeManager = new ThemeManager(localizationManager);
+
+        themeManager.applyTheme(themeManager.getSavedTheme());
+
         setTitle(localizationManager.getString(LocalizationKeys.WINDOW_TITLE));
 
         //Make the big window be indented 50 pixels from each edge
@@ -38,7 +43,7 @@ public class MainApplicationFrame extends JFrame
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 
-        setJMenuBar(new MenuBarGenerator(this, localizationManager).createMenuBar());
+        setJMenuBar(new MenuBarGenerator(this, localizationManager, themeManager).createMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -67,21 +72,16 @@ public class MainApplicationFrame extends JFrame
         frame.getWindow().setVisible(true);
         statefulWindows.add(frame);
     }
-    
-    public void setLookAndFeel(String className)
-    {
-        try
-        {
+
+    public void setLookAndFeel(String className) {
+        try {
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(this);
             for (StatefulWindow window : statefulWindows) {
                 SwingUtilities.updateComponentTreeUI(window.getWindow());
             }
-        }
-        catch (ClassNotFoundException | InstantiationException
-            | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
-            // just ignore
+        } catch (Exception e) {
+            Logger.error("Ошибка при установке Look and Feel: " + e.getMessage());
         }
     }
 
@@ -116,7 +116,7 @@ public class MainApplicationFrame extends JFrame
                 ((LogWindow) window).updateTitle();
             }
         }
-        setJMenuBar(new MenuBarGenerator(this, localizationManager).createMenuBar());
+        setJMenuBar(new MenuBarGenerator(this, localizationManager, themeManager).createMenuBar());
     }
     
     private void saveWindowsState() {

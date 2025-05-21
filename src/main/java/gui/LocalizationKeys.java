@@ -29,4 +29,16 @@ public class LocalizationKeys {
 
     // Ключи подтверждения выхода
     public static final String EXIT_OPTION = "exit.option.";
+
+    // Ключи оформления темы
+    public static final String MENU_THEME = "menu.theme";
+    public static final String MENU_THEME_DESCRIPTION = "menu.theme.description";
+    public static final String THEME_LIGHT = "theme.light";
+    public static final String THEME_DARK = "theme.dark";
+    public static final String THEME_CONTRAST = "theme.contrast";
+    public static final String THEME_PREVIEW = "theme.preview";
+    public static final String THEME_PREVIEW_TITLE = "theme.preview.title";
+    public static final String THEME_PREVIEW_MESSAGE = "theme.preview.message";
+    public static final String THEME_APPLY = "theme.apply";
+    public static final String THEME_CANCEL = "theme.cancel";
 }
