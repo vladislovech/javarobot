@@ -1,7 +1,6 @@
 package gui;
 
 import log.Logger;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.prefs.Preferences;
@@ -17,16 +16,10 @@ public class ThemeManager {
     }
 
     public void applyTheme(String themeName) {
+        if (themeName == null) return;
+
         try {
-            // Сохраняем текущий Look and Feel
-            LookAndFeel currentLAF = UIManager.getLookAndFeel();
-
-            // Применяем настройки темы
             applyThemeSettings(themeName);
-
-            // Восстанавливаем Look and Feel
-            UIManager.setLookAndFeel(currentLAF);
-
             prefs.put(THEME_PREF_KEY, themeName);
             updateAllUI();
         } catch (Exception e) {
@@ -35,10 +28,15 @@ public class ThemeManager {
     }
 
     public void previewTheme(String themeName, Component parent) {
-        JDialog previewDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(parent),
-                localizationManager.getString(LocalizationKeys.THEME_PREVIEW_TITLE), true);
-        previewDialog.setLayout(new BorderLayout());
+        if (themeName == null || parent == null) return;
 
+        JDialog previewDialog = new JDialog(
+                (Frame) SwingUtilities.getWindowAncestor(parent),
+                localizationManager.getString(LocalizationKeys.THEME_PREVIEW_TITLE),
+                true
+        );
+
+        previewDialog.setLayout(new BorderLayout());
         JLabel message = new JLabel(localizationManager.getString(LocalizationKeys.THEME_PREVIEW_MESSAGE));
         previewDialog.add(message, BorderLayout.CENTER);
 
@@ -50,25 +48,13 @@ public class ThemeManager {
             applyTheme(themeName);
             previewDialog.dispose();
         });
-
         cancelButton.addActionListener(e -> previewDialog.dispose());
 
         buttonPanel.add(applyButton);
         buttonPanel.add(cancelButton);
         previewDialog.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Применяем выбранную тему только к диалогу предпросмотра
-        switch (themeName) {
-            case "dark":
-                applyDarkThemeToDialog(previewDialog);
-                break;
-            case "contrast":
-                applyContrastThemeToDialog(previewDialog);
-                break;
-            default:
-                applyLightThemeToDialog(previewDialog);
-        }
-
+        applyThemeToDialog(themeName, previewDialog);
         previewDialog.pack();
         previewDialog.setLocationRelativeTo(parent);
         previewDialog.setVisible(true);
@@ -87,13 +73,35 @@ public class ThemeManager {
         }
     }
 
-    public String getSavedTheme() {
-        return prefs.get(THEME_PREF_KEY, "light");
+    private void applyThemeToDialog(String themeName, JDialog dialog) {
+        ThemeSettings settings = getThemeSettings(themeName);
+        dialog.getContentPane().setBackground(settings.background);
+        dialog.setBackground(settings.background);
+
+        for (Component comp : dialog.getContentPane().getComponents()) {
+            if (comp instanceof JLabel) {
+                ((JLabel) comp).setForeground(settings.foreground);
+            }
+        }
     }
 
-    private void updateAllUI() {
-        for (Frame frame : Frame.getFrames()) {
-            SwingUtilities.updateComponentTreeUI(frame);
+    private ThemeSettings getThemeSettings(String themeName) {
+        switch (themeName) {
+            case "dark":
+                return new ThemeSettings(
+                        new Color(60, 63, 65),
+                        new Color(187, 187, 187)
+                );
+            case "contrast":
+                return new ThemeSettings(
+                        Color.WHITE,
+                        Color.BLACK
+                );
+            default:
+                return new ThemeSettings(
+                        new Color(240, 240, 240),
+                        new Color(50, 50, 50)
+                );
         }
     }
 
@@ -108,65 +116,40 @@ public class ThemeManager {
     }
 
     private void setDarkThemeSettings() {
-        Color darkColor = new Color(60, 63, 65);
-        Color darkerColor = new Color(43, 43, 43);
-        Color textColor = new Color(187, 187, 187);
-
-        UIManager.put("control", darkColor);
-        UIManager.put("nimbusBase", darkerColor);
-        UIManager.put("nimbusAlertYellow", new Color(248, 187, 0));
-        UIManager.put("nimbusDisabledText", new Color(150, 150, 150));
-        UIManager.put("nimbusFocus", new Color(115, 164, 209));
+        UIManager.put("control", new Color(60, 63, 65));
+        UIManager.put("nimbusBase", new Color(43, 43, 43));
         UIManager.put("nimbusLightBackground", new Color(60, 63, 65));
-        UIManager.put("nimbusOrange", new Color(191, 98, 4));
-        UIManager.put("nimbusRed", new Color(169, 46, 34));
-        UIManager.put("nimbusSelectedText", Color.WHITE);
+        UIManager.put("text", new Color(187, 187, 187));
         UIManager.put("nimbusSelection", new Color(65, 113, 156));
         UIManager.put("nimbusSelectionBackground", new Color(65, 113, 156));
-        UIManager.put("text", textColor);
     }
 
     private void setContrastThemeSettings() {
         UIManager.put("control", Color.WHITE);
         UIManager.put("nimbusBase", Color.BLACK);
-        UIManager.put("nimbusAlertYellow", Color.YELLOW);
-        UIManager.put("nimbusDisabledText", Color.GRAY);
-        UIManager.put("nimbusFocus", Color.BLUE);
         UIManager.put("nimbusLightBackground", Color.WHITE);
-        UIManager.put("nimbusOrange", Color.ORANGE);
-        UIManager.put("nimbusRed", Color.RED);
-        UIManager.put("nimbusSelectedText", Color.BLACK);
+        UIManager.put("text", Color.BLACK);
         UIManager.put("nimbusSelection", Color.CYAN);
         UIManager.put("nimbusSelectionBackground", Color.CYAN);
-        UIManager.put("text", Color.BLACK);
     }
 
-    private void applyLightThemeToDialog(JDialog dialog) {
-        dialog.getContentPane().setBackground(new Color(240, 240, 240));
-        dialog.setBackground(new Color(240, 240, 240));
+    public String getSavedTheme() {
+        return prefs.get(THEME_PREF_KEY, "light");
     }
 
-    private void applyDarkThemeToDialog(JDialog dialog) {
-        dialog.getContentPane().setBackground(new Color(60, 63, 65));
-        dialog.setBackground(new Color(60, 63, 65));
-        for (Component comp : dialog.getContentPane().getComponents()) {
-            if (comp instanceof JLabel) {
-                ((JLabel) comp).setForeground(new Color(187, 187, 187));
-            }
+    private void updateAllUI() {
+        for (Frame frame : Frame.getFrames()) {
+            SwingUtilities.updateComponentTreeUI(frame);
         }
     }
 
-    private void applyContrastThemeToDialog(JDialog dialog) {
-        dialog.getContentPane().setBackground(Color.WHITE);
-        dialog.setBackground(Color.WHITE);
-        for (Component comp : dialog.getContentPane().getComponents()) {
-            if (comp instanceof JLabel) {
-                ((JLabel) comp).setForeground(Color.BLACK);
-            }
-        }
-    }
+    private static class ThemeSettings {
+        final Color background;
+        final Color foreground;
 
-    public void reapplyCurrentTheme() {
-        applyTheme(getSavedTheme());
+        ThemeSettings(Color background, Color foreground) {
+            this.background = background;
+            this.foreground = foreground;
+        }
     }
 }

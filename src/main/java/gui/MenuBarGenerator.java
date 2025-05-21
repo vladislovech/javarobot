@@ -11,10 +11,11 @@ public class MenuBarGenerator {
     private final LocalizationManager localizationManager;
     private final ThemeManager themeManager;
 
-    public MenuBarGenerator(MainApplicationFrame frame, LocalizationManager localizationManager) {
+    public MenuBarGenerator(MainApplicationFrame frame, LocalizationManager localizationManager,
+                            ThemeManager themeManager) {
         this.frame = frame;
         this.localizationManager = localizationManager;
-        this.themeManager = new ThemeManager(localizationManager);
+        this.themeManager = themeManager;
     }
 
     public JMenuBar createMenuBar() {

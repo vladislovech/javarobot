@@ -43,7 +43,7 @@ public class MainApplicationFrame extends JFrame
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 
-        setJMenuBar(new MenuBarGenerator(this, localizationManager).createMenuBar());
+        setJMenuBar(new MenuBarGenerator(this, localizationManager, themeManager).createMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -75,13 +75,7 @@ public class MainApplicationFrame extends JFrame
 
     public void setLookAndFeel(String className) {
         try {
-            // Устанавливаем новый Look and Feel
             UIManager.setLookAndFeel(className);
-
-            // Принудительно переприменяем текущую тему
-            themeManager.reapplyCurrentTheme();
-
-            // Обновляем UI
             SwingUtilities.updateComponentTreeUI(this);
             for (StatefulWindow window : statefulWindows) {
                 SwingUtilities.updateComponentTreeUI(window.getWindow());
@@ -122,7 +116,7 @@ public class MainApplicationFrame extends JFrame
                 ((LogWindow) window).updateTitle();
             }
         }
-        setJMenuBar(new MenuBarGenerator(this, localizationManager).createMenuBar());
+        setJMenuBar(new MenuBarGenerator(this, localizationManager, themeManager).createMenuBar());
     }
     
     private void saveWindowsState() {
