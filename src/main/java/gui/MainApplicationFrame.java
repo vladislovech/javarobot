@@ -15,9 +15,14 @@ public class MainApplicationFrame extends JFrame
     private final JDesktopPane desktopPane = new JDesktopPane();
     private final WindowStateManager stateManager = new WindowStateManager();
     private final List<StatefulWindow> statefulWindows = new ArrayList<>();
+    private final ThemeManager themeManager;
 
     public MainApplicationFrame(LocalizationManager localizationManager) {
         this.localizationManager = localizationManager;
+        this.themeManager = new ThemeManager(localizationManager);
+
+        themeManager.applyTheme(themeManager.getSavedTheme());
+
         setTitle(localizationManager.getString(LocalizationKeys.WINDOW_TITLE));
 
         //Make the big window be indented 50 pixels from each edge
@@ -67,21 +72,22 @@ public class MainApplicationFrame extends JFrame
         frame.getWindow().setVisible(true);
         statefulWindows.add(frame);
     }
-    
-    public void setLookAndFeel(String className)
-    {
-        try
-        {
+
+    public void setLookAndFeel(String className) {
+        try {
+            // Устанавливаем новый Look and Feel
             UIManager.setLookAndFeel(className);
+
+            // Принудительно переприменяем текущую тему
+            themeManager.reapplyCurrentTheme();
+
+            // Обновляем UI
             SwingUtilities.updateComponentTreeUI(this);
             for (StatefulWindow window : statefulWindows) {
                 SwingUtilities.updateComponentTreeUI(window.getWindow());
             }
-        }
-        catch (ClassNotFoundException | InstantiationException
-            | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
-            // just ignore
+        } catch (Exception e) {
+            Logger.error("Ошибка при установке Look and Feel: " + e.getMessage());
         }
     }
 
