@@ -8,34 +8,54 @@ import java.util.prefs.Preferences;
 public class ThemeManager {
     private static final String THEME_PREF_KEY = "selected_theme";
     private final Preferences prefs;
-    private final LocalizationManager localizationManager;
 
-    public ThemeManager(LocalizationManager localizationManager) {
-        this.localizationManager = localizationManager;
+    public ThemeManager() {
         this.prefs = Preferences.userNodeForPackage(ThemeManager.class);
     }
 
-    public void applyTheme(String themeName) {
-        if (themeName == null) return;
+    public enum Theme {
+        LIGHT("light", "Темная"),
+        DARK("dark", "Светлая"),
+        CONTRAST("contrast", "Контрастная");
+
+        private final String id;
+        private final String displayName;
+
+        Theme(String id, String displayName) {
+            this.id = id;
+            this.displayName = displayName;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
+    public void applyTheme(Theme theme) {
+        if (theme == null) return;
 
         try {
-            applyThemeSettings(themeName);
-            prefs.put(THEME_PREF_KEY, themeName);
+            applyThemeSettings(theme);
+            prefs.put(THEME_PREF_KEY, theme.getId());
             updateAllUI();
         } catch (Exception e) {
             Logger.error("Ошибка применения темы: " + e.getMessage());
         }
     }
 
-    public void previewTheme(String themeName, Component parent) {
+    public void previewTheme(Theme theme, Component parent) {
         JDialog dialog = new JDialog(
                 (Frame) SwingUtilities.getWindowAncestor(parent),
-                "Просмотр темы: " + getThemeDisplayName(themeName),
+                "Просмотр темы: " + theme.getDisplayName(),
                 true
         );
 
         // Настройки цветов
-        ThemeColors colors = getThemeColors(themeName);
+        ThemeColors colors = getThemeColors(theme);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -45,7 +65,7 @@ public class ThemeManager {
         addDemoComponent(new JLabel("Пример текста"), panel, colors);
 
         JButton apply = createActionButton("Применить", colors, e -> {
-            applyTheme(themeName);
+            applyTheme(theme);
             dialog.dispose();
         });
 
@@ -66,8 +86,8 @@ public class ThemeManager {
         dialog.setVisible(true);
     }
 
-    private void applyThemeSettings(String themeName) {
-        ThemeColors colors = getThemeColors(themeName);
+    private void applyThemeSettings(Theme theme) {
+        ThemeColors colors = getThemeColors(theme);
 
         UIManager.put("nimbusBase", colors.base);
         UIManager.put("control", colors.control);
@@ -87,9 +107,9 @@ public class ThemeManager {
         }
     }
 
-    private ThemeColors getThemeColors(String themeName) {
-        switch (themeName) {
-            case "dark":
+    private ThemeColors getThemeColors(Theme theme) {
+        switch (theme) {
+            case DARK:
                 return new ThemeColors(
                         new Color(60, 63, 65),  // background
                         new Color(187, 187, 187), // foreground
@@ -97,21 +117,21 @@ public class ThemeManager {
                         new Color(60, 63, 65),    // control
                         new Color(65, 113, 156)   // selection
                 );
-            case "contrast":
+            case CONTRAST:
                 return new ThemeColors(
-                        Color.BLACK,              // background
-                        Color.YELLOW,             // foreground
-                        Color.BLACK,              // base
-                        Color.BLACK,              // control
-                        Color.RED                 // selection
+                        Color.BLACK,
+                        Color.YELLOW,
+                        Color.BLACK,
+                        Color.BLACK,
+                        Color.RED
                 );
-            default: // light
+            default:
                 return new ThemeColors(
-                        new Color(240, 240, 240), // background
-                        Color.BLACK,              // foreground
-                        new Color(200, 200, 200),  // base
-                        new Color(240, 240, 240),  // control
-                        new Color(57, 105, 138)    // selection
+                        new Color(240, 240, 240),
+                        Color.BLACK,
+                        new Color(200, 200, 200),
+                        new Color(240, 240, 240),
+                        new Color(57, 105, 138)
                 );
         }
     }
@@ -148,8 +168,9 @@ public class ThemeManager {
         return button;
     }
 
-    public String getSavedTheme() {
-        return prefs.get(THEME_PREF_KEY, "light");
+    public Theme getSavedTheme() {
+        String themeId = prefs.get(THEME_PREF_KEY, Theme.LIGHT.getId());
+        return Theme.valueOf(themeId.toUpperCase());
     }
 
     private void updateAllUI() {

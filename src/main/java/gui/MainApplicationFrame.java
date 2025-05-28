@@ -19,7 +19,7 @@ public class MainApplicationFrame extends JFrame
 
     public MainApplicationFrame(LocalizationManager localizationManager) {
         this.localizationManager = localizationManager;
-        this.themeManager = new ThemeManager(localizationManager);
+        this.themeManager = new ThemeManager();
 
         themeManager.applyTheme(themeManager.getSavedTheme());
 

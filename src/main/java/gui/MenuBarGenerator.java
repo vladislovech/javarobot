@@ -36,28 +36,30 @@ public class MenuBarGenerator {
         themeMenu.getAccessibleContext().setAccessibleDescription(
                 localizationManager.getString(LocalizationKeys.MENU_THEME_DESCRIPTION));
 
-        JMenuItem lightTheme = new JMenuItem(localizationManager.getString(LocalizationKeys.THEME_LIGHT));
-        lightTheme.addActionListener(e -> {
-            themeManager.previewTheme("light", frame);
-            frame.updateAllUI();
-        });
-        themeMenu.add(lightTheme);
-
-        JMenuItem darkTheme = new JMenuItem(localizationManager.getString(LocalizationKeys.THEME_DARK));
-        darkTheme.addActionListener(e -> {
-            themeManager.previewTheme("dark", frame);
-            frame.updateAllUI();
-        });
-        themeMenu.add(darkTheme);
-
-        JMenuItem contrastTheme = new JMenuItem(localizationManager.getString(LocalizationKeys.THEME_CONTRAST));
-        contrastTheme.addActionListener(e -> {
-            themeManager.previewTheme("contrast", frame);
-            frame.updateAllUI();
-        });
-        themeMenu.add(contrastTheme);
+        for (ThemeManager.Theme theme : ThemeManager.Theme.values()) {
+            themeMenu.add(createThemeMenuItem(theme));
+        }
 
         return themeMenu;
+    }
+
+    private JMenuItem createThemeMenuItem(ThemeManager.Theme theme) {
+        String themeKey = getThemeLocalizationKey(theme);
+        JMenuItem menuItem = new JMenuItem(localizationManager.getString(themeKey));
+        menuItem.addActionListener(e -> {
+            themeManager.previewTheme(theme, frame);
+            frame.updateAllUI();
+        });
+        return menuItem;
+    }
+
+    private String getThemeLocalizationKey(ThemeManager.Theme theme) {
+        switch (theme) {
+            case LIGHT: return LocalizationKeys.THEME_LIGHT;
+            case DARK: return LocalizationKeys.THEME_DARK;
+            case CONTRAST: return LocalizationKeys.THEME_CONTRAST;
+            default: throw new IllegalArgumentException("Unknown theme: " + theme);
+        }
     }
 
     private JMenu createLookAndFeelMenu() {
