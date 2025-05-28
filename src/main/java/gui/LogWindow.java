@@ -2,10 +2,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.TextArea;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.plaf.nimbus.State;
 
 import log.LogChangeListener;
@@ -15,7 +13,7 @@ import log.LogWindowSource;
 public class LogWindow extends JInternalFrame implements LogChangeListener, StatefulWindow
 {
     private LogWindowSource m_logSource;
-    private TextArea m_logContent;
+    private JTextArea m_logContent;
     private final LocalizationManager localizationManager;
 
     public LogWindow(LogWindowSource logSource, LocalizationManager localizationManager) {
@@ -27,7 +25,7 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Stat
         this.localizationManager = localizationManager;
         m_logSource = logSource;
         m_logSource.registerListener(this);
-        m_logContent = new TextArea("");
+        m_logContent = new JTextArea();
         m_logContent.setSize(200, 500);
         
         JPanel panel = new JPanel(new BorderLayout());
